@@ -2,6 +2,7 @@
   <dictionary name="ARTEM">
     <words>
       <w>downto</w>
+      <w>logln</w>
     </words>
   </dictionary>
 </component>

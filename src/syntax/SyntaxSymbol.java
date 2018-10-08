@@ -1,5 +1,7 @@
 package syntax;
 
+import core.Logger;
+
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -60,9 +62,13 @@ public class SyntaxSymbol {
                 }
     
                 System.out.println(name + ": " + i + " enter");
+                Logger.getInstance().logln(name + ": " + i + " enter");
+                
                 Integer res = performOperation(op, data, position);
+                
                 System.out.println("(" + data[position] + ") " + position + " -> " + res + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
-
+                Logger.getInstance().logln("(" + data[position] + ") " + position + " -> " + res + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
+                
                 if (res == null && loops.isEmpty() && selects.isEmpty()) {
                     success = false;
                     break;
