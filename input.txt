@@ -1,0 +1,18 @@
+program g;
+var u, v, max, min: real;
+begin
+    read(u,v);
+    max:=10;
+    min:=0;
+    if u>v then
+    begin
+        if u>max then max:=u;
+        if v<min then min:=v
+    end
+    else
+    begin
+        if v>max then max:=v;
+        if u<min then min:=u
+    end;
+    write(max,min)
+end.
