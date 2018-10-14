@@ -4,6 +4,7 @@ import lexis.PascalSymbolPack;
 import lexis.StringLexer;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
+import syntax.OperationResult;
 import syntax.PascalSyntaxPack;
 import syntax.PatternSearchException;
 import syntax.SyntaxPack;
@@ -11,6 +12,7 @@ import syntax.SyntaxPack;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 public class AnalyzerMain {
@@ -87,8 +89,19 @@ public class AnalyzerMain {
                 System.out.println("Data size: " + data.size());
                 Logger.getInstance().logln("Data size: " + data.size());
                 
-                outLine = dic.analyzeSyntax(data.toArray(new String[]{}));
+                OperationResult result = dic.analyzeSyntax(data.toArray(new String[]{}));
     
+                if (result.isSuccess()) {
+                    outLine = result.toString(" ");
+                }
+                else {
+                    outLine = result.getError().toString();
+                    try {
+                        outLine += "\nSymbol " + result.getError().getSymbol() + " is \"" + dic.getSymbol(Integer.parseInt(result.getError().getSymbol())) + "\"";
+                    }
+                    catch (IllegalFormatException ignored) {}
+                }
+                
                 System.out.println("\nSyntax analysis result:");
                 Logger.getInstance().logln("\nSyntax analysis result:");
                 System.out.println(outLine);

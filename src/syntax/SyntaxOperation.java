@@ -4,48 +4,53 @@ public class SyntaxOperation {
     private final String data;
     private final String[] params;
 
-    public SyntaxOperation(String data, String params) {
+    SyntaxOperation(String data, String params) {
         this.data = data;
-        this.params = params.split(" ");
+        if (params != null) {
+            this.params = params.split(" ");
+        }
+        else {
+            this.params = new String[0];
+        }
     }
 
-    public String getData() {
+    String getData() {
         return data;
     }
 
     public String[] getParams() {
-        return params;
+        return params.clone();
     }
 
-    public boolean isSymbol() {
+    boolean isSymbol() {
         return contains("s");
     }
 
-    public boolean isIdentifier() {
+    boolean isIdentifier() {
         return contains("id");
     }
 
-    public boolean isLiteral() {
+    boolean isLiteral() {
         return contains("lit");
     }
 
-    public boolean isLoopStart() {
+    boolean isLoopStart() {
         return contains("ls");
     }
 
-    public boolean isLoopEnd() {
+    boolean isLoopEnd() {
         return contains("le");
     }
 
-    public boolean isSelectionStart() {
+    boolean isSelectionStart() {
         return contains("ss");
     }
 
-    public boolean isSelectionEnd() {
+    boolean isSelectionEnd() {
         return contains("se");
     }
 
-    public boolean isSelectionBody() {
+    boolean isSelectionBody() {
         return contains("sb");
     }
     

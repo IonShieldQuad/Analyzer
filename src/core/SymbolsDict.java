@@ -1,6 +1,7 @@
 package core;
 
 import lexis.SymbolPack;
+import syntax.OperationResult;
 import syntax.PatternSearchException;
 import syntax.SyntaxPack;
 import syntax.SyntaxSymbol;
@@ -33,6 +34,10 @@ public class SymbolsDict {
     /**Finds and returns a constant symbol from map*/
     public int getSymbol(String symbol) {
         return this.symbols.find(symbol);
+    }
+    
+    public String getSymbol(int symbol) {
+        return symbols.find(symbol);
     }
 
     /**Returns a set containing all constant symbols*/
@@ -69,12 +74,8 @@ public class SymbolsDict {
         return this.symbols.getLiteralCode();
     }
     
-    public String analyzeSyntax(String[] string) throws PatternSearchException {
+    public OperationResult analyzeSyntax(String[] string) throws PatternSearchException {
         SyntaxSymbol mainSymbol = syntax.getSyntaxSymbol(syntax.getMainSymbol());
-        Integer result = mainSymbol.searchPatterns(string, 0);
-        if (result == null) {
-            return null;
-        }
-        return mainSymbol.getOutput();
+        return mainSymbol.searchPatterns(string, 0);
     }
 }

@@ -41,7 +41,7 @@ public abstract class SymbolPack {
         this.literalCode = in;
     }
 
-    public int getSymbolCount() {
+    int getSymbolCount() {
         return this.symbolsMap.size();
     }
 
@@ -54,6 +54,15 @@ public abstract class SymbolPack {
 
     public final int find(String symbol) {
         return this.symbolsMap.get(symbol);
+    }
+    
+    public final String find(int symbol) {
+        for (var pair : symbolsMap.entrySet()) {
+            if (pair.getValue() == symbol) {
+                return pair.getKey();
+            }
+        }
+        return null;
     }
 
     public final Set<String> symbolSet() {

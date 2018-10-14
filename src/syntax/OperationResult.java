@@ -1,0 +1,85 @@
+package syntax;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OperationResult {
+    private final int oldPosition;
+    private final int newPosition;
+    private final boolean success;
+    private final List<String> data = new ArrayList<>();
+    private final SyntaxError error;
+    
+    OperationResult(int oldPosition, int newPosition, boolean success, List<String> data, SyntaxError error) {
+    
+        this.oldPosition = oldPosition;
+        this.newPosition = newPosition;
+        this.success = success;
+        if (data != null) {
+            this.getData().addAll(data);
+        }
+        this.error = error;
+    }
+    
+    OperationResult(int oldPosition, int newPosition, boolean success, String data, SyntaxError error) {
+        
+        this.oldPosition = oldPosition;
+        this.newPosition = newPosition;
+        this.success = success;
+        if (data != null) {
+            this.getData().add(data);
+        }
+        this.error = error;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        for (String s : getData()) {
+            if (s == null || s.trim().length() == 0) {
+                continue;
+            }
+            out.append(s);
+        }
+        return out.toString();
+    }
+    
+    public String toString(String separator) {
+        StringBuilder out = new StringBuilder();
+        String prev = separator;
+        for (String s : data) {
+            if (s == null || s.length() == 0) {
+                continue;
+            }
+        
+            if (!(s.startsWith(separator) || prev.endsWith(separator))) {
+                out.append(separator);
+            }
+        
+        out.append(s);
+        prev = s;
+        }
+    return out.toString();
+    }
+    
+    public SyntaxError getError() {
+        return error;
+    }
+    
+    public boolean isSuccess() {
+        return success;
+    }
+    
+    int getNewPosition() {
+        return newPosition;
+    }
+    
+    int getOldPosition() {
+        return oldPosition;
+    }
+    
+    public List<String> getData() {
+        return new ArrayList<>(data);
+    }
+}
+

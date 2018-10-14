@@ -2,7 +2,9 @@ package syntax;
 
 import core.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 public class SyntaxSymbol {
@@ -10,10 +12,8 @@ public class SyntaxSymbol {
     private final String name;
     private final SyntaxOperation[][] patterns;
     private final String term;
-    private String buffer;
-    private String output;
 
-    public SyntaxSymbol(SyntaxPack pack, String name, SyntaxOperation[][] patterns, String term) {
+    SyntaxSymbol(SyntaxPack pack, String name, SyntaxOperation[][] patterns, String term) {
         this.pack = pack;
         this.name = name;
         if (patterns != null) {
@@ -29,34 +29,34 @@ public class SyntaxSymbol {
         this.pack.addSyntaxSymbol(name, this);
     }
 
-    public String getOutput() {
-        return this.output;
-    }
-
     /**
      * Perform search of patterns in data starting at index
      * @param data Input data sa an array of strings
      * @param index Index to begin search at
-     * @return If search succeeded, returns new index, null otherwise
+     * @return Object containing result information
      * */
-    public Integer searchPatterns(String[] data, int index) throws PatternSearchException {
-        this.output = null;
+    public OperationResult searchPatterns(String[] data, int index) throws PatternSearchException {
+        List<String> out = new ArrayList<>();
+        SyntaxError error = null;
+        
         for (SyntaxOperation[] pattern : patterns) {
             int position = index;
             boolean success = true;
-            //TODO: Add output
+            SyntaxError err = new SyntaxError("Unknown error occurred", null, 0);
 
-            StringBuilder out = new StringBuilder();
+            out.clear();
             Stack<LoopData> loops = new Stack<>();
             Stack<SelectData>selects = new Stack<>();
 
             for (int i = 0; i < pattern.length;) {
                 SyntaxOperation op = pattern[i];
 
+                //Checks for loop start
                 if (op.isLoopStart() && (loops.isEmpty() || loops.peek().getStart() != i)) {
                     loops.push(findLoop(position, pattern, i));
                 }
 
+                //Checks for loop end
                 if (op.isSelectionStart() && (selects.isEmpty() || selects.peek().getStart() != i)) {
                     selects.push(findSelect(position, pattern, i));
                 }
@@ -64,27 +64,28 @@ public class SyntaxSymbol {
                 System.out.println(name + ": " + i + " enter");
                 Logger.getInstance().logln(name + ": " + i + " enter");
                 
-                Integer res = performOperation(op, data, position);
+                //Tries to perform operation
+                OperationResult res = performOperation(op, data, position);
                 
-                System.out.println("(" + data[position] + ") " + position + " -> " + res + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
-                Logger.getInstance().logln("(" + data[position] + ") " + position + " -> " + res + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
+                System.out.println("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
+                Logger.getInstance().logln("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
                 
-                if (res == null && loops.isEmpty() && selects.isEmpty()) {
+                //Breaks if operation failed and not in loop or select
+                if (!res.isSuccess() && loops.isEmpty() && selects.isEmpty()) {
                     success = false;
+                    if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
+                        err = res.getError();
+                    }
+                    if (error == null || err.getIndex() > error.getIndex()) {
+                        error = err;
+                    }
                     break;
                 }
 
-                if (res != null) {
-                    position = res;
-                    if (buffer.length() != 0) {
-                        if (!buffer.startsWith(" ") && !out.toString().endsWith(" ")) {
-                            out.append(" ");
-                        }
-                        out.append(buffer);
-                        if (!buffer.endsWith(" ") && !out.toString().startsWith(" ")) {
-                            out.append(" ");
-                        }
-                    }
+                if (res.isSuccess()) {
+                    //Updates position and data if operation succeeded
+                    position = res.getNewPosition();
+                    out.addAll(res.getData());
                     
                     if (!selects.isEmpty()) {
                         if (selects.peek().hasPoint(i + 1) && selects.peek().getStart() != i) {
@@ -112,13 +113,21 @@ public class SyntaxSymbol {
                         i = loops.pop().getEnd();
                     }
                     else if (!selects.isEmpty()) {
+                        //If in selection tries to try next option
                         position = selects.peek().getStartIndex();
                         if (selects.peek().getEnd() == selects.peek().getNext(i)) {
                             
                             selects.pop();
                             
+                            //Breaks if select is ended with failure
                             if (loops.isEmpty() && selects.isEmpty()) {
                                 success = false;
+                                if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
+                                    err = res.getError();
+                                }
+                                if (error == null || err.getIndex() > error.getIndex()) {
+                                    error = err;
+                                }
                                 break;
                             }
                             else if (!loops.isEmpty()) {
@@ -136,7 +145,7 @@ public class SyntaxSymbol {
                     if(loops.empty()) {
                         throw new PatternSearchException(this.name, pattern, i, "Unexpected loop end");
                     }
-                    if (res == null) {
+                    if (!res.isSuccess()) {
                         throw new NullPointerException();
                     }
                     else if (loops.peek().getEnd() == i){
@@ -152,11 +161,10 @@ public class SyntaxSymbol {
                 ++i;
             }
             if (success) {
-                output = out.toString();
-                return position;
+                return new OperationResult(index, position, true, out, error);
             }
         }
-        return null;
+        return new OperationResult(index, index, false, out, error);
     }
 
     /**
@@ -164,9 +172,9 @@ public class SyntaxSymbol {
      * @param op Operation to perform
      * @param data Input data sa an array of strings
      * @param index Index to perform operation at
-     * @return If operation succeeded, returns new index, null otherwise
+     * @return Returns an object containing resulting information
      * */
-    private Integer performOperation(SyntaxOperation op, String[] data, int index) throws PatternSearchException {
+    private OperationResult performOperation(SyntaxOperation op, String[] data, int index) throws PatternSearchException {
         //Checks if to perform symbol search
         if (op.isSymbol()) {
             
@@ -177,48 +185,45 @@ public class SyntaxSymbol {
                     String key = data[index].substring(0, data[index].indexOf('.'));
                     
                     if (op.isIdentifier() && key.equals(Integer.toString(this.pack.getIdentifierCode()))) {
-                       this.buffer = data[index];
-                       return index + 1;
+                       return new OperationResult(index, index + 1, true, data[index], null);
                     }
                     else if (op.isLiteral() && key.equals(Integer.toString(this.pack.getLiteralCode()))) {
-                        this.buffer = data[index];
-                        return index + 1;
+                        return new OperationResult(index, index + 1, true, data[index], null);
                     }
                     else {
-                        return null;
+                        return new OperationResult(index, index, false, "", new SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
                     }
                 }
                 else {
-                    return null;
+                    return new OperationResult(index, index, false, "", new SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
                 }
             }
 
+            //Checks if symbol exists
             if (!this.pack.hasSyntaxSymbol(op.getData())) {
                 throw new PatternSearchException(op.getData(), null, index, "Symbol does not exist: " + op.getData());
             }
             
+            //Tries fo find symbol in data
             if (this.pack.getSyntaxSymbol(op.getData()).getTerm() != null) {
                 String term = this.pack.getSyntaxSymbol(op.getData()).getTerm();
 
                 if (data[index].equals(term)) {
-                    this.buffer = term;
-                    return index + 1;
+                    return new OperationResult(index, index + 1, true, term, null);
                 }
                 else {
-                    return null;
+                    return new OperationResult(index, index, false, "", new SyntaxError("Expected terminal symbol " + term + " , but found: " + data[index] + " at " + index, data[index], index));
                 }
             }
             else {
-                Integer i = this.pack.getSyntaxSymbol(op.getData()).searchPatterns(data, index);
-                buffer = this.pack.getSyntaxSymbol(op.getData()).getOutput();
-                return i;
+                OperationResult res = this.pack.getSyntaxSymbol(op.getData()).searchPatterns(data, index);
+                return new OperationResult(index, res.getNewPosition(), res.isSuccess(), res.toString(" "), res.getError());
             }
         }
-        buffer = "";
-        return index;
+        return new OperationResult(index, index, true, "", null);
     }
-
-    public String getTerm() {
+    
+    private String getTerm() {
         return this.term;
     }
     
