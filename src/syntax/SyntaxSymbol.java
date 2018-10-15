@@ -86,7 +86,7 @@ public class SyntaxSymbol {
                     if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
                         err = res.getError();
                     }
-                    if (error == null || err.getIndex() > error.getIndex()) {
+                    if (err != null && (error == null || err.getIndex() > error.getIndex())) {
                         error = err;
                     }
                     break;
@@ -121,6 +121,9 @@ public class SyntaxSymbol {
                         //If the loop was last break and return to the beginning
                         position = loops.peek().getStartIndex();
                         i = loops.pop().getEnd();
+                        if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
+                            err = res.getError();
+                        }
                     }
                     else if (!selects.isEmpty()) {
                         //If in selection tries to try next option
@@ -135,7 +138,7 @@ public class SyntaxSymbol {
                                 if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
                                     err = res.getError();
                                 }
-                                if (error == null || err.getIndex() > error.getIndex()) {
+                                if (err != null && (error == null || err.getIndex() > error.getIndex())) {
                                     error = err;
                                 }
                                 break;
@@ -147,6 +150,9 @@ public class SyntaxSymbol {
                         }
                         else {
                             i = selects.peek().getNext(i);
+                            if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
+                                err = res.getError();
+                            }
                         }
                     }
                 }
