@@ -1,33 +1,42 @@
 package syntax;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class OperationResult {
     private final int oldPosition;
     private final int newPosition;
     private final boolean success;
-    private final List<String> data = new ArrayList<>();
+    private final String data[];
     private final SyntaxError error;
     
-    OperationResult(int oldPosition, int newPosition, boolean success, List<String> data, SyntaxError error) {
+    OperationResult(int oldPosition, int newPosition, boolean success, List<String> data, @Nullable SyntaxError error) {
     
         this.oldPosition = oldPosition;
         this.newPosition = newPosition;
         this.success = success;
         if (data != null) {
-            this.getData().addAll(data);
+            this.data = data.toArray(new String[0]);
+        }
+        else {
+            this.data = new String[0];
         }
         this.error = error;
     }
     
-    OperationResult(int oldPosition, int newPosition, boolean success, String data, SyntaxError error) {
+    OperationResult(int oldPosition, int newPosition, boolean success, String data, @Nullable SyntaxError error) {
         
         this.oldPosition = oldPosition;
         this.newPosition = newPosition;
         this.success = success;
         if (data != null) {
-            this.getData().add(data);
+            this.data = new String[]{data};
+        }
+        else {
+            this.data = new String[0];
         }
         this.error = error;
     }
@@ -79,7 +88,7 @@ public class OperationResult {
     }
     
     public List<String> getData() {
-        return new ArrayList<>(data);
+        return new ArrayList<>(Arrays.asList(data));
     }
 }
 

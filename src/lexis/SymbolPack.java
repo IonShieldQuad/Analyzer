@@ -1,5 +1,9 @@
 package lexis;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -45,9 +49,11 @@ public abstract class SymbolPack {
         return this.symbolsMap.size();
     }
 
+    @Contract(pure = true)
     public final int getIdentifierCode() {
         return this.identifierCode;
     }
+    @Contract(pure = true)
     public final int getLiteralCode() {
         return this.literalCode;
     }
@@ -56,6 +62,7 @@ public abstract class SymbolPack {
         return this.symbolsMap.get(symbol);
     }
     
+    @Nullable
     public final String find(int symbol) {
         for (var pair : symbolsMap.entrySet()) {
             if (pair.getValue() == symbol) {
@@ -65,9 +72,13 @@ public abstract class SymbolPack {
         return null;
     }
 
+    @NotNull
+    @Contract(pure = true)
     public final Set<String> symbolSet() {
         return this.symbolsMap.keySet();
     }
+    @NotNull
+    @Contract(pure = true)
     public final Set<String> spacedSymbolSet() {
         return this.spacedSymbolsMap.keySet();
     }

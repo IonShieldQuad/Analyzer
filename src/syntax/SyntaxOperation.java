@@ -1,10 +1,13 @@
 package syntax;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+
 public class SyntaxOperation {
     private final String data;
     private final String[] params;
 
-    SyntaxOperation(String data, String params) {
+    SyntaxOperation(@Nullable String data, @Nullable String params) {
         this.data = data;
         if (params != null) {
             this.params = params.split(" ");
@@ -54,6 +57,7 @@ public class SyntaxOperation {
         return contains("sb");
     }
     
+    @Contract(pure = true)
     private boolean contains(String param) {
         for (String p : params) {
             if (p.equals(param)) {

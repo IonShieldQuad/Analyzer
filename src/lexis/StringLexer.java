@@ -1,6 +1,9 @@
 package lexis;
 
 import core.SymbolsDict;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static java.lang.Character.isDigit;
 
@@ -12,6 +15,8 @@ public class StringLexer {
     private final SymbolsDict dic;
 
     /**Processes input string into lexemes*/
+    @Nullable
+    @Contract("null -> null")
     public String processString(String inString) throws UnmatchedSubstringException {
         if (inString == null) {
             return null;
@@ -56,7 +61,8 @@ public class StringLexer {
     }
 
     /**Adds spaces around reserved symbols*/
-    private String addSpaces(String inString) {
+    @NotNull
+    private String addSpaces(@NotNull String inString) {
         StringBuilder outString = new StringBuilder();
 
         for (int i = 0; i < inString.length(); ++i) {
@@ -89,7 +95,7 @@ public class StringLexer {
         return outString.toString();
     }
 
-    private boolean isSymbol(String string) {
+    private boolean isSymbol(@NotNull String string) {
         for (String symbol : this.dic.symbolSet()) {
             if (string.equals(symbol)) {
                 return true;
@@ -98,7 +104,7 @@ public class StringLexer {
         return false;
     }
 
-    private boolean isIdentifier(String string) {
+    private boolean isIdentifier(@NotNull String string) {
         if (string.length() == 0) {
             return false;
         }
@@ -118,7 +124,7 @@ public class StringLexer {
         return matched;
     }
 
-    private boolean isLiteral(String string) {
+    private boolean isLiteral(@NotNull String string) {
         if (string.length() == 0) {
             return false;
         }

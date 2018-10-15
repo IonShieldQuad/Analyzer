@@ -1,6 +1,7 @@
 package core;
 
 import lexis.SymbolPack;
+import org.jetbrains.annotations.Nullable;
 import syntax.OperationResult;
 import syntax.PatternSearchException;
 import syntax.SyntaxPack;
@@ -16,7 +17,7 @@ public class SymbolsDict {
     private SyntaxPack syntax;
     private Map<String, Integer> idMap = new HashMap<>();
 
-    public SymbolsDict(SymbolPack symbolPack, SyntaxPack syntaxPack) {
+    public SymbolsDict(SymbolPack symbolPack, @Nullable SyntaxPack syntaxPack) {
         this.symbols = symbolPack;
         this.syntax = syntaxPack;
         

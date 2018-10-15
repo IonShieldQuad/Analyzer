@@ -1,6 +1,8 @@
 package syntax;
 
 import core.Logger;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +37,8 @@ public class SyntaxSymbol {
      * @param index Index to begin search at
      * @return Object containing result information
      * */
-    public OperationResult searchPatterns(String[] data, int index) throws PatternSearchException {
+    @NotNull
+    public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
         List<String> out = new ArrayList<>();
         SyntaxError error = null;
         
@@ -174,7 +177,9 @@ public class SyntaxSymbol {
      * @param index Index to perform operation at
      * @return Returns an object containing resulting information
      * */
-    private OperationResult performOperation(SyntaxOperation op, String[] data, int index) throws PatternSearchException {
+    @NotNull
+    @Contract("_, _, _ -> new")
+    private OperationResult performOperation(@NotNull SyntaxOperation op, @NotNull String[] data, int index) throws PatternSearchException {
         //Checks if to perform symbol search
         if (op.isSymbol()) {
             
@@ -223,11 +228,14 @@ public class SyntaxSymbol {
         return new OperationResult(index, index, true, "", null);
     }
     
+    @Contract(pure = true)
     private String getTerm() {
         return this.term;
     }
     
-    private LoopData findLoop(int startIndex, SyntaxOperation[] pattern, int index) throws PatternSearchException {
+    @NotNull
+    @Contract("_, _, _ -> new")
+    private LoopData findLoop(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
         if (!pattern[index].isLoopStart()) {
             throw new PatternSearchException(this.name, pattern, index, "Loop start not found");
         }
@@ -250,7 +258,9 @@ public class SyntaxSymbol {
         throw new PatternSearchException(this.name, pattern, pattern.length - 1, "Unclosed loop");
     }
     
-    private SelectData findSelect(int startIndex, SyntaxOperation[] pattern, int index) throws PatternSearchException {
+    @NotNull
+    @Contract("_, _, _ -> new")
+    private SelectData findSelect(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
         if (!pattern[index].isSelectionStart()) {
             throw new PatternSearchException(this.name, pattern, index, "Selection start not found");
         }

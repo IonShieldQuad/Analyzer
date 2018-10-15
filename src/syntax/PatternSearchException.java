@@ -1,7 +1,5 @@
 package syntax;
 
-import java.util.List;
-
 public class PatternSearchException extends Exception {
     private final String name;
     private final SyntaxOperation[] pattern;

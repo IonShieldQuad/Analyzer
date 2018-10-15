@@ -1,5 +1,8 @@
 package core;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +14,7 @@ public class Logger {
     
     private static Logger ourInstance = new Logger();
     
+    @Contract(pure = true)
     public static Logger getInstance() {
         return ourInstance;
     }
@@ -24,7 +28,7 @@ public class Logger {
         }
     }
     
-    public void log(String msg) {
+    public void log(@NotNull String msg) {
         if (!isOpen) {
             throw new IllegalStateException("Logger is closed");
         }
@@ -35,7 +39,7 @@ public class Logger {
         }
     }
     
-    public void logln(String msg) {
+    public void logln(@NotNull String msg) {
         log(msg);
         try {
             writer.newLine();
