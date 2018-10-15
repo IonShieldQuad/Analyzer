@@ -79,16 +79,18 @@ public class SyntaxSymbol {
                 
                 System.out.println("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
                 Logger.getInstance().logln("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
+    
+                //Saves error with highest index
+                if (res.getError() != null && (err == null || res.getError().getIndex() > err.getIndex())) {
+                    err = res.getError();
+                }
+                if (err != null && (error == null || err.getIndex() > error.getIndex())) {
+                    error = err;
+                }
                 
                 //Breaks if operation failed and not in loop or select
                 if (!res.isSuccess() && loops.isEmpty() && selects.isEmpty()) {
                     success = false;
-                    if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
-                        err = res.getError();
-                    }
-                    if (err != null && (error == null || err.getIndex() > error.getIndex())) {
-                        error = err;
-                    }
                     break;
                 }
 
@@ -121,9 +123,6 @@ public class SyntaxSymbol {
                         //If the loop was last break and return to the beginning
                         position = loops.peek().getStartIndex();
                         i = loops.pop().getEnd();
-                        if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
-                            err = res.getError();
-                        }
                     }
                     else if (!selects.isEmpty()) {
                         //If in selection tries to try next option
@@ -135,12 +134,6 @@ public class SyntaxSymbol {
                             //Breaks if select is ended with failure
                             if (loops.isEmpty() && selects.isEmpty()) {
                                 success = false;
-                                if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
-                                    err = res.getError();
-                                }
-                                if (err != null && (error == null || err.getIndex() > error.getIndex())) {
-                                    error = err;
-                                }
                                 break;
                             }
                             else if (!loops.isEmpty()) {
@@ -150,9 +143,6 @@ public class SyntaxSymbol {
                         }
                         else {
                             i = selects.peek().getNext(i);
-                            if (res.getError() != null && res.getError().getIndex() > err.getIndex()) {
-                                err = res.getError();
-                            }
                         }
                     }
                 }
@@ -352,12 +342,11 @@ public class SyntaxSymbol {
             return data.get(data.size() - 1);
         }
         
-        boolean addPoint(int index) {
+        void addPoint(int index) {
             if (index <= this.getEnd()) {
-                return false;
+                throw new IllegalArgumentException("New point position: " + index + " should be higher than previous: " + this.getEnd());
             }
             data.add(index);
-            return true;
         }
         
         Integer getNext(int index) {
