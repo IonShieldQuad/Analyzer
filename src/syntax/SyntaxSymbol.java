@@ -3,6 +3,7 @@ package syntax;
 import core.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +15,14 @@ public class SyntaxSymbol {
     private final String name;
     private final SyntaxOperation[][] patterns;
     private final String term;
-
-    SyntaxSymbol(SyntaxPack pack, String name, SyntaxOperation[][] patterns, String term) {
+    
+    /**
+     * @param pack Syntax pack to which new symbol will be added
+     * @param name Name of the new symbol
+     * @param patterns Patterns of syntax operations to search
+     * @param term If this is a terminal symbol, it's value. Null otherwise
+     */
+    SyntaxSymbol(@NotNull SyntaxPack pack, @NotNull String name, @Nullable SyntaxOperation[][] patterns, @Nullable String term) {
         this.pack = pack;
         this.name = name;
         if (patterns != null) {
@@ -40,12 +47,12 @@ public class SyntaxSymbol {
     @NotNull
     public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
         List<String> out = new ArrayList<>();
-        SyntaxError error = null;
+        OperationResult.SyntaxError error = null;
         
         for (SyntaxOperation[] pattern : patterns) {
             int position = index;
             boolean success = true;
-            SyntaxError err = new SyntaxError("Unknown error occurred", null, 0);
+            OperationResult.SyntaxError err = new OperationResult.SyntaxError("Unknown error occurred", null, 0);
 
             out.clear();
             Stack<LoopData> loops = new Stack<>();
@@ -196,11 +203,11 @@ public class SyntaxSymbol {
                         return new OperationResult(index, index + 1, true, data[index], null);
                     }
                     else {
-                        return new OperationResult(index, index, false, "", new SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
+                        return new OperationResult(index, index, false, "", new OperationResult.SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
                     }
                 }
                 else {
-                    return new OperationResult(index, index, false, "", new SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
+                    return new OperationResult(index, index, false, "", new OperationResult.SyntaxError("Expected identifier or literal, but found: " + data[index] + " at " + index, data[index], index));
                 }
             }
 
@@ -217,7 +224,7 @@ public class SyntaxSymbol {
                     return new OperationResult(index, index + 1, true, term, null);
                 }
                 else {
-                    return new OperationResult(index, index, false, "", new SyntaxError("Expected terminal symbol " + term + " , but found: " + data[index] + " at " + index, data[index], index));
+                    return new OperationResult(index, index, false, "", new OperationResult.SyntaxError("Expected terminal symbol " + term + " , but found: " + data[index] + " at " + index, data[index], index));
                 }
             }
             else {
@@ -288,5 +295,81 @@ public class SyntaxSymbol {
             }
         }
         throw new PatternSearchException(this.name, pattern, pattern.length - 1, "Unclosed selection");
+    }
+    
+    static class LoopData {
+        private int startIndex;
+        private int start;
+        private int end;
+        
+        LoopData(int startIndex, int start, int end) {
+            this.startIndex = startIndex;
+            this.start = start;
+            this.end = end;
+        }
+        
+        void setStartIndex(int startIndex) {
+            this.startIndex = startIndex;
+        }
+        
+        int getStartIndex() {
+            return startIndex;
+        }
+        
+        int getStart() {
+            return start;
+        }
+        
+        int getEnd() {
+            return end;
+        }
+    }
+    
+    static class SelectData {
+        private int startIndex;
+        private List<Integer> data = new ArrayList<>();
+        
+        SelectData(int startIndex, int start) {
+            this.startIndex = startIndex;
+            this.data.add(start);
+        }
+        
+        int getStartIndex() {
+            return startIndex;
+        }
+        
+        int getStart() {
+            return data.get(0);
+        }
+        
+        int getEnd() {
+            return data.get(data.size() - 1);
+        }
+        
+        boolean addPoint(int index) {
+            if (index <= this.getEnd()) {
+                return false;
+            }
+            data.add(index);
+            return true;
+        }
+        
+        Integer getNext(int index) {
+            for (Integer aData : data) {
+                if (aData > index) {
+                    return aData;
+                }
+            }
+            return null;
+        }
+        
+        boolean hasPoint(int index) {
+            for (int i : data) {
+                if (i == index) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

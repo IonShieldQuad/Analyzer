@@ -3,6 +3,10 @@ package syntax;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Abstract class
+ */
 public abstract class SyntaxPack {
     
     private Map<String, SyntaxSymbol> syntax = new HashMap<>();
@@ -10,7 +14,7 @@ public abstract class SyntaxPack {
     private int identifierCode;
     private int literalCode;
     
-    public SyntaxPack() {
+    SyntaxPack() {
         init();
     }
     
