@@ -3,6 +3,10 @@ package syntax;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class SyntaxOperation {
     private final String data;
     private final String[] params;
@@ -59,11 +63,21 @@ public class SyntaxOperation {
     
     @Contract(pure = true)
     private boolean contains(String param) {
-        for (String p : params) {
-            if (p.equals(param)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.asList(params).contains(param);
+    }
+    
+    @Contract(pure = true)
+    public List<String> getVariables() {
+        return Arrays.stream(params).filter((s) -> s.startsWith("$")).collect(ArrayList<String>::new, List::add, List::addAll);
+    }
+    
+    @Contract(pure = true)
+    public boolean containsVariable(String var) {
+        return Arrays.stream(params).filter((s) -> s.startsWith("$")).anyMatch((s) -> s.equals(var));
+    }
+    
+    @Contract(pure = true)
+    public boolean containsVariables() {
+        return getVariables().isEmpty();
     }
 }

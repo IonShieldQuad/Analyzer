@@ -46,7 +46,7 @@ public class SyntaxSymbol {
      * */
     @NotNull
     public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
-        List<String> out = new ArrayList<>();
+        List<OperationResult.DataEntry> out = new ArrayList<>();
         OperationResult.SyntaxError error = null;
         
         for (SyntaxOperation[] pattern : patterns) {
@@ -70,14 +70,12 @@ public class SyntaxSymbol {
                 if (op.isSelectionStart() && (selects.isEmpty() || selects.peek().getStart() != i)) {
                     selects.push(findSelect(position, pattern, i));
                 }
-    
-                System.out.println(name + ": " + i + " enter");
+                
                 Logger.getInstance().logln(name + ": " + i + " enter");
                 
                 //Tries to perform operation
                 OperationResult res = performOperation(op, data, position);
                 
-                System.out.println("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
                 Logger.getInstance().logln("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
     
                 //Saves error with highest index
@@ -225,7 +223,7 @@ public class SyntaxSymbol {
             }
             else {
                 OperationResult res = this.pack.getSyntaxSymbol(op.getData()).searchPatterns(data, index);
-                return new OperationResult(index, res.getNewPosition(), res.isSuccess(), res.toString(" "), res.getError());
+                return new OperationResult(index, res.getNewPosition(), res.isSuccess(), res.toString(" "), res.getVariables(), res.getError());
             }
         }
         return new OperationResult(index, index, true, "", null);
