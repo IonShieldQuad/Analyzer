@@ -1,7 +1,9 @@
 package syntax;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -22,6 +24,12 @@ public abstract class SyntaxPack {
     
     public SyntaxSymbol getSyntaxSymbol(String name) {
         return this.syntax.get(name);
+    }
+    
+    public Set<SyntaxSymbol> symbolSet() {
+        Set<SyntaxSymbol> s = new HashSet<>();
+        syntax.keySet().forEach((k) -> s.add(syntax.get(k)));
+        return s;
     }
     
     public boolean hasSyntaxSymbol(String name) {

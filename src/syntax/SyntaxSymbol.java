@@ -37,7 +37,15 @@ public class SyntaxSymbol {
         this.term = term;
         this.pack.addSyntaxSymbol(name, this);
     }
-
+    
+    String getName() {
+        return name;
+    }
+    
+    SyntaxOperation[][] getPatterns() {
+        return patterns;
+    }
+    
     /**
      * Perform search of patterns in data starting at index
      * @param data Input data sa an array of strings
@@ -230,7 +238,7 @@ public class SyntaxSymbol {
     }
     
     @Contract(pure = true)
-    private String getTerm() {
+    String getTerm() {
         return this.term;
     }
     
