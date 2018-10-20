@@ -1,7 +1,6 @@
 package core;
 
 import lexis.PascalSymbolPack;
-import lexis.StringLexer;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
 import syntax.OperationResult;
@@ -12,7 +11,6 @@ import syntax.SyntaxPack;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.IllegalFormatException;
 import java.util.List;
 
 public class AnalyzerMain {
@@ -24,7 +22,7 @@ public class AnalyzerMain {
         
         String fileNameIn = "input.txt";
         String fileNameOut = "output.txt";
-
+        
         //Reader object, reads from file
         BufferedReader reader;
         //Writer object, writes to file
@@ -34,8 +32,10 @@ public class AnalyzerMain {
         //Output string, created by processing input string then passed to writer
         String outLine;
         //Symbols dictionary object, contains information about symbols
-        SymbolsDict dic = new SymbolsDict(symbolPack, syntaxPack);
-        StringLexer lex = new StringLexer(dic);
+        
+        TDParsingSymbolsSystem td = new TDParsingSymbolsSystem(symbolPack, syntaxPack);
+        Lexer lexer = td;
+        Parser parser = td;
         
         try {
             //Create reader and writer
@@ -52,7 +52,12 @@ public class AnalyzerMain {
                     Logger.getInstance().logln(inLine);
                     try {
                         //Processes line into lexemes
-                        outLine = lex.processString(inLine);
+                        String[] out = lexer.process(inLine);
+                        StringBuilder outLineBuilder = new StringBuilder();
+                        for (String s : out) {
+                            outLineBuilder.append(s).append(" ");
+                        }
+                        outLine = outLineBuilder.toString();
                         //Writes a line
                         System.out.println(outLine);
                         Logger.getInstance().logln(outLine);
@@ -89,7 +94,7 @@ public class AnalyzerMain {
                 System.out.println("Data size: " + data.size());
                 Logger.getInstance().logln("Data size: " + data.size());
                 
-                OperationResult result = dic.analyzeSyntax(data.toArray(new String[]{}));
+                OperationResult result = parser.process(data.toArray(new String[0]));
     
                 if (result.isSuccess()) {
                     outLine = result.toString(" ");
@@ -97,9 +102,9 @@ public class AnalyzerMain {
                 else {
                     outLine = result.getError().toString();
                     try {
-                        outLine += "\nSymbol " + result.getError().getSymbol() + " is \"" + dic.getSymbol(Integer.parseInt(result.getError().getSymbol())) + "\"";
+                        outLine += "\nSymbol " + result.getError().getSymbol() + " is \"" + td.getSymbol(Integer.parseInt(result.getError().getSymbol())) + "\"";
                     }
-                    catch (IllegalFormatException ignored) {}
+                    catch (NumberFormatException ignored) {}
                 }
                 
                 System.out.println("\nSyntax analysis result:");

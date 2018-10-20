@@ -1,35 +1,21 @@
 package core;
 
+import lexis.StringLexer;
 import lexis.SymbolPack;
-import org.jetbrains.annotations.Nullable;
-import syntax.OperationResult;
-import syntax.PatternSearchException;
-import syntax.SyntaxPack;
-import syntax.SyntaxSymbol;
+import lexis.UnmatchedSubstringException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class SymbolsDict {
+public class SymbolsSystem implements Lexer {
 
-    private SymbolPack symbols;
-    private SyntaxPack syntax;
-    private Map<String, Integer> idMap = new HashMap<>();
+    private StringLexer lexer = new StringLexer(this);
+    protected SymbolPack symbols;
+    protected Map<String, Integer> idMap = new HashMap<>();
 
-    public SymbolsDict(SymbolPack symbolPack, @Nullable SyntaxPack syntaxPack) {
+    public SymbolsSystem(SymbolPack symbolPack) {
         this.symbols = symbolPack;
-        this.syntax = syntaxPack;
-        
-        if (syntaxPack != null) {
-            
-            for (String name : symbols.symbolSet()) {
-                syntaxPack.addSyntaxSymbol(name, null, Integer.toString(symbols.find(name)));
-            }
-            
-            syntaxPack.setIdentifierCode(symbolPack.getIdentifierCode());
-            syntaxPack.setLiteralCode(symbolPack.getLiteralCode());
-        }
     }
 
     /**Finds and returns a constant symbol from map*/
@@ -75,8 +61,8 @@ public class SymbolsDict {
         return this.symbols.getLiteralCode();
     }
     
-    public OperationResult analyzeSyntax(String[] string) throws PatternSearchException {
-        SyntaxSymbol mainSymbol = syntax.getSyntaxSymbol(syntax.getMainSymbol());
-        return mainSymbol.searchPatterns(string, 0);
+    @Override
+    public String[] process(String input) throws UnmatchedSubstringException {
+        return lexer.processString(input);
     }
 }

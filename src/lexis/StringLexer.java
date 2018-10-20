@@ -1,31 +1,34 @@
 package lexis;
 
-import core.SymbolsDict;
+import core.SymbolsSystem;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Character.isDigit;
 
 public class StringLexer {
-    public StringLexer(SymbolsDict dictionary) {
+    public StringLexer(SymbolsSystem dictionary) {
         this.dic = dictionary;
     }
 
-    private final SymbolsDict dic;
+    private final SymbolsSystem dic;
 
     /**Processes input string into lexemes*/
     @Nullable
     @Contract("null -> null")
-    public String processString(String inString) throws UnmatchedSubstringException {
+    public String[] processString(String inString) throws UnmatchedSubstringException {
         if (inString == null) {
             return null;
         }
-        String outString = "";
+        List<String> out = new ArrayList<>();
         String[] substrings;
 
         //Adds spaces around special symbols
-        inString = this.addSpaces(inString);
+        inString = addSpaces(inString);
 
         //Splits string into substrings by spaces
         substrings = inString.split(" ");
@@ -36,16 +39,16 @@ public class StringLexer {
             }
             //Checks if the string is a reserved symbol
             if (this.isSymbol(substring)) {
-                outString += this.dic.getSymbol(substring) + " ";
+                out.add(Integer.toString(dic.getSymbol(substring)));
             }
             //Checks if the string is an identifier
              else if (this.isIdentifier(substring)) {
                 this.dic.addIdentifier(substring);
-                outString += this.dic.getIdentifierCode() + "." + this.dic.getIdentifier(substring) + " ";
+                out.add(dic.getIdentifierCode() + "." + dic.getIdentifier(substring));
             }
             //Checks if the string is a literal
             else if (this.isLiteral(substring)) {
-                outString += this.dic.getLiteralCode() + "." + substring + " ";
+                out.add(dic.getLiteralCode() + "." + substring);
             }
             //Otherwise, throws exception
             else {
@@ -53,11 +56,7 @@ public class StringLexer {
             }
         }
 
-        return outString;
-    }
-
-    public SymbolsDict getDictionary() {
-        return this.dic;
+        return out.toArray(new String[0]);
     }
 
     /**Adds spaces around reserved symbols*/
@@ -79,7 +78,7 @@ public class StringLexer {
                     outString.append(" ");
                 }
 
-                outString.append(inString.substring(i, i + matched.length()));
+                outString.append(inString, i, i + matched.length());
 
                 if (inString.length() > i + matched.length() && inString.charAt(i + matched.length()) != ' ') {
                     outString.append(" ");
@@ -88,7 +87,7 @@ public class StringLexer {
                 i += matched.length() - 1;
             }
             else {
-                outString.append(inString.substring(i, i + 1));
+                outString.append(inString, i, i + 1);
             }
         }
 
