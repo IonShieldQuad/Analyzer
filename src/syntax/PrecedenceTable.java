@@ -1,6 +1,7 @@
 package syntax;
 
 
+import core.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +101,8 @@ public abstract class PrecedenceTable {
                 //TODO:
                 
                 System.out.println(stack.peek().symbol.getName() + ": " + stack.peek().find().getData() + " : " + Arrays.stream(stack.peek().find().getParams()).reduce("", (a, b) -> a + " " + b));
+                Logger.getInstance().logln("tableGen", stack.peek().symbol.getName() + ": " + stack.peek().find().getData() + " : " + Arrays.stream(stack.peek().find().getParams()).reduce("", (a, b) -> a + " " + b));
+                
                 //If current operation is symbol match
                 if (stack.peek().find().isSymbol()) {
                     
@@ -295,10 +298,12 @@ public abstract class PrecedenceTable {
             }
             
         }
-        
+    
+        Logger.getInstance().logln("tableGen", "\nResult:");
         tuples.sort(Comparator.comparing((e) -> e.x));
         for (PrecedenceTuple t : tuples) {
             System.out.println(t.x + " " + t.value + " " + t.y);
+            Logger.getInstance().logln("tableGen", t.x + " " + t.value + " " + t.y);
         }
         
         return new PrecedenceTable(){

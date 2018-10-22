@@ -34,19 +34,24 @@ public class AnalyzerMain {
         Lexer lexer = td;
         Parser parser = td;
         
+        Logger.getInstance().addLogger("lexis", "lexisLog.txt");
+        Logger.getInstance().addLogger("syntax", "syntaxLog.txt");
+        Logger.getInstance().addLogger("tableGen", "tableGenLog.txt");
+        
+        
         try {
             //Create reader and writer
             reader = new BufferedReader(new FileReader(fileNameIn));
             writer = new BufferedWriter(new FileWriter(fileNameOut));
     
             System.out.println("\nLexical analysis:");
-            Logger.getInstance().logln("\nLexical analysis:");
+            Logger.getInstance().logln("lexis", "\nLexical analysis:");
             do {
                 //Reads a line
                 inLine = reader.readLine();
                 if (inLine != null) {
                     System.out.println(inLine);
-                    Logger.getInstance().logln(inLine);
+                    Logger.getInstance().logln("lexis", inLine);
                     try {
                         //Processes line into lexemes
                         String[] out = lexer.process(inLine);
@@ -57,12 +62,12 @@ public class AnalyzerMain {
                         outLine = outLineBuilder.toString();
                         //Writes a line
                         System.out.println(outLine);
-                        Logger.getInstance().logln(outLine);
+                        Logger.getInstance().logln("lexis", outLine);
                         writer.write(outLine);
                     }
                     catch (UnmatchedSubstringException e) {
                         System.out.println("Error: Failed to match substring: " + e.getUnmatchedSubstring());
-                        Logger.getInstance().logln("Error: Failed to match substring: " + e.getUnmatchedSubstring());
+                        Logger.getInstance().logln("lexis", "Error: Failed to match substring: " + e.getUnmatchedSubstring());
                     }
                     writer.newLine();
                 }
@@ -87,9 +92,9 @@ public class AnalyzerMain {
     
             try {
                 System.out.println("\nSyntax analysis:");
-                Logger.getInstance().logln("\nSyntax analysis:");
+                Logger.getInstance().logln("syntax", "\nSyntax analysis:");
                 System.out.println("Data size: " + data.size());
-                Logger.getInstance().logln("Data size: " + data.size());
+                Logger.getInstance().logln("syntax", "Data size: " + data.size());
                 
                 OperationResult result = parser.process(data.toArray(new String[0]));
     
@@ -105,22 +110,21 @@ public class AnalyzerMain {
                 }
                 
                 System.out.println("\nSyntax analysis result:");
-                Logger.getInstance().logln("\nSyntax analysis result:");
+                Logger.getInstance().logln("syntax", "\nSyntax analysis result:");
                 System.out.println(outLine);
-                Logger.getInstance().logln(outLine);
+                Logger.getInstance().logln("syntax", outLine);
             }
             catch (PatternSearchException e) {
                 System.out.println("======================================================================================");
                 System.out.println("Error in syntax pattern search in symbol '" + e.getName() + "', position: " + e.getIndex());
                 System.out.println(e.getData());
                 System.out.println("======================================================================================");
-                Logger.getInstance().logln("======================================================================================");
-                Logger.getInstance().logln("Error in syntax pattern search in symbol '" + e.getName() + "', position: " + e.getIndex());
-                Logger.getInstance().logln(e.getData());
-                Logger.getInstance().logln("======================================================================================");
+                Logger.getInstance().logln("syntax", "======================================================================================");
+                Logger.getInstance().logln("syntax", "Error in syntax pattern search in symbol '" + e.getName() + "', position: " + e.getIndex());
+                Logger.getInstance().logln("syntax", e.getData());
+                Logger.getInstance().logln("syntax", "======================================================================================");
             }
             
-            Logger.getInstance().close();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -205,7 +209,7 @@ public class AnalyzerMain {
         } catch (PatternSearchException e) {
             e.printStackTrace();
         }
-    
-    
+        
+        Logger.getInstance().close();
     }
 }

@@ -1,0 +1,2185 @@
+
+Lexical analysis:
+program g;
+0 39.0 24 
+var u, v, max, min: real;
+1 39.1 25 39.2 25 39.3 25 39.4 29 3 24 
+begin
+6 
+    read(u,v);
+16 27 39.1 25 39.2 28 24 
+    max:=10;
+39.3 18 40.10 24 
+    min:=0;
+39.4 18 40.0 24 
+    if u>v then
+8 39.1 32 39.2 10 
+    begin
+6 
+        if u>max then max:=u;
+8 39.1 32 39.3 10 39.3 18 39.1 24 
+        if v<min then min:=v
+8 39.2 33 39.4 10 39.4 18 39.2 
+    end
+7 
+    else
+9 
+    begin
+6 
+        if v>max then max:=v;
+8 39.2 32 39.3 10 39.3 18 39.2 24 
+        if u<min then min:=u
+8 39.1 33 39.4 10 39.4 18 39.1 
+    end;
+7 24 
+    write(max,min)
+17 27 39.3 25 39.4 28 
+end.
+7 26 
+
+Syntax analysis:
+Data size: 83
+main: 0 enter
+header: 0 enter
+(0) 0 -> 1 : header: 0 exit
+header: 1 enter
+program name: 0 enter
+(39.0) 1 -> 2 : program name: 0 exit
+(39.0) 1 -> 2 : header: 1 exit
+(0) 0 -> 2 : main: 0 exit
+main: 1 enter
+(24) 2 -> 3 : main: 1 exit
+main: 2 enter
+description section: 0 enter
+(1) 3 -> 4 : description section: 0 exit
+description section: 1 enter
+variable list: 0 enter
+(39.1) 4 -> 5 : variable list: 0 exit
+variable list: 1 enter
+(25) 5 -> 5 l : variable list: 1 exit
+variable list: 2 enter
+(25) 5 -> 6 l : variable list: 2 exit
+variable list: 3 enter
+(39.2) 6 -> 7 l : variable list: 3 exit
+variable list: 4 enter
+(25) 7 -> 7 l : variable list: 4 exit
+variable list: 2 enter
+(25) 7 -> 8 l : variable list: 2 exit
+variable list: 3 enter
+(39.3) 8 -> 9 l : variable list: 3 exit
+variable list: 4 enter
+(25) 9 -> 9 l : variable list: 4 exit
+variable list: 2 enter
+(25) 9 -> 10 l : variable list: 2 exit
+variable list: 3 enter
+(39.4) 10 -> 11 l : variable list: 3 exit
+variable list: 4 enter
+(29) 11 -> 11 l : variable list: 4 exit
+variable list: 2 enter
+(29) 11 -> "Expected terminal symbol 25 , but found: 29 at 11" l : variable list: 2 exit
+(39.1) 4 -> 11 : description section: 1 exit
+description section: 2 enter
+(29) 11 -> 12 : description section: 2 exit
+description section: 3 enter
+variable type: 0 enter
+(3) 12 -> 12 s : variable type: 0 exit
+variable type: 1 enter
+(3) 12 -> "Expected terminal symbol 2 , but found: 3 at 12" s : variable type: 1 exit
+variable type: 3 enter
+(3) 12 -> 13 s : variable type: 3 exit
+(3) 12 -> 13 : description section: 3 exit
+description section: 4 enter
+(24) 13 -> 13 l : description section: 4 exit
+description section: 5 enter
+(24) 13 -> 14 l : description section: 5 exit
+description section: 6 enter
+variable list: 0 enter
+(6) 14 -> "Expected identifier or literal, but found: 6 at 14" : variable list: 0 exit
+(6) 14 -> "Expected identifier or literal, but found: 6 at 14" l : description section: 6 exit
+(1) 3 -> 13 : main: 2 exit
+main: 3 enter
+(24) 13 -> 14 : main: 3 exit
+main: 4 enter
+operator section: 0 enter
+(6) 14 -> 14 s : operator section: 0 exit
+operator section: 1 enter
+(6) 14 -> 15 s : operator section: 1 exit
+operator section: 2 enter
+operator list: 0 enter
+operator: 0 enter
+(16) 15 -> 15 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(16) 15 -> "Expected identifier or literal, but found: 16 at 15" : assignment: 0 exit
+(16) 15 -> "Expected identifier or literal, but found: 16 at 15" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(16) 15 -> "Expected terminal symbol 8 , but found: 16 at 15" : conditional: 0 exit
+conditional: 0 enter
+(16) 15 -> "Expected terminal symbol 8 , but found: 16 at 15" : conditional: 0 exit
+(16) 15 -> "Expected terminal symbol 8 , but found: 16 at 15" s : operator: 3 exit
+operator: 5 enter
+loop: 0 enter
+(16) 15 -> "Expected terminal symbol 12 , but found: 16 at 15" : loop: 0 exit
+(16) 15 -> "Expected terminal symbol 12 , but found: 16 at 15" s : operator: 5 exit
+operator: 7 enter
+input: 0 enter
+(16) 15 -> 16 : input: 0 exit
+input: 1 enter
+(27) 16 -> 17 : input: 1 exit
+input: 2 enter
+variable list: 0 enter
+(39.1) 17 -> 18 : variable list: 0 exit
+variable list: 1 enter
+(25) 18 -> 18 l : variable list: 1 exit
+variable list: 2 enter
+(25) 18 -> 19 l : variable list: 2 exit
+variable list: 3 enter
+(39.2) 19 -> 20 l : variable list: 3 exit
+variable list: 4 enter
+(28) 20 -> 20 l : variable list: 4 exit
+variable list: 2 enter
+(28) 20 -> "Expected terminal symbol 25 , but found: 28 at 20" l : variable list: 2 exit
+(39.1) 17 -> 20 : input: 2 exit
+input: 3 enter
+(28) 20 -> 21 : input: 3 exit
+(16) 15 -> 21 s : operator: 7 exit
+(16) 15 -> 21 : operator list: 0 exit
+operator list: 1 enter
+(24) 21 -> 21 l : operator list: 1 exit
+operator list: 2 enter
+(24) 21 -> 22 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(39.3) 22 -> 22 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.3) 22 -> 23 : assignment: 0 exit
+assignment: 1 enter
+(18) 23 -> 24 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(40.10) 24 -> "Expected terminal symbol 36 , but found: 40.10 at 24" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(40.10) 24 -> "Expected terminal symbol 36 , but found: 40.10 at 24" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(40.10) 24 -> 24 s : multiplication: 0 exit
+multiplication: 1 enter
+(40.10) 24 -> "Expected identifier or literal, but found: 40.10 at 24" s : multiplication: 1 exit
+multiplication: 3 enter
+(40.10) 24 -> 25 s : multiplication: 3 exit
+(40.10) 24 -> 25 : addition: 0 exit
+addition: 1 enter
+(24) 25 -> 25 l : addition: 1 exit
+addition: 2 enter
+(24) 25 -> 25 l s : addition: 2 exit
+addition: 3 enter
+(24) 25 -> "Expected terminal symbol 21 , but found: 24 at 25" l s : addition: 3 exit
+addition: 5 enter
+(24) 25 -> "Expected terminal symbol 22 , but found: 24 at 25" l s : addition: 5 exit
+addition: 7 enter
+(24) 25 -> "Expected terminal symbol 23 , but found: 24 at 25" l s : addition: 7 exit
+(40.10) 24 -> 25 : comparison: 0 exit
+comparison: 1 enter
+(24) 25 -> 25 l : comparison: 1 exit
+comparison: 2 enter
+(24) 25 -> 25 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 25 -> "Expected terminal symbol 19 , but found: 24 at 25" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 25 -> "Expected terminal symbol 20 , but found: 24 at 25" l s : comparison: 5 exit
+(40.10) 24 -> 25 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 25 -> 25 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 25 -> 25 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 25 -> "Expected terminal symbol 30 , but found: 24 at 25" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 25 -> "Expected terminal symbol 31 , but found: 24 at 25" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 25 -> "Expected terminal symbol 33 , but found: 24 at 25" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 25 -> "Expected terminal symbol 34 , but found: 24 at 25" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 25 -> "Expected terminal symbol 32 , but found: 24 at 25" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 25 -> "Expected terminal symbol 35 , but found: 24 at 25" s : comparison operator: 11 exit
+(24) 25 -> "Expected terminal symbol 30 , but found: 24 at 25" l : logic expression: 2 exit
+(40.10) 24 -> 25 : expression: 0 exit
+expression: 1 enter
+(24) 25 -> 25 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 25 -> 25 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 25 -> "Expected terminal symbol 38 , but found: 24 at 25" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 25 -> "Expected terminal symbol 37 , but found: 24 at 25" s : logic operator: 3 exit
+(24) 25 -> "Expected terminal symbol 38 , but found: 24 at 25" l : expression: 2 exit
+(40.10) 24 -> 25 : assignment: 2 exit
+(39.3) 22 -> 25 s : operator: 1 exit
+(39.3) 22 -> 25 l : operator list: 3 exit
+operator list: 4 enter
+(24) 25 -> 25 l : operator list: 4 exit
+operator list: 2 enter
+(24) 25 -> 26 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(39.4) 26 -> 26 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.4) 26 -> 27 : assignment: 0 exit
+assignment: 1 enter
+(18) 27 -> 28 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(40.0) 28 -> "Expected terminal symbol 36 , but found: 40.0 at 28" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(40.0) 28 -> "Expected terminal symbol 36 , but found: 40.0 at 28" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(40.0) 28 -> 28 s : multiplication: 0 exit
+multiplication: 1 enter
+(40.0) 28 -> "Expected identifier or literal, but found: 40.0 at 28" s : multiplication: 1 exit
+multiplication: 3 enter
+(40.0) 28 -> 29 s : multiplication: 3 exit
+(40.0) 28 -> 29 : addition: 0 exit
+addition: 1 enter
+(24) 29 -> 29 l : addition: 1 exit
+addition: 2 enter
+(24) 29 -> 29 l s : addition: 2 exit
+addition: 3 enter
+(24) 29 -> "Expected terminal symbol 21 , but found: 24 at 29" l s : addition: 3 exit
+addition: 5 enter
+(24) 29 -> "Expected terminal symbol 22 , but found: 24 at 29" l s : addition: 5 exit
+addition: 7 enter
+(24) 29 -> "Expected terminal symbol 23 , but found: 24 at 29" l s : addition: 7 exit
+(40.0) 28 -> 29 : comparison: 0 exit
+comparison: 1 enter
+(24) 29 -> 29 l : comparison: 1 exit
+comparison: 2 enter
+(24) 29 -> 29 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 29 -> "Expected terminal symbol 19 , but found: 24 at 29" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 29 -> "Expected terminal symbol 20 , but found: 24 at 29" l s : comparison: 5 exit
+(40.0) 28 -> 29 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 29 -> 29 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 29 -> 29 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 29 -> "Expected terminal symbol 30 , but found: 24 at 29" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 29 -> "Expected terminal symbol 31 , but found: 24 at 29" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 29 -> "Expected terminal symbol 33 , but found: 24 at 29" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 29 -> "Expected terminal symbol 34 , but found: 24 at 29" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 29 -> "Expected terminal symbol 32 , but found: 24 at 29" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 29 -> "Expected terminal symbol 35 , but found: 24 at 29" s : comparison operator: 11 exit
+(24) 29 -> "Expected terminal symbol 30 , but found: 24 at 29" l : logic expression: 2 exit
+(40.0) 28 -> 29 : expression: 0 exit
+expression: 1 enter
+(24) 29 -> 29 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 29 -> 29 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 29 -> "Expected terminal symbol 38 , but found: 24 at 29" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 29 -> "Expected terminal symbol 37 , but found: 24 at 29" s : logic operator: 3 exit
+(24) 29 -> "Expected terminal symbol 38 , but found: 24 at 29" l : expression: 2 exit
+(40.0) 28 -> 29 : assignment: 2 exit
+(39.4) 26 -> 29 s : operator: 1 exit
+(39.4) 26 -> 29 l : operator list: 3 exit
+operator list: 4 enter
+(24) 29 -> 29 l : operator list: 4 exit
+operator list: 2 enter
+(24) 29 -> 30 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(8) 30 -> 30 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(8) 30 -> "Expected identifier or literal, but found: 8 at 30" : assignment: 0 exit
+(8) 30 -> "Expected identifier or literal, but found: 8 at 30" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(8) 30 -> 31 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.1) 31 -> "Expected terminal symbol 36 , but found: 39.1 at 31" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 31 -> "Expected terminal symbol 36 , but found: 39.1 at 31" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 31 -> 31 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 31 -> 32 s : multiplication: 1 exit
+(39.1) 31 -> 32 : addition: 0 exit
+addition: 1 enter
+(32) 32 -> 32 l : addition: 1 exit
+addition: 2 enter
+(32) 32 -> 32 l s : addition: 2 exit
+addition: 3 enter
+(32) 32 -> "Expected terminal symbol 21 , but found: 32 at 32" l s : addition: 3 exit
+addition: 5 enter
+(32) 32 -> "Expected terminal symbol 22 , but found: 32 at 32" l s : addition: 5 exit
+addition: 7 enter
+(32) 32 -> "Expected terminal symbol 23 , but found: 32 at 32" l s : addition: 7 exit
+(39.1) 31 -> 32 : comparison: 0 exit
+comparison: 1 enter
+(32) 32 -> 32 l : comparison: 1 exit
+comparison: 2 enter
+(32) 32 -> 32 l s : comparison: 2 exit
+comparison: 3 enter
+(32) 32 -> "Expected terminal symbol 19 , but found: 32 at 32" l s : comparison: 3 exit
+comparison: 5 enter
+(32) 32 -> "Expected terminal symbol 20 , but found: 32 at 32" l s : comparison: 5 exit
+(39.1) 31 -> 32 : logic expression: 0 exit
+logic expression: 1 enter
+(32) 32 -> 32 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(32) 32 -> 32 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(32) 32 -> "Expected terminal symbol 30 , but found: 32 at 32" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(32) 32 -> "Expected terminal symbol 31 , but found: 32 at 32" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(32) 32 -> "Expected terminal symbol 33 , but found: 32 at 32" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(32) 32 -> "Expected terminal symbol 34 , but found: 32 at 32" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(32) 32 -> 33 s : comparison operator: 9 exit
+(32) 32 -> 33 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 33 -> 33 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 33 -> 34 s : multiplication: 1 exit
+(39.2) 33 -> 34 : addition: 0 exit
+addition: 1 enter
+(10) 34 -> 34 l : addition: 1 exit
+addition: 2 enter
+(10) 34 -> 34 l s : addition: 2 exit
+addition: 3 enter
+(10) 34 -> "Expected terminal symbol 21 , but found: 10 at 34" l s : addition: 3 exit
+addition: 5 enter
+(10) 34 -> "Expected terminal symbol 22 , but found: 10 at 34" l s : addition: 5 exit
+addition: 7 enter
+(10) 34 -> "Expected terminal symbol 23 , but found: 10 at 34" l s : addition: 7 exit
+(39.2) 33 -> 34 : comparison: 0 exit
+comparison: 1 enter
+(10) 34 -> 34 l : comparison: 1 exit
+comparison: 2 enter
+(10) 34 -> 34 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 34 -> "Expected terminal symbol 19 , but found: 10 at 34" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 34 -> "Expected terminal symbol 20 , but found: 10 at 34" l s : comparison: 5 exit
+(39.2) 33 -> 34 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 34 -> 34 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 34 -> 34 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 34 -> "Expected terminal symbol 30 , but found: 10 at 34" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 34 -> "Expected terminal symbol 31 , but found: 10 at 34" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 34 -> "Expected terminal symbol 33 , but found: 10 at 34" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 34 -> "Expected terminal symbol 34 , but found: 10 at 34" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 34 -> "Expected terminal symbol 32 , but found: 10 at 34" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 34 -> "Expected terminal symbol 35 , but found: 10 at 34" s : comparison operator: 11 exit
+(10) 34 -> "Expected terminal symbol 30 , but found: 10 at 34" l : logic expression: 2 exit
+(39.1) 31 -> 34 : expression: 0 exit
+expression: 1 enter
+(10) 34 -> 34 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 34 -> 34 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 34 -> "Expected terminal symbol 38 , but found: 10 at 34" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 34 -> "Expected terminal symbol 37 , but found: 10 at 34" s : logic operator: 3 exit
+(10) 34 -> "Expected terminal symbol 38 , but found: 10 at 34" l : expression: 2 exit
+(39.1) 31 -> 34 : conditional: 1 exit
+conditional: 2 enter
+(10) 34 -> 35 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(6) 35 -> 35 s : operator section: 0 exit
+operator section: 1 enter
+(6) 35 -> 36 s : operator section: 1 exit
+operator section: 2 enter
+operator list: 0 enter
+operator: 0 enter
+(8) 36 -> 36 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(8) 36 -> "Expected identifier or literal, but found: 8 at 36" : assignment: 0 exit
+(8) 36 -> "Expected identifier or literal, but found: 8 at 36" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(8) 36 -> 37 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.1) 37 -> "Expected terminal symbol 36 , but found: 39.1 at 37" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 37 -> "Expected terminal symbol 36 , but found: 39.1 at 37" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 37 -> 37 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 37 -> 38 s : multiplication: 1 exit
+(39.1) 37 -> 38 : addition: 0 exit
+addition: 1 enter
+(32) 38 -> 38 l : addition: 1 exit
+addition: 2 enter
+(32) 38 -> 38 l s : addition: 2 exit
+addition: 3 enter
+(32) 38 -> "Expected terminal symbol 21 , but found: 32 at 38" l s : addition: 3 exit
+addition: 5 enter
+(32) 38 -> "Expected terminal symbol 22 , but found: 32 at 38" l s : addition: 5 exit
+addition: 7 enter
+(32) 38 -> "Expected terminal symbol 23 , but found: 32 at 38" l s : addition: 7 exit
+(39.1) 37 -> 38 : comparison: 0 exit
+comparison: 1 enter
+(32) 38 -> 38 l : comparison: 1 exit
+comparison: 2 enter
+(32) 38 -> 38 l s : comparison: 2 exit
+comparison: 3 enter
+(32) 38 -> "Expected terminal symbol 19 , but found: 32 at 38" l s : comparison: 3 exit
+comparison: 5 enter
+(32) 38 -> "Expected terminal symbol 20 , but found: 32 at 38" l s : comparison: 5 exit
+(39.1) 37 -> 38 : logic expression: 0 exit
+logic expression: 1 enter
+(32) 38 -> 38 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(32) 38 -> 38 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(32) 38 -> "Expected terminal symbol 30 , but found: 32 at 38" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(32) 38 -> "Expected terminal symbol 31 , but found: 32 at 38" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(32) 38 -> "Expected terminal symbol 33 , but found: 32 at 38" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(32) 38 -> "Expected terminal symbol 34 , but found: 32 at 38" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(32) 38 -> 39 s : comparison operator: 9 exit
+(32) 38 -> 39 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.3) 39 -> 39 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.3) 39 -> 40 s : multiplication: 1 exit
+(39.3) 39 -> 40 : addition: 0 exit
+addition: 1 enter
+(10) 40 -> 40 l : addition: 1 exit
+addition: 2 enter
+(10) 40 -> 40 l s : addition: 2 exit
+addition: 3 enter
+(10) 40 -> "Expected terminal symbol 21 , but found: 10 at 40" l s : addition: 3 exit
+addition: 5 enter
+(10) 40 -> "Expected terminal symbol 22 , but found: 10 at 40" l s : addition: 5 exit
+addition: 7 enter
+(10) 40 -> "Expected terminal symbol 23 , but found: 10 at 40" l s : addition: 7 exit
+(39.3) 39 -> 40 : comparison: 0 exit
+comparison: 1 enter
+(10) 40 -> 40 l : comparison: 1 exit
+comparison: 2 enter
+(10) 40 -> 40 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 40 -> "Expected terminal symbol 19 , but found: 10 at 40" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 40 -> "Expected terminal symbol 20 , but found: 10 at 40" l s : comparison: 5 exit
+(39.3) 39 -> 40 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 40 -> 40 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 40 -> 40 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 40 -> "Expected terminal symbol 30 , but found: 10 at 40" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 40 -> "Expected terminal symbol 31 , but found: 10 at 40" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 40 -> "Expected terminal symbol 33 , but found: 10 at 40" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 40 -> "Expected terminal symbol 34 , but found: 10 at 40" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 40 -> "Expected terminal symbol 32 , but found: 10 at 40" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 40 -> "Expected terminal symbol 35 , but found: 10 at 40" s : comparison operator: 11 exit
+(10) 40 -> "Expected terminal symbol 30 , but found: 10 at 40" l : logic expression: 2 exit
+(39.1) 37 -> 40 : expression: 0 exit
+expression: 1 enter
+(10) 40 -> 40 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 40 -> 40 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 40 -> "Expected terminal symbol 38 , but found: 10 at 40" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 40 -> "Expected terminal symbol 37 , but found: 10 at 40" s : logic operator: 3 exit
+(10) 40 -> "Expected terminal symbol 38 , but found: 10 at 40" l : expression: 2 exit
+(39.1) 37 -> 40 : conditional: 1 exit
+conditional: 2 enter
+(10) 40 -> 41 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.3) 41 -> 41 s : operator section: 0 exit
+operator section: 1 enter
+(39.3) 41 -> "Expected terminal symbol 6 , but found: 39.3 at 41" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.3) 41 -> 41 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.3) 41 -> 42 : assignment: 0 exit
+assignment: 1 enter
+(18) 42 -> 43 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.1) 43 -> "Expected terminal symbol 36 , but found: 39.1 at 43" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 43 -> "Expected terminal symbol 36 , but found: 39.1 at 43" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 43 -> 43 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 43 -> 44 s : multiplication: 1 exit
+(39.1) 43 -> 44 : addition: 0 exit
+addition: 1 enter
+(24) 44 -> 44 l : addition: 1 exit
+addition: 2 enter
+(24) 44 -> 44 l s : addition: 2 exit
+addition: 3 enter
+(24) 44 -> "Expected terminal symbol 21 , but found: 24 at 44" l s : addition: 3 exit
+addition: 5 enter
+(24) 44 -> "Expected terminal symbol 22 , but found: 24 at 44" l s : addition: 5 exit
+addition: 7 enter
+(24) 44 -> "Expected terminal symbol 23 , but found: 24 at 44" l s : addition: 7 exit
+(39.1) 43 -> 44 : comparison: 0 exit
+comparison: 1 enter
+(24) 44 -> 44 l : comparison: 1 exit
+comparison: 2 enter
+(24) 44 -> 44 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 44 -> "Expected terminal symbol 19 , but found: 24 at 44" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 44 -> "Expected terminal symbol 20 , but found: 24 at 44" l s : comparison: 5 exit
+(39.1) 43 -> 44 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 44 -> 44 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 44 -> 44 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 44 -> "Expected terminal symbol 30 , but found: 24 at 44" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 44 -> "Expected terminal symbol 31 , but found: 24 at 44" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 44 -> "Expected terminal symbol 33 , but found: 24 at 44" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 44 -> "Expected terminal symbol 34 , but found: 24 at 44" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 44 -> "Expected terminal symbol 32 , but found: 24 at 44" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 44 -> "Expected terminal symbol 35 , but found: 24 at 44" s : comparison operator: 11 exit
+(24) 44 -> "Expected terminal symbol 30 , but found: 24 at 44" l : logic expression: 2 exit
+(39.1) 43 -> 44 : expression: 0 exit
+expression: 1 enter
+(24) 44 -> 44 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 44 -> 44 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 44 -> "Expected terminal symbol 38 , but found: 24 at 44" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 44 -> "Expected terminal symbol 37 , but found: 24 at 44" s : logic operator: 3 exit
+(24) 44 -> "Expected terminal symbol 38 , but found: 24 at 44" l : expression: 2 exit
+(39.1) 43 -> 44 : assignment: 2 exit
+(39.3) 41 -> 44 s : operator: 1 exit
+(39.3) 41 -> 44 s : operator section: 5 exit
+(39.3) 41 -> 44 : conditional: 3 exit
+conditional: 4 enter
+(24) 44 -> "Expected terminal symbol 9 , but found: 24 at 44" : conditional: 4 exit
+conditional: 0 enter
+(8) 36 -> 37 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.1) 37 -> "Expected terminal symbol 36 , but found: 39.1 at 37" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 37 -> "Expected terminal symbol 36 , but found: 39.1 at 37" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 37 -> 37 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 37 -> 38 s : multiplication: 1 exit
+(39.1) 37 -> 38 : addition: 0 exit
+addition: 1 enter
+(32) 38 -> 38 l : addition: 1 exit
+addition: 2 enter
+(32) 38 -> 38 l s : addition: 2 exit
+addition: 3 enter
+(32) 38 -> "Expected terminal symbol 21 , but found: 32 at 38" l s : addition: 3 exit
+addition: 5 enter
+(32) 38 -> "Expected terminal symbol 22 , but found: 32 at 38" l s : addition: 5 exit
+addition: 7 enter
+(32) 38 -> "Expected terminal symbol 23 , but found: 32 at 38" l s : addition: 7 exit
+(39.1) 37 -> 38 : comparison: 0 exit
+comparison: 1 enter
+(32) 38 -> 38 l : comparison: 1 exit
+comparison: 2 enter
+(32) 38 -> 38 l s : comparison: 2 exit
+comparison: 3 enter
+(32) 38 -> "Expected terminal symbol 19 , but found: 32 at 38" l s : comparison: 3 exit
+comparison: 5 enter
+(32) 38 -> "Expected terminal symbol 20 , but found: 32 at 38" l s : comparison: 5 exit
+(39.1) 37 -> 38 : logic expression: 0 exit
+logic expression: 1 enter
+(32) 38 -> 38 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(32) 38 -> 38 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(32) 38 -> "Expected terminal symbol 30 , but found: 32 at 38" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(32) 38 -> "Expected terminal symbol 31 , but found: 32 at 38" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(32) 38 -> "Expected terminal symbol 33 , but found: 32 at 38" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(32) 38 -> "Expected terminal symbol 34 , but found: 32 at 38" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(32) 38 -> 39 s : comparison operator: 9 exit
+(32) 38 -> 39 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.3) 39 -> 39 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.3) 39 -> 40 s : multiplication: 1 exit
+(39.3) 39 -> 40 : addition: 0 exit
+addition: 1 enter
+(10) 40 -> 40 l : addition: 1 exit
+addition: 2 enter
+(10) 40 -> 40 l s : addition: 2 exit
+addition: 3 enter
+(10) 40 -> "Expected terminal symbol 21 , but found: 10 at 40" l s : addition: 3 exit
+addition: 5 enter
+(10) 40 -> "Expected terminal symbol 22 , but found: 10 at 40" l s : addition: 5 exit
+addition: 7 enter
+(10) 40 -> "Expected terminal symbol 23 , but found: 10 at 40" l s : addition: 7 exit
+(39.3) 39 -> 40 : comparison: 0 exit
+comparison: 1 enter
+(10) 40 -> 40 l : comparison: 1 exit
+comparison: 2 enter
+(10) 40 -> 40 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 40 -> "Expected terminal symbol 19 , but found: 10 at 40" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 40 -> "Expected terminal symbol 20 , but found: 10 at 40" l s : comparison: 5 exit
+(39.3) 39 -> 40 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 40 -> 40 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 40 -> 40 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 40 -> "Expected terminal symbol 30 , but found: 10 at 40" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 40 -> "Expected terminal symbol 31 , but found: 10 at 40" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 40 -> "Expected terminal symbol 33 , but found: 10 at 40" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 40 -> "Expected terminal symbol 34 , but found: 10 at 40" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 40 -> "Expected terminal symbol 32 , but found: 10 at 40" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 40 -> "Expected terminal symbol 35 , but found: 10 at 40" s : comparison operator: 11 exit
+(10) 40 -> "Expected terminal symbol 30 , but found: 10 at 40" l : logic expression: 2 exit
+(39.1) 37 -> 40 : expression: 0 exit
+expression: 1 enter
+(10) 40 -> 40 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 40 -> 40 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 40 -> "Expected terminal symbol 38 , but found: 10 at 40" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 40 -> "Expected terminal symbol 37 , but found: 10 at 40" s : logic operator: 3 exit
+(10) 40 -> "Expected terminal symbol 38 , but found: 10 at 40" l : expression: 2 exit
+(39.1) 37 -> 40 : conditional: 1 exit
+conditional: 2 enter
+(10) 40 -> 41 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.3) 41 -> 41 s : operator section: 0 exit
+operator section: 1 enter
+(39.3) 41 -> "Expected terminal symbol 6 , but found: 39.3 at 41" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.3) 41 -> 41 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.3) 41 -> 42 : assignment: 0 exit
+assignment: 1 enter
+(18) 42 -> 43 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.1) 43 -> "Expected terminal symbol 36 , but found: 39.1 at 43" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 43 -> "Expected terminal symbol 36 , but found: 39.1 at 43" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 43 -> 43 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 43 -> 44 s : multiplication: 1 exit
+(39.1) 43 -> 44 : addition: 0 exit
+addition: 1 enter
+(24) 44 -> 44 l : addition: 1 exit
+addition: 2 enter
+(24) 44 -> 44 l s : addition: 2 exit
+addition: 3 enter
+(24) 44 -> "Expected terminal symbol 21 , but found: 24 at 44" l s : addition: 3 exit
+addition: 5 enter
+(24) 44 -> "Expected terminal symbol 22 , but found: 24 at 44" l s : addition: 5 exit
+addition: 7 enter
+(24) 44 -> "Expected terminal symbol 23 , but found: 24 at 44" l s : addition: 7 exit
+(39.1) 43 -> 44 : comparison: 0 exit
+comparison: 1 enter
+(24) 44 -> 44 l : comparison: 1 exit
+comparison: 2 enter
+(24) 44 -> 44 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 44 -> "Expected terminal symbol 19 , but found: 24 at 44" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 44 -> "Expected terminal symbol 20 , but found: 24 at 44" l s : comparison: 5 exit
+(39.1) 43 -> 44 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 44 -> 44 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 44 -> 44 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 44 -> "Expected terminal symbol 30 , but found: 24 at 44" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 44 -> "Expected terminal symbol 31 , but found: 24 at 44" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 44 -> "Expected terminal symbol 33 , but found: 24 at 44" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 44 -> "Expected terminal symbol 34 , but found: 24 at 44" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 44 -> "Expected terminal symbol 32 , but found: 24 at 44" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 44 -> "Expected terminal symbol 35 , but found: 24 at 44" s : comparison operator: 11 exit
+(24) 44 -> "Expected terminal symbol 30 , but found: 24 at 44" l : logic expression: 2 exit
+(39.1) 43 -> 44 : expression: 0 exit
+expression: 1 enter
+(24) 44 -> 44 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 44 -> 44 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 44 -> "Expected terminal symbol 38 , but found: 24 at 44" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 44 -> "Expected terminal symbol 37 , but found: 24 at 44" s : logic operator: 3 exit
+(24) 44 -> "Expected terminal symbol 38 , but found: 24 at 44" l : expression: 2 exit
+(39.1) 43 -> 44 : assignment: 2 exit
+(39.3) 41 -> 44 s : operator: 1 exit
+(39.3) 41 -> 44 s : operator section: 5 exit
+(39.3) 41 -> 44 : conditional: 3 exit
+(8) 36 -> 44 s : operator: 3 exit
+(8) 36 -> 44 : operator list: 0 exit
+operator list: 1 enter
+(24) 44 -> 44 l : operator list: 1 exit
+operator list: 2 enter
+(24) 44 -> 45 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(8) 45 -> 45 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(8) 45 -> "Expected identifier or literal, but found: 8 at 45" : assignment: 0 exit
+(8) 45 -> "Expected identifier or literal, but found: 8 at 45" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(8) 45 -> 46 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.2) 46 -> "Expected terminal symbol 36 , but found: 39.2 at 46" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 46 -> "Expected terminal symbol 36 , but found: 39.2 at 46" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 46 -> 46 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 46 -> 47 s : multiplication: 1 exit
+(39.2) 46 -> 47 : addition: 0 exit
+addition: 1 enter
+(33) 47 -> 47 l : addition: 1 exit
+addition: 2 enter
+(33) 47 -> 47 l s : addition: 2 exit
+addition: 3 enter
+(33) 47 -> "Expected terminal symbol 21 , but found: 33 at 47" l s : addition: 3 exit
+addition: 5 enter
+(33) 47 -> "Expected terminal symbol 22 , but found: 33 at 47" l s : addition: 5 exit
+addition: 7 enter
+(33) 47 -> "Expected terminal symbol 23 , but found: 33 at 47" l s : addition: 7 exit
+(39.2) 46 -> 47 : comparison: 0 exit
+comparison: 1 enter
+(33) 47 -> 47 l : comparison: 1 exit
+comparison: 2 enter
+(33) 47 -> 47 l s : comparison: 2 exit
+comparison: 3 enter
+(33) 47 -> "Expected terminal symbol 19 , but found: 33 at 47" l s : comparison: 3 exit
+comparison: 5 enter
+(33) 47 -> "Expected terminal symbol 20 , but found: 33 at 47" l s : comparison: 5 exit
+(39.2) 46 -> 47 : logic expression: 0 exit
+logic expression: 1 enter
+(33) 47 -> 47 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(33) 47 -> 47 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(33) 47 -> "Expected terminal symbol 30 , but found: 33 at 47" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(33) 47 -> "Expected terminal symbol 31 , but found: 33 at 47" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(33) 47 -> 48 s : comparison operator: 5 exit
+(33) 47 -> 48 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.4) 48 -> 48 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.4) 48 -> 49 s : multiplication: 1 exit
+(39.4) 48 -> 49 : addition: 0 exit
+addition: 1 enter
+(10) 49 -> 49 l : addition: 1 exit
+addition: 2 enter
+(10) 49 -> 49 l s : addition: 2 exit
+addition: 3 enter
+(10) 49 -> "Expected terminal symbol 21 , but found: 10 at 49" l s : addition: 3 exit
+addition: 5 enter
+(10) 49 -> "Expected terminal symbol 22 , but found: 10 at 49" l s : addition: 5 exit
+addition: 7 enter
+(10) 49 -> "Expected terminal symbol 23 , but found: 10 at 49" l s : addition: 7 exit
+(39.4) 48 -> 49 : comparison: 0 exit
+comparison: 1 enter
+(10) 49 -> 49 l : comparison: 1 exit
+comparison: 2 enter
+(10) 49 -> 49 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 49 -> "Expected terminal symbol 19 , but found: 10 at 49" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 49 -> "Expected terminal symbol 20 , but found: 10 at 49" l s : comparison: 5 exit
+(39.4) 48 -> 49 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 49 -> 49 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 49 -> 49 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 49 -> "Expected terminal symbol 30 , but found: 10 at 49" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 49 -> "Expected terminal symbol 31 , but found: 10 at 49" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 49 -> "Expected terminal symbol 33 , but found: 10 at 49" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 49 -> "Expected terminal symbol 34 , but found: 10 at 49" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 49 -> "Expected terminal symbol 32 , but found: 10 at 49" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 49 -> "Expected terminal symbol 35 , but found: 10 at 49" s : comparison operator: 11 exit
+(10) 49 -> "Expected terminal symbol 30 , but found: 10 at 49" l : logic expression: 2 exit
+(39.2) 46 -> 49 : expression: 0 exit
+expression: 1 enter
+(10) 49 -> 49 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 49 -> 49 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 49 -> "Expected terminal symbol 38 , but found: 10 at 49" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 49 -> "Expected terminal symbol 37 , but found: 10 at 49" s : logic operator: 3 exit
+(10) 49 -> "Expected terminal symbol 38 , but found: 10 at 49" l : expression: 2 exit
+(39.2) 46 -> 49 : conditional: 1 exit
+conditional: 2 enter
+(10) 49 -> 50 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.4) 50 -> 50 s : operator section: 0 exit
+operator section: 1 enter
+(39.4) 50 -> "Expected terminal symbol 6 , but found: 39.4 at 50" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.4) 50 -> 50 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.4) 50 -> 51 : assignment: 0 exit
+assignment: 1 enter
+(18) 51 -> 52 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.2) 52 -> "Expected terminal symbol 36 , but found: 39.2 at 52" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 52 -> "Expected terminal symbol 36 , but found: 39.2 at 52" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 52 -> 52 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 52 -> 53 s : multiplication: 1 exit
+(39.2) 52 -> 53 : addition: 0 exit
+addition: 1 enter
+(7) 53 -> 53 l : addition: 1 exit
+addition: 2 enter
+(7) 53 -> 53 l s : addition: 2 exit
+addition: 3 enter
+(7) 53 -> "Expected terminal symbol 21 , but found: 7 at 53" l s : addition: 3 exit
+addition: 5 enter
+(7) 53 -> "Expected terminal symbol 22 , but found: 7 at 53" l s : addition: 5 exit
+addition: 7 enter
+(7) 53 -> "Expected terminal symbol 23 , but found: 7 at 53" l s : addition: 7 exit
+(39.2) 52 -> 53 : comparison: 0 exit
+comparison: 1 enter
+(7) 53 -> 53 l : comparison: 1 exit
+comparison: 2 enter
+(7) 53 -> 53 l s : comparison: 2 exit
+comparison: 3 enter
+(7) 53 -> "Expected terminal symbol 19 , but found: 7 at 53" l s : comparison: 3 exit
+comparison: 5 enter
+(7) 53 -> "Expected terminal symbol 20 , but found: 7 at 53" l s : comparison: 5 exit
+(39.2) 52 -> 53 : logic expression: 0 exit
+logic expression: 1 enter
+(7) 53 -> 53 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(7) 53 -> 53 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(7) 53 -> "Expected terminal symbol 30 , but found: 7 at 53" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(7) 53 -> "Expected terminal symbol 31 , but found: 7 at 53" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(7) 53 -> "Expected terminal symbol 33 , but found: 7 at 53" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(7) 53 -> "Expected terminal symbol 34 , but found: 7 at 53" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(7) 53 -> "Expected terminal symbol 32 , but found: 7 at 53" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(7) 53 -> "Expected terminal symbol 35 , but found: 7 at 53" s : comparison operator: 11 exit
+(7) 53 -> "Expected terminal symbol 30 , but found: 7 at 53" l : logic expression: 2 exit
+(39.2) 52 -> 53 : expression: 0 exit
+expression: 1 enter
+(7) 53 -> 53 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(7) 53 -> 53 s : logic operator: 0 exit
+logic operator: 1 enter
+(7) 53 -> "Expected terminal symbol 38 , but found: 7 at 53" s : logic operator: 1 exit
+logic operator: 3 enter
+(7) 53 -> "Expected terminal symbol 37 , but found: 7 at 53" s : logic operator: 3 exit
+(7) 53 -> "Expected terminal symbol 38 , but found: 7 at 53" l : expression: 2 exit
+(39.2) 52 -> 53 : assignment: 2 exit
+(39.4) 50 -> 53 s : operator: 1 exit
+(39.4) 50 -> 53 s : operator section: 5 exit
+(39.4) 50 -> 53 : conditional: 3 exit
+conditional: 4 enter
+(7) 53 -> "Expected terminal symbol 9 , but found: 7 at 53" : conditional: 4 exit
+conditional: 0 enter
+(8) 45 -> 46 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.2) 46 -> "Expected terminal symbol 36 , but found: 39.2 at 46" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 46 -> "Expected terminal symbol 36 , but found: 39.2 at 46" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 46 -> 46 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 46 -> 47 s : multiplication: 1 exit
+(39.2) 46 -> 47 : addition: 0 exit
+addition: 1 enter
+(33) 47 -> 47 l : addition: 1 exit
+addition: 2 enter
+(33) 47 -> 47 l s : addition: 2 exit
+addition: 3 enter
+(33) 47 -> "Expected terminal symbol 21 , but found: 33 at 47" l s : addition: 3 exit
+addition: 5 enter
+(33) 47 -> "Expected terminal symbol 22 , but found: 33 at 47" l s : addition: 5 exit
+addition: 7 enter
+(33) 47 -> "Expected terminal symbol 23 , but found: 33 at 47" l s : addition: 7 exit
+(39.2) 46 -> 47 : comparison: 0 exit
+comparison: 1 enter
+(33) 47 -> 47 l : comparison: 1 exit
+comparison: 2 enter
+(33) 47 -> 47 l s : comparison: 2 exit
+comparison: 3 enter
+(33) 47 -> "Expected terminal symbol 19 , but found: 33 at 47" l s : comparison: 3 exit
+comparison: 5 enter
+(33) 47 -> "Expected terminal symbol 20 , but found: 33 at 47" l s : comparison: 5 exit
+(39.2) 46 -> 47 : logic expression: 0 exit
+logic expression: 1 enter
+(33) 47 -> 47 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(33) 47 -> 47 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(33) 47 -> "Expected terminal symbol 30 , but found: 33 at 47" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(33) 47 -> "Expected terminal symbol 31 , but found: 33 at 47" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(33) 47 -> 48 s : comparison operator: 5 exit
+(33) 47 -> 48 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.4) 48 -> 48 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.4) 48 -> 49 s : multiplication: 1 exit
+(39.4) 48 -> 49 : addition: 0 exit
+addition: 1 enter
+(10) 49 -> 49 l : addition: 1 exit
+addition: 2 enter
+(10) 49 -> 49 l s : addition: 2 exit
+addition: 3 enter
+(10) 49 -> "Expected terminal symbol 21 , but found: 10 at 49" l s : addition: 3 exit
+addition: 5 enter
+(10) 49 -> "Expected terminal symbol 22 , but found: 10 at 49" l s : addition: 5 exit
+addition: 7 enter
+(10) 49 -> "Expected terminal symbol 23 , but found: 10 at 49" l s : addition: 7 exit
+(39.4) 48 -> 49 : comparison: 0 exit
+comparison: 1 enter
+(10) 49 -> 49 l : comparison: 1 exit
+comparison: 2 enter
+(10) 49 -> 49 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 49 -> "Expected terminal symbol 19 , but found: 10 at 49" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 49 -> "Expected terminal symbol 20 , but found: 10 at 49" l s : comparison: 5 exit
+(39.4) 48 -> 49 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 49 -> 49 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 49 -> 49 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 49 -> "Expected terminal symbol 30 , but found: 10 at 49" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 49 -> "Expected terminal symbol 31 , but found: 10 at 49" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 49 -> "Expected terminal symbol 33 , but found: 10 at 49" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 49 -> "Expected terminal symbol 34 , but found: 10 at 49" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 49 -> "Expected terminal symbol 32 , but found: 10 at 49" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 49 -> "Expected terminal symbol 35 , but found: 10 at 49" s : comparison operator: 11 exit
+(10) 49 -> "Expected terminal symbol 30 , but found: 10 at 49" l : logic expression: 2 exit
+(39.2) 46 -> 49 : expression: 0 exit
+expression: 1 enter
+(10) 49 -> 49 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 49 -> 49 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 49 -> "Expected terminal symbol 38 , but found: 10 at 49" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 49 -> "Expected terminal symbol 37 , but found: 10 at 49" s : logic operator: 3 exit
+(10) 49 -> "Expected terminal symbol 38 , but found: 10 at 49" l : expression: 2 exit
+(39.2) 46 -> 49 : conditional: 1 exit
+conditional: 2 enter
+(10) 49 -> 50 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.4) 50 -> 50 s : operator section: 0 exit
+operator section: 1 enter
+(39.4) 50 -> "Expected terminal symbol 6 , but found: 39.4 at 50" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.4) 50 -> 50 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.4) 50 -> 51 : assignment: 0 exit
+assignment: 1 enter
+(18) 51 -> 52 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.2) 52 -> "Expected terminal symbol 36 , but found: 39.2 at 52" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 52 -> "Expected terminal symbol 36 , but found: 39.2 at 52" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 52 -> 52 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 52 -> 53 s : multiplication: 1 exit
+(39.2) 52 -> 53 : addition: 0 exit
+addition: 1 enter
+(7) 53 -> 53 l : addition: 1 exit
+addition: 2 enter
+(7) 53 -> 53 l s : addition: 2 exit
+addition: 3 enter
+(7) 53 -> "Expected terminal symbol 21 , but found: 7 at 53" l s : addition: 3 exit
+addition: 5 enter
+(7) 53 -> "Expected terminal symbol 22 , but found: 7 at 53" l s : addition: 5 exit
+addition: 7 enter
+(7) 53 -> "Expected terminal symbol 23 , but found: 7 at 53" l s : addition: 7 exit
+(39.2) 52 -> 53 : comparison: 0 exit
+comparison: 1 enter
+(7) 53 -> 53 l : comparison: 1 exit
+comparison: 2 enter
+(7) 53 -> 53 l s : comparison: 2 exit
+comparison: 3 enter
+(7) 53 -> "Expected terminal symbol 19 , but found: 7 at 53" l s : comparison: 3 exit
+comparison: 5 enter
+(7) 53 -> "Expected terminal symbol 20 , but found: 7 at 53" l s : comparison: 5 exit
+(39.2) 52 -> 53 : logic expression: 0 exit
+logic expression: 1 enter
+(7) 53 -> 53 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(7) 53 -> 53 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(7) 53 -> "Expected terminal symbol 30 , but found: 7 at 53" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(7) 53 -> "Expected terminal symbol 31 , but found: 7 at 53" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(7) 53 -> "Expected terminal symbol 33 , but found: 7 at 53" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(7) 53 -> "Expected terminal symbol 34 , but found: 7 at 53" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(7) 53 -> "Expected terminal symbol 32 , but found: 7 at 53" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(7) 53 -> "Expected terminal symbol 35 , but found: 7 at 53" s : comparison operator: 11 exit
+(7) 53 -> "Expected terminal symbol 30 , but found: 7 at 53" l : logic expression: 2 exit
+(39.2) 52 -> 53 : expression: 0 exit
+expression: 1 enter
+(7) 53 -> 53 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(7) 53 -> 53 s : logic operator: 0 exit
+logic operator: 1 enter
+(7) 53 -> "Expected terminal symbol 38 , but found: 7 at 53" s : logic operator: 1 exit
+logic operator: 3 enter
+(7) 53 -> "Expected terminal symbol 37 , but found: 7 at 53" s : logic operator: 3 exit
+(7) 53 -> "Expected terminal symbol 38 , but found: 7 at 53" l : expression: 2 exit
+(39.2) 52 -> 53 : assignment: 2 exit
+(39.4) 50 -> 53 s : operator: 1 exit
+(39.4) 50 -> 53 s : operator section: 5 exit
+(39.4) 50 -> 53 : conditional: 3 exit
+(8) 45 -> 53 s : operator: 3 exit
+(8) 45 -> 53 l : operator list: 3 exit
+operator list: 4 enter
+(7) 53 -> 53 l : operator list: 4 exit
+operator list: 2 enter
+(7) 53 -> "Expected terminal symbol 24 , but found: 7 at 53" l : operator list: 2 exit
+(8) 36 -> 53 s : operator section: 2 exit
+operator section: 3 enter
+(7) 53 -> 54 s : operator section: 3 exit
+(6) 35 -> 54 : conditional: 3 exit
+conditional: 4 enter
+(9) 54 -> 55 : conditional: 4 exit
+conditional: 5 enter
+operator section: 0 enter
+(6) 55 -> 55 s : operator section: 0 exit
+operator section: 1 enter
+(6) 55 -> 56 s : operator section: 1 exit
+operator section: 2 enter
+operator list: 0 enter
+operator: 0 enter
+(8) 56 -> 56 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(8) 56 -> "Expected identifier or literal, but found: 8 at 56" : assignment: 0 exit
+(8) 56 -> "Expected identifier or literal, but found: 8 at 56" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(8) 56 -> 57 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.2) 57 -> "Expected terminal symbol 36 , but found: 39.2 at 57" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 57 -> "Expected terminal symbol 36 , but found: 39.2 at 57" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 57 -> 57 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 57 -> 58 s : multiplication: 1 exit
+(39.2) 57 -> 58 : addition: 0 exit
+addition: 1 enter
+(32) 58 -> 58 l : addition: 1 exit
+addition: 2 enter
+(32) 58 -> 58 l s : addition: 2 exit
+addition: 3 enter
+(32) 58 -> "Expected terminal symbol 21 , but found: 32 at 58" l s : addition: 3 exit
+addition: 5 enter
+(32) 58 -> "Expected terminal symbol 22 , but found: 32 at 58" l s : addition: 5 exit
+addition: 7 enter
+(32) 58 -> "Expected terminal symbol 23 , but found: 32 at 58" l s : addition: 7 exit
+(39.2) 57 -> 58 : comparison: 0 exit
+comparison: 1 enter
+(32) 58 -> 58 l : comparison: 1 exit
+comparison: 2 enter
+(32) 58 -> 58 l s : comparison: 2 exit
+comparison: 3 enter
+(32) 58 -> "Expected terminal symbol 19 , but found: 32 at 58" l s : comparison: 3 exit
+comparison: 5 enter
+(32) 58 -> "Expected terminal symbol 20 , but found: 32 at 58" l s : comparison: 5 exit
+(39.2) 57 -> 58 : logic expression: 0 exit
+logic expression: 1 enter
+(32) 58 -> 58 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(32) 58 -> 58 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(32) 58 -> "Expected terminal symbol 30 , but found: 32 at 58" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(32) 58 -> "Expected terminal symbol 31 , but found: 32 at 58" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(32) 58 -> "Expected terminal symbol 33 , but found: 32 at 58" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(32) 58 -> "Expected terminal symbol 34 , but found: 32 at 58" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(32) 58 -> 59 s : comparison operator: 9 exit
+(32) 58 -> 59 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.3) 59 -> 59 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.3) 59 -> 60 s : multiplication: 1 exit
+(39.3) 59 -> 60 : addition: 0 exit
+addition: 1 enter
+(10) 60 -> 60 l : addition: 1 exit
+addition: 2 enter
+(10) 60 -> 60 l s : addition: 2 exit
+addition: 3 enter
+(10) 60 -> "Expected terminal symbol 21 , but found: 10 at 60" l s : addition: 3 exit
+addition: 5 enter
+(10) 60 -> "Expected terminal symbol 22 , but found: 10 at 60" l s : addition: 5 exit
+addition: 7 enter
+(10) 60 -> "Expected terminal symbol 23 , but found: 10 at 60" l s : addition: 7 exit
+(39.3) 59 -> 60 : comparison: 0 exit
+comparison: 1 enter
+(10) 60 -> 60 l : comparison: 1 exit
+comparison: 2 enter
+(10) 60 -> 60 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 60 -> "Expected terminal symbol 19 , but found: 10 at 60" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 60 -> "Expected terminal symbol 20 , but found: 10 at 60" l s : comparison: 5 exit
+(39.3) 59 -> 60 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 60 -> 60 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 60 -> 60 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 60 -> "Expected terminal symbol 30 , but found: 10 at 60" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 60 -> "Expected terminal symbol 31 , but found: 10 at 60" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 60 -> "Expected terminal symbol 33 , but found: 10 at 60" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 60 -> "Expected terminal symbol 34 , but found: 10 at 60" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 60 -> "Expected terminal symbol 32 , but found: 10 at 60" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 60 -> "Expected terminal symbol 35 , but found: 10 at 60" s : comparison operator: 11 exit
+(10) 60 -> "Expected terminal symbol 30 , but found: 10 at 60" l : logic expression: 2 exit
+(39.2) 57 -> 60 : expression: 0 exit
+expression: 1 enter
+(10) 60 -> 60 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 60 -> 60 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 60 -> "Expected terminal symbol 38 , but found: 10 at 60" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 60 -> "Expected terminal symbol 37 , but found: 10 at 60" s : logic operator: 3 exit
+(10) 60 -> "Expected terminal symbol 38 , but found: 10 at 60" l : expression: 2 exit
+(39.2) 57 -> 60 : conditional: 1 exit
+conditional: 2 enter
+(10) 60 -> 61 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.3) 61 -> 61 s : operator section: 0 exit
+operator section: 1 enter
+(39.3) 61 -> "Expected terminal symbol 6 , but found: 39.3 at 61" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.3) 61 -> 61 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.3) 61 -> 62 : assignment: 0 exit
+assignment: 1 enter
+(18) 62 -> 63 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.2) 63 -> "Expected terminal symbol 36 , but found: 39.2 at 63" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 63 -> "Expected terminal symbol 36 , but found: 39.2 at 63" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 63 -> 63 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 63 -> 64 s : multiplication: 1 exit
+(39.2) 63 -> 64 : addition: 0 exit
+addition: 1 enter
+(24) 64 -> 64 l : addition: 1 exit
+addition: 2 enter
+(24) 64 -> 64 l s : addition: 2 exit
+addition: 3 enter
+(24) 64 -> "Expected terminal symbol 21 , but found: 24 at 64" l s : addition: 3 exit
+addition: 5 enter
+(24) 64 -> "Expected terminal symbol 22 , but found: 24 at 64" l s : addition: 5 exit
+addition: 7 enter
+(24) 64 -> "Expected terminal symbol 23 , but found: 24 at 64" l s : addition: 7 exit
+(39.2) 63 -> 64 : comparison: 0 exit
+comparison: 1 enter
+(24) 64 -> 64 l : comparison: 1 exit
+comparison: 2 enter
+(24) 64 -> 64 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 64 -> "Expected terminal symbol 19 , but found: 24 at 64" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 64 -> "Expected terminal symbol 20 , but found: 24 at 64" l s : comparison: 5 exit
+(39.2) 63 -> 64 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 64 -> 64 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 64 -> 64 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 64 -> "Expected terminal symbol 30 , but found: 24 at 64" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 64 -> "Expected terminal symbol 31 , but found: 24 at 64" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 64 -> "Expected terminal symbol 33 , but found: 24 at 64" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 64 -> "Expected terminal symbol 34 , but found: 24 at 64" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 64 -> "Expected terminal symbol 32 , but found: 24 at 64" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 64 -> "Expected terminal symbol 35 , but found: 24 at 64" s : comparison operator: 11 exit
+(24) 64 -> "Expected terminal symbol 30 , but found: 24 at 64" l : logic expression: 2 exit
+(39.2) 63 -> 64 : expression: 0 exit
+expression: 1 enter
+(24) 64 -> 64 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 64 -> 64 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 64 -> "Expected terminal symbol 38 , but found: 24 at 64" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 64 -> "Expected terminal symbol 37 , but found: 24 at 64" s : logic operator: 3 exit
+(24) 64 -> "Expected terminal symbol 38 , but found: 24 at 64" l : expression: 2 exit
+(39.2) 63 -> 64 : assignment: 2 exit
+(39.3) 61 -> 64 s : operator: 1 exit
+(39.3) 61 -> 64 s : operator section: 5 exit
+(39.3) 61 -> 64 : conditional: 3 exit
+conditional: 4 enter
+(24) 64 -> "Expected terminal symbol 9 , but found: 24 at 64" : conditional: 4 exit
+conditional: 0 enter
+(8) 56 -> 57 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.2) 57 -> "Expected terminal symbol 36 , but found: 39.2 at 57" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 57 -> "Expected terminal symbol 36 , but found: 39.2 at 57" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 57 -> 57 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 57 -> 58 s : multiplication: 1 exit
+(39.2) 57 -> 58 : addition: 0 exit
+addition: 1 enter
+(32) 58 -> 58 l : addition: 1 exit
+addition: 2 enter
+(32) 58 -> 58 l s : addition: 2 exit
+addition: 3 enter
+(32) 58 -> "Expected terminal symbol 21 , but found: 32 at 58" l s : addition: 3 exit
+addition: 5 enter
+(32) 58 -> "Expected terminal symbol 22 , but found: 32 at 58" l s : addition: 5 exit
+addition: 7 enter
+(32) 58 -> "Expected terminal symbol 23 , but found: 32 at 58" l s : addition: 7 exit
+(39.2) 57 -> 58 : comparison: 0 exit
+comparison: 1 enter
+(32) 58 -> 58 l : comparison: 1 exit
+comparison: 2 enter
+(32) 58 -> 58 l s : comparison: 2 exit
+comparison: 3 enter
+(32) 58 -> "Expected terminal symbol 19 , but found: 32 at 58" l s : comparison: 3 exit
+comparison: 5 enter
+(32) 58 -> "Expected terminal symbol 20 , but found: 32 at 58" l s : comparison: 5 exit
+(39.2) 57 -> 58 : logic expression: 0 exit
+logic expression: 1 enter
+(32) 58 -> 58 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(32) 58 -> 58 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(32) 58 -> "Expected terminal symbol 30 , but found: 32 at 58" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(32) 58 -> "Expected terminal symbol 31 , but found: 32 at 58" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(32) 58 -> "Expected terminal symbol 33 , but found: 32 at 58" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(32) 58 -> "Expected terminal symbol 34 , but found: 32 at 58" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(32) 58 -> 59 s : comparison operator: 9 exit
+(32) 58 -> 59 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.3) 59 -> 59 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.3) 59 -> 60 s : multiplication: 1 exit
+(39.3) 59 -> 60 : addition: 0 exit
+addition: 1 enter
+(10) 60 -> 60 l : addition: 1 exit
+addition: 2 enter
+(10) 60 -> 60 l s : addition: 2 exit
+addition: 3 enter
+(10) 60 -> "Expected terminal symbol 21 , but found: 10 at 60" l s : addition: 3 exit
+addition: 5 enter
+(10) 60 -> "Expected terminal symbol 22 , but found: 10 at 60" l s : addition: 5 exit
+addition: 7 enter
+(10) 60 -> "Expected terminal symbol 23 , but found: 10 at 60" l s : addition: 7 exit
+(39.3) 59 -> 60 : comparison: 0 exit
+comparison: 1 enter
+(10) 60 -> 60 l : comparison: 1 exit
+comparison: 2 enter
+(10) 60 -> 60 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 60 -> "Expected terminal symbol 19 , but found: 10 at 60" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 60 -> "Expected terminal symbol 20 , but found: 10 at 60" l s : comparison: 5 exit
+(39.3) 59 -> 60 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 60 -> 60 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 60 -> 60 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 60 -> "Expected terminal symbol 30 , but found: 10 at 60" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 60 -> "Expected terminal symbol 31 , but found: 10 at 60" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 60 -> "Expected terminal symbol 33 , but found: 10 at 60" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 60 -> "Expected terminal symbol 34 , but found: 10 at 60" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 60 -> "Expected terminal symbol 32 , but found: 10 at 60" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 60 -> "Expected terminal symbol 35 , but found: 10 at 60" s : comparison operator: 11 exit
+(10) 60 -> "Expected terminal symbol 30 , but found: 10 at 60" l : logic expression: 2 exit
+(39.2) 57 -> 60 : expression: 0 exit
+expression: 1 enter
+(10) 60 -> 60 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 60 -> 60 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 60 -> "Expected terminal symbol 38 , but found: 10 at 60" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 60 -> "Expected terminal symbol 37 , but found: 10 at 60" s : logic operator: 3 exit
+(10) 60 -> "Expected terminal symbol 38 , but found: 10 at 60" l : expression: 2 exit
+(39.2) 57 -> 60 : conditional: 1 exit
+conditional: 2 enter
+(10) 60 -> 61 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.3) 61 -> 61 s : operator section: 0 exit
+operator section: 1 enter
+(39.3) 61 -> "Expected terminal symbol 6 , but found: 39.3 at 61" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.3) 61 -> 61 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.3) 61 -> 62 : assignment: 0 exit
+assignment: 1 enter
+(18) 62 -> 63 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.2) 63 -> "Expected terminal symbol 36 , but found: 39.2 at 63" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.2) 63 -> "Expected terminal symbol 36 , but found: 39.2 at 63" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.2) 63 -> 63 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.2) 63 -> 64 s : multiplication: 1 exit
+(39.2) 63 -> 64 : addition: 0 exit
+addition: 1 enter
+(24) 64 -> 64 l : addition: 1 exit
+addition: 2 enter
+(24) 64 -> 64 l s : addition: 2 exit
+addition: 3 enter
+(24) 64 -> "Expected terminal symbol 21 , but found: 24 at 64" l s : addition: 3 exit
+addition: 5 enter
+(24) 64 -> "Expected terminal symbol 22 , but found: 24 at 64" l s : addition: 5 exit
+addition: 7 enter
+(24) 64 -> "Expected terminal symbol 23 , but found: 24 at 64" l s : addition: 7 exit
+(39.2) 63 -> 64 : comparison: 0 exit
+comparison: 1 enter
+(24) 64 -> 64 l : comparison: 1 exit
+comparison: 2 enter
+(24) 64 -> 64 l s : comparison: 2 exit
+comparison: 3 enter
+(24) 64 -> "Expected terminal symbol 19 , but found: 24 at 64" l s : comparison: 3 exit
+comparison: 5 enter
+(24) 64 -> "Expected terminal symbol 20 , but found: 24 at 64" l s : comparison: 5 exit
+(39.2) 63 -> 64 : logic expression: 0 exit
+logic expression: 1 enter
+(24) 64 -> 64 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(24) 64 -> 64 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(24) 64 -> "Expected terminal symbol 30 , but found: 24 at 64" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(24) 64 -> "Expected terminal symbol 31 , but found: 24 at 64" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(24) 64 -> "Expected terminal symbol 33 , but found: 24 at 64" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(24) 64 -> "Expected terminal symbol 34 , but found: 24 at 64" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(24) 64 -> "Expected terminal symbol 32 , but found: 24 at 64" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(24) 64 -> "Expected terminal symbol 35 , but found: 24 at 64" s : comparison operator: 11 exit
+(24) 64 -> "Expected terminal symbol 30 , but found: 24 at 64" l : logic expression: 2 exit
+(39.2) 63 -> 64 : expression: 0 exit
+expression: 1 enter
+(24) 64 -> 64 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(24) 64 -> 64 s : logic operator: 0 exit
+logic operator: 1 enter
+(24) 64 -> "Expected terminal symbol 38 , but found: 24 at 64" s : logic operator: 1 exit
+logic operator: 3 enter
+(24) 64 -> "Expected terminal symbol 37 , but found: 24 at 64" s : logic operator: 3 exit
+(24) 64 -> "Expected terminal symbol 38 , but found: 24 at 64" l : expression: 2 exit
+(39.2) 63 -> 64 : assignment: 2 exit
+(39.3) 61 -> 64 s : operator: 1 exit
+(39.3) 61 -> 64 s : operator section: 5 exit
+(39.3) 61 -> 64 : conditional: 3 exit
+(8) 56 -> 64 s : operator: 3 exit
+(8) 56 -> 64 : operator list: 0 exit
+operator list: 1 enter
+(24) 64 -> 64 l : operator list: 1 exit
+operator list: 2 enter
+(24) 64 -> 65 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(8) 65 -> 65 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(8) 65 -> "Expected identifier or literal, but found: 8 at 65" : assignment: 0 exit
+(8) 65 -> "Expected identifier or literal, but found: 8 at 65" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(8) 65 -> 66 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.1) 66 -> "Expected terminal symbol 36 , but found: 39.1 at 66" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 66 -> "Expected terminal symbol 36 , but found: 39.1 at 66" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 66 -> 66 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 66 -> 67 s : multiplication: 1 exit
+(39.1) 66 -> 67 : addition: 0 exit
+addition: 1 enter
+(33) 67 -> 67 l : addition: 1 exit
+addition: 2 enter
+(33) 67 -> 67 l s : addition: 2 exit
+addition: 3 enter
+(33) 67 -> "Expected terminal symbol 21 , but found: 33 at 67" l s : addition: 3 exit
+addition: 5 enter
+(33) 67 -> "Expected terminal symbol 22 , but found: 33 at 67" l s : addition: 5 exit
+addition: 7 enter
+(33) 67 -> "Expected terminal symbol 23 , but found: 33 at 67" l s : addition: 7 exit
+(39.1) 66 -> 67 : comparison: 0 exit
+comparison: 1 enter
+(33) 67 -> 67 l : comparison: 1 exit
+comparison: 2 enter
+(33) 67 -> 67 l s : comparison: 2 exit
+comparison: 3 enter
+(33) 67 -> "Expected terminal symbol 19 , but found: 33 at 67" l s : comparison: 3 exit
+comparison: 5 enter
+(33) 67 -> "Expected terminal symbol 20 , but found: 33 at 67" l s : comparison: 5 exit
+(39.1) 66 -> 67 : logic expression: 0 exit
+logic expression: 1 enter
+(33) 67 -> 67 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(33) 67 -> 67 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(33) 67 -> "Expected terminal symbol 30 , but found: 33 at 67" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(33) 67 -> "Expected terminal symbol 31 , but found: 33 at 67" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(33) 67 -> 68 s : comparison operator: 5 exit
+(33) 67 -> 68 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.4) 68 -> 68 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.4) 68 -> 69 s : multiplication: 1 exit
+(39.4) 68 -> 69 : addition: 0 exit
+addition: 1 enter
+(10) 69 -> 69 l : addition: 1 exit
+addition: 2 enter
+(10) 69 -> 69 l s : addition: 2 exit
+addition: 3 enter
+(10) 69 -> "Expected terminal symbol 21 , but found: 10 at 69" l s : addition: 3 exit
+addition: 5 enter
+(10) 69 -> "Expected terminal symbol 22 , but found: 10 at 69" l s : addition: 5 exit
+addition: 7 enter
+(10) 69 -> "Expected terminal symbol 23 , but found: 10 at 69" l s : addition: 7 exit
+(39.4) 68 -> 69 : comparison: 0 exit
+comparison: 1 enter
+(10) 69 -> 69 l : comparison: 1 exit
+comparison: 2 enter
+(10) 69 -> 69 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 69 -> "Expected terminal symbol 19 , but found: 10 at 69" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 69 -> "Expected terminal symbol 20 , but found: 10 at 69" l s : comparison: 5 exit
+(39.4) 68 -> 69 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 69 -> 69 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 69 -> 69 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 69 -> "Expected terminal symbol 30 , but found: 10 at 69" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 69 -> "Expected terminal symbol 31 , but found: 10 at 69" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 69 -> "Expected terminal symbol 33 , but found: 10 at 69" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 69 -> "Expected terminal symbol 34 , but found: 10 at 69" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 69 -> "Expected terminal symbol 32 , but found: 10 at 69" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 69 -> "Expected terminal symbol 35 , but found: 10 at 69" s : comparison operator: 11 exit
+(10) 69 -> "Expected terminal symbol 30 , but found: 10 at 69" l : logic expression: 2 exit
+(39.1) 66 -> 69 : expression: 0 exit
+expression: 1 enter
+(10) 69 -> 69 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 69 -> 69 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 69 -> "Expected terminal symbol 38 , but found: 10 at 69" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 69 -> "Expected terminal symbol 37 , but found: 10 at 69" s : logic operator: 3 exit
+(10) 69 -> "Expected terminal symbol 38 , but found: 10 at 69" l : expression: 2 exit
+(39.1) 66 -> 69 : conditional: 1 exit
+conditional: 2 enter
+(10) 69 -> 70 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.4) 70 -> 70 s : operator section: 0 exit
+operator section: 1 enter
+(39.4) 70 -> "Expected terminal symbol 6 , but found: 39.4 at 70" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.4) 70 -> 70 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.4) 70 -> 71 : assignment: 0 exit
+assignment: 1 enter
+(18) 71 -> 72 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.1) 72 -> "Expected terminal symbol 36 , but found: 39.1 at 72" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 72 -> "Expected terminal symbol 36 , but found: 39.1 at 72" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 72 -> 72 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 72 -> 73 s : multiplication: 1 exit
+(39.1) 72 -> 73 : addition: 0 exit
+addition: 1 enter
+(7) 73 -> 73 l : addition: 1 exit
+addition: 2 enter
+(7) 73 -> 73 l s : addition: 2 exit
+addition: 3 enter
+(7) 73 -> "Expected terminal symbol 21 , but found: 7 at 73" l s : addition: 3 exit
+addition: 5 enter
+(7) 73 -> "Expected terminal symbol 22 , but found: 7 at 73" l s : addition: 5 exit
+addition: 7 enter
+(7) 73 -> "Expected terminal symbol 23 , but found: 7 at 73" l s : addition: 7 exit
+(39.1) 72 -> 73 : comparison: 0 exit
+comparison: 1 enter
+(7) 73 -> 73 l : comparison: 1 exit
+comparison: 2 enter
+(7) 73 -> 73 l s : comparison: 2 exit
+comparison: 3 enter
+(7) 73 -> "Expected terminal symbol 19 , but found: 7 at 73" l s : comparison: 3 exit
+comparison: 5 enter
+(7) 73 -> "Expected terminal symbol 20 , but found: 7 at 73" l s : comparison: 5 exit
+(39.1) 72 -> 73 : logic expression: 0 exit
+logic expression: 1 enter
+(7) 73 -> 73 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(7) 73 -> 73 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(7) 73 -> "Expected terminal symbol 30 , but found: 7 at 73" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(7) 73 -> "Expected terminal symbol 31 , but found: 7 at 73" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(7) 73 -> "Expected terminal symbol 33 , but found: 7 at 73" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(7) 73 -> "Expected terminal symbol 34 , but found: 7 at 73" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(7) 73 -> "Expected terminal symbol 32 , but found: 7 at 73" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(7) 73 -> "Expected terminal symbol 35 , but found: 7 at 73" s : comparison operator: 11 exit
+(7) 73 -> "Expected terminal symbol 30 , but found: 7 at 73" l : logic expression: 2 exit
+(39.1) 72 -> 73 : expression: 0 exit
+expression: 1 enter
+(7) 73 -> 73 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(7) 73 -> 73 s : logic operator: 0 exit
+logic operator: 1 enter
+(7) 73 -> "Expected terminal symbol 38 , but found: 7 at 73" s : logic operator: 1 exit
+logic operator: 3 enter
+(7) 73 -> "Expected terminal symbol 37 , but found: 7 at 73" s : logic operator: 3 exit
+(7) 73 -> "Expected terminal symbol 38 , but found: 7 at 73" l : expression: 2 exit
+(39.1) 72 -> 73 : assignment: 2 exit
+(39.4) 70 -> 73 s : operator: 1 exit
+(39.4) 70 -> 73 s : operator section: 5 exit
+(39.4) 70 -> 73 : conditional: 3 exit
+conditional: 4 enter
+(7) 73 -> "Expected terminal symbol 9 , but found: 7 at 73" : conditional: 4 exit
+conditional: 0 enter
+(8) 65 -> 66 : conditional: 0 exit
+conditional: 1 enter
+expression: 0 enter
+(39.1) 66 -> "Expected terminal symbol 36 , but found: 39.1 at 66" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 66 -> "Expected terminal symbol 36 , but found: 39.1 at 66" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 66 -> 66 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 66 -> 67 s : multiplication: 1 exit
+(39.1) 66 -> 67 : addition: 0 exit
+addition: 1 enter
+(33) 67 -> 67 l : addition: 1 exit
+addition: 2 enter
+(33) 67 -> 67 l s : addition: 2 exit
+addition: 3 enter
+(33) 67 -> "Expected terminal symbol 21 , but found: 33 at 67" l s : addition: 3 exit
+addition: 5 enter
+(33) 67 -> "Expected terminal symbol 22 , but found: 33 at 67" l s : addition: 5 exit
+addition: 7 enter
+(33) 67 -> "Expected terminal symbol 23 , but found: 33 at 67" l s : addition: 7 exit
+(39.1) 66 -> 67 : comparison: 0 exit
+comparison: 1 enter
+(33) 67 -> 67 l : comparison: 1 exit
+comparison: 2 enter
+(33) 67 -> 67 l s : comparison: 2 exit
+comparison: 3 enter
+(33) 67 -> "Expected terminal symbol 19 , but found: 33 at 67" l s : comparison: 3 exit
+comparison: 5 enter
+(33) 67 -> "Expected terminal symbol 20 , but found: 33 at 67" l s : comparison: 5 exit
+(39.1) 66 -> 67 : logic expression: 0 exit
+logic expression: 1 enter
+(33) 67 -> 67 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(33) 67 -> 67 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(33) 67 -> "Expected terminal symbol 30 , but found: 33 at 67" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(33) 67 -> "Expected terminal symbol 31 , but found: 33 at 67" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(33) 67 -> 68 s : comparison operator: 5 exit
+(33) 67 -> 68 l : logic expression: 2 exit
+logic expression: 3 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.4) 68 -> 68 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.4) 68 -> 69 s : multiplication: 1 exit
+(39.4) 68 -> 69 : addition: 0 exit
+addition: 1 enter
+(10) 69 -> 69 l : addition: 1 exit
+addition: 2 enter
+(10) 69 -> 69 l s : addition: 2 exit
+addition: 3 enter
+(10) 69 -> "Expected terminal symbol 21 , but found: 10 at 69" l s : addition: 3 exit
+addition: 5 enter
+(10) 69 -> "Expected terminal symbol 22 , but found: 10 at 69" l s : addition: 5 exit
+addition: 7 enter
+(10) 69 -> "Expected terminal symbol 23 , but found: 10 at 69" l s : addition: 7 exit
+(39.4) 68 -> 69 : comparison: 0 exit
+comparison: 1 enter
+(10) 69 -> 69 l : comparison: 1 exit
+comparison: 2 enter
+(10) 69 -> 69 l s : comparison: 2 exit
+comparison: 3 enter
+(10) 69 -> "Expected terminal symbol 19 , but found: 10 at 69" l s : comparison: 3 exit
+comparison: 5 enter
+(10) 69 -> "Expected terminal symbol 20 , but found: 10 at 69" l s : comparison: 5 exit
+(39.4) 68 -> 69 l : logic expression: 3 exit
+logic expression: 4 enter
+(10) 69 -> 69 l : logic expression: 4 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(10) 69 -> 69 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(10) 69 -> "Expected terminal symbol 30 , but found: 10 at 69" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(10) 69 -> "Expected terminal symbol 31 , but found: 10 at 69" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(10) 69 -> "Expected terminal symbol 33 , but found: 10 at 69" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(10) 69 -> "Expected terminal symbol 34 , but found: 10 at 69" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(10) 69 -> "Expected terminal symbol 32 , but found: 10 at 69" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(10) 69 -> "Expected terminal symbol 35 , but found: 10 at 69" s : comparison operator: 11 exit
+(10) 69 -> "Expected terminal symbol 30 , but found: 10 at 69" l : logic expression: 2 exit
+(39.1) 66 -> 69 : expression: 0 exit
+expression: 1 enter
+(10) 69 -> 69 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(10) 69 -> 69 s : logic operator: 0 exit
+logic operator: 1 enter
+(10) 69 -> "Expected terminal symbol 38 , but found: 10 at 69" s : logic operator: 1 exit
+logic operator: 3 enter
+(10) 69 -> "Expected terminal symbol 37 , but found: 10 at 69" s : logic operator: 3 exit
+(10) 69 -> "Expected terminal symbol 38 , but found: 10 at 69" l : expression: 2 exit
+(39.1) 66 -> 69 : conditional: 1 exit
+conditional: 2 enter
+(10) 69 -> 70 : conditional: 2 exit
+conditional: 3 enter
+operator section: 0 enter
+(39.4) 70 -> 70 s : operator section: 0 exit
+operator section: 1 enter
+(39.4) 70 -> "Expected terminal symbol 6 , but found: 39.4 at 70" s : operator section: 1 exit
+operator section: 5 enter
+operator: 0 enter
+(39.4) 70 -> 70 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(39.4) 70 -> 71 : assignment: 0 exit
+assignment: 1 enter
+(18) 71 -> 72 : assignment: 1 exit
+assignment: 2 enter
+expression: 0 enter
+(39.1) 72 -> "Expected terminal symbol 36 , but found: 39.1 at 72" : expression: 0 exit
+expression: 0 enter
+logic expression: 0 enter
+(39.1) 72 -> "Expected terminal symbol 36 , but found: 39.1 at 72" : logic expression: 0 exit
+logic expression: 0 enter
+comparison: 0 enter
+addition: 0 enter
+multiplication: 0 enter
+(39.1) 72 -> 72 s : multiplication: 0 exit
+multiplication: 1 enter
+(39.1) 72 -> 73 s : multiplication: 1 exit
+(39.1) 72 -> 73 : addition: 0 exit
+addition: 1 enter
+(7) 73 -> 73 l : addition: 1 exit
+addition: 2 enter
+(7) 73 -> 73 l s : addition: 2 exit
+addition: 3 enter
+(7) 73 -> "Expected terminal symbol 21 , but found: 7 at 73" l s : addition: 3 exit
+addition: 5 enter
+(7) 73 -> "Expected terminal symbol 22 , but found: 7 at 73" l s : addition: 5 exit
+addition: 7 enter
+(7) 73 -> "Expected terminal symbol 23 , but found: 7 at 73" l s : addition: 7 exit
+(39.1) 72 -> 73 : comparison: 0 exit
+comparison: 1 enter
+(7) 73 -> 73 l : comparison: 1 exit
+comparison: 2 enter
+(7) 73 -> 73 l s : comparison: 2 exit
+comparison: 3 enter
+(7) 73 -> "Expected terminal symbol 19 , but found: 7 at 73" l s : comparison: 3 exit
+comparison: 5 enter
+(7) 73 -> "Expected terminal symbol 20 , but found: 7 at 73" l s : comparison: 5 exit
+(39.1) 72 -> 73 : logic expression: 0 exit
+logic expression: 1 enter
+(7) 73 -> 73 l : logic expression: 1 exit
+logic expression: 2 enter
+comparison operator: 0 enter
+(7) 73 -> 73 s : comparison operator: 0 exit
+comparison operator: 1 enter
+(7) 73 -> "Expected terminal symbol 30 , but found: 7 at 73" s : comparison operator: 1 exit
+comparison operator: 3 enter
+(7) 73 -> "Expected terminal symbol 31 , but found: 7 at 73" s : comparison operator: 3 exit
+comparison operator: 5 enter
+(7) 73 -> "Expected terminal symbol 33 , but found: 7 at 73" s : comparison operator: 5 exit
+comparison operator: 7 enter
+(7) 73 -> "Expected terminal symbol 34 , but found: 7 at 73" s : comparison operator: 7 exit
+comparison operator: 9 enter
+(7) 73 -> "Expected terminal symbol 32 , but found: 7 at 73" s : comparison operator: 9 exit
+comparison operator: 11 enter
+(7) 73 -> "Expected terminal symbol 35 , but found: 7 at 73" s : comparison operator: 11 exit
+(7) 73 -> "Expected terminal symbol 30 , but found: 7 at 73" l : logic expression: 2 exit
+(39.1) 72 -> 73 : expression: 0 exit
+expression: 1 enter
+(7) 73 -> 73 l : expression: 1 exit
+expression: 2 enter
+logic operator: 0 enter
+(7) 73 -> 73 s : logic operator: 0 exit
+logic operator: 1 enter
+(7) 73 -> "Expected terminal symbol 38 , but found: 7 at 73" s : logic operator: 1 exit
+logic operator: 3 enter
+(7) 73 -> "Expected terminal symbol 37 , but found: 7 at 73" s : logic operator: 3 exit
+(7) 73 -> "Expected terminal symbol 38 , but found: 7 at 73" l : expression: 2 exit
+(39.1) 72 -> 73 : assignment: 2 exit
+(39.4) 70 -> 73 s : operator: 1 exit
+(39.4) 70 -> 73 s : operator section: 5 exit
+(39.4) 70 -> 73 : conditional: 3 exit
+(8) 65 -> 73 s : operator: 3 exit
+(8) 65 -> 73 l : operator list: 3 exit
+operator list: 4 enter
+(7) 73 -> 73 l : operator list: 4 exit
+operator list: 2 enter
+(7) 73 -> "Expected terminal symbol 24 , but found: 7 at 73" l : operator list: 2 exit
+(8) 56 -> 73 s : operator section: 2 exit
+operator section: 3 enter
+(7) 73 -> 74 s : operator section: 3 exit
+(6) 55 -> 74 : conditional: 5 exit
+(8) 30 -> 74 s : operator: 3 exit
+(8) 30 -> 74 l : operator list: 3 exit
+operator list: 4 enter
+(24) 74 -> 74 l : operator list: 4 exit
+operator list: 2 enter
+(24) 74 -> 75 l : operator list: 2 exit
+operator list: 3 enter
+operator: 0 enter
+(17) 75 -> 75 s : operator: 0 exit
+operator: 1 enter
+assignment: 0 enter
+(17) 75 -> "Expected identifier or literal, but found: 17 at 75" : assignment: 0 exit
+(17) 75 -> "Expected identifier or literal, but found: 17 at 75" s : operator: 1 exit
+operator: 3 enter
+conditional: 0 enter
+(17) 75 -> "Expected terminal symbol 8 , but found: 17 at 75" : conditional: 0 exit
+conditional: 0 enter
+(17) 75 -> "Expected terminal symbol 8 , but found: 17 at 75" : conditional: 0 exit
+(17) 75 -> "Expected terminal symbol 8 , but found: 17 at 75" s : operator: 3 exit
+operator: 5 enter
+loop: 0 enter
+(17) 75 -> "Expected terminal symbol 12 , but found: 17 at 75" : loop: 0 exit
+(17) 75 -> "Expected terminal symbol 12 , but found: 17 at 75" s : operator: 5 exit
+operator: 7 enter
+input: 0 enter
+(17) 75 -> "Expected terminal symbol 16 , but found: 17 at 75" : input: 0 exit
+(17) 75 -> "Expected terminal symbol 16 , but found: 17 at 75" s : operator: 7 exit
+operator: 9 enter
+output: 0 enter
+(17) 75 -> 76 : output: 0 exit
+output: 1 enter
+(27) 76 -> 77 : output: 1 exit
+output: 2 enter
+variable list: 0 enter
+(39.3) 77 -> 78 : variable list: 0 exit
+variable list: 1 enter
+(25) 78 -> 78 l : variable list: 1 exit
+variable list: 2 enter
+(25) 78 -> 79 l : variable list: 2 exit
+variable list: 3 enter
+(39.4) 79 -> 80 l : variable list: 3 exit
+variable list: 4 enter
+(28) 80 -> 80 l : variable list: 4 exit
+variable list: 2 enter
+(28) 80 -> "Expected terminal symbol 25 , but found: 28 at 80" l : variable list: 2 exit
+(39.3) 77 -> 80 : output: 2 exit
+output: 3 enter
+(28) 80 -> 81 : output: 3 exit
+(17) 75 -> 81 s : operator: 9 exit
+(17) 75 -> 81 l : operator list: 3 exit
+operator list: 4 enter
+(7) 81 -> 81 l : operator list: 4 exit
+operator list: 2 enter
+(7) 81 -> "Expected terminal symbol 24 , but found: 7 at 81" l : operator list: 2 exit
+(16) 15 -> 81 s : operator section: 2 exit
+operator section: 3 enter
+(7) 81 -> 82 s : operator section: 3 exit
+(6) 14 -> 82 : main: 4 exit
+main: 5 enter
+(26) 82 -> 83 : main: 5 exit
+
+Syntax analysis result:
+0 39.0 24 1 39.1 25 39.2 25 39.3 25 39.4 29 3 24 24 6 16 27 39.1 25 39.2 28 24 39.3 18 40.10 24 39.4 18 40.0 24 8 39.1 32 39.2 10 6 8 39.1 32 39.3 10 39.3 18 39.1 24 8 39.2 33 39.4 10 39.4 18 39.2 7 9 6 8 39.2 32 39.3 10 39.3 18 39.2 24 8 39.1 33 39.4 10 39.4 18 39.1 7 24 17 27 39.3 25 39.4 28 7 26
+main: operation list :  s
+operation list: operation :  s
+operation: null :  ss
+operation: input :  s
+input: read :  s
+input: ( :  s
+input: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+input: ) :  s
+operation: null :  sb
+operation: output :  s
+output: write :  s
+output: ( :  s
+output: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+output: ) :  s
+operation: null :  se
+operation list: null :  ls
+operation list: ; :  s
+operation list: operation :  s
+operation: null :  ss
+operation: input :  s
+input: read :  s
+input: ( :  s
+input: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+input: ) :  s
+operation: null :  sb
+operation: output :  s
+output: write :  s
+output: ( :  s
+output: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+output: ) :  s
+operation: null :  se
+operation list: null :  le
+
+Result:
+0 EQUAL 4
+0 EQUAL 4
+1 EQUAL 4
+1 EQUAL 4
+2 LOWER 0
+2 LOWER 6
+2 LOWER 1
+2 LOWER 6
+3 EQUAL 6
+3 EQUAL 6
+3 EQUAL 6
+3 EQUAL 6
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+5 EQUAL 1
+5 HIGHER 2
+5 EQUAL 1
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5

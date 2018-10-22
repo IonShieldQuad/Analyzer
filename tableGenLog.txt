@@ -1,0 +1,85 @@
+main: operation list :  s
+operation list: operation :  s
+operation: null :  ss
+operation: input :  s
+input: read :  s
+input: ( :  s
+input: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+input: ) :  s
+operation: null :  sb
+operation: output :  s
+output: write :  s
+output: ( :  s
+output: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+output: ) :  s
+operation: null :  se
+operation list: null :  ls
+operation list: ; :  s
+operation list: operation :  s
+operation: null :  ss
+operation: input :  s
+input: read :  s
+input: ( :  s
+input: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+input: ) :  s
+operation: null :  sb
+operation: output :  s
+output: write :  s
+output: ( :  s
+output: variable list :  s
+variable list: null :  s id
+variable list: null :  ls
+variable list: , :  s
+variable list: null :  s id
+variable list: null :  le
+output: ) :  s
+operation: null :  se
+operation list: null :  le
+
+Result:
+0 EQUAL 4
+0 EQUAL 4
+1 EQUAL 4
+1 EQUAL 4
+2 LOWER 0
+2 LOWER 6
+2 LOWER 1
+2 LOWER 6
+3 EQUAL 6
+3 EQUAL 6
+3 EQUAL 6
+3 EQUAL 6
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+4 LOWER 6
+4 EQUAL 5
+5 EQUAL 1
+5 HIGHER 2
+5 EQUAL 1
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5
+6 EQUAL 3
+6 HIGHER 5

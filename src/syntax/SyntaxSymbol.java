@@ -79,12 +79,12 @@ public class SyntaxSymbol {
                     selects.push(findSelect(position, pattern, i));
                 }
                 
-                Logger.getInstance().logln(name + ": " + i + " enter");
+                Logger.getInstance().logln("syntax", name + ": " + i + " enter");
                 
                 //Tries to perform operation
                 OperationResult res = performOperation(op, data, position);
                 
-                Logger.getInstance().logln("(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
+                Logger.getInstance().logln("syntax", "(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
     
                 //Saves error with highest index
                 if (res.getError() != null && (err == null || res.getError().getIndex() > err.getIndex())) {
