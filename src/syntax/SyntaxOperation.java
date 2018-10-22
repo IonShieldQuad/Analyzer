@@ -11,7 +11,7 @@ public class SyntaxOperation {
     private final String data;
     private final String[] params;
 
-    SyntaxOperation(@Nullable String data, @Nullable String params) {
+    public SyntaxOperation(@Nullable String data, @Nullable String params) {
         this.data = data;
         if (params != null) {
             this.params = params.split(" ");

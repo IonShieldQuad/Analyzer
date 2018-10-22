@@ -3,10 +3,7 @@ package core;
 import lexis.PascalSymbolPack;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
-import syntax.OperationResult;
-import syntax.PascalSyntaxPack;
-import syntax.PatternSearchException;
-import syntax.SyntaxPack;
+import syntax.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -128,5 +125,87 @@ public class AnalyzerMain {
         catch (IOException e) {
             e.printStackTrace();
         }
+        
+        
+        
+        SymbolPack testSymbols = new SymbolPack() {
+            @Override
+            protected void initSymbols() {
+                add("read");
+                add("write");
+                addSpaced(";");
+                addSpaced(",");
+                addSpaced("(");
+                addSpaced(")");
+                setIdentifierCode(getSymbolCount());
+                setLiteralCode(getSymbolCount() + 1);
+            }
+        };
+        
+        SyntaxPack testSyntax = new SyntaxPack() {
+            @Override
+            protected void init() {
+                addTerminalsFromPack(testSymbols);
+                
+                SyntaxOperation[][] patterns;
+                
+                patterns = new SyntaxOperation[][]{{
+                    new SyntaxOperation("operation list", "s")
+                }};
+                addSyntaxSymbol("main", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("operation", "s"),
+                        new SyntaxOperation(null, "ls"),
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("operation", "s"),
+                        new SyntaxOperation(null, "le")
+                }};
+                addSyntaxSymbol("operation list", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(null, "ss"),
+                        new SyntaxOperation("input", "s"),
+                        new SyntaxOperation(null, "sb"),
+                        new SyntaxOperation("output", "s"),
+                        new SyntaxOperation(null, "se")
+                }};
+                addSyntaxSymbol("operation", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("read", "s"),
+                        new SyntaxOperation("(", "s"),
+                        new SyntaxOperation("variable list", "s"),
+                        new SyntaxOperation(")", "s")
+                }};
+                addSyntaxSymbol("input", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("write", "s"),
+                        new SyntaxOperation("(", "s"),
+                        new SyntaxOperation("variable list", "s"),
+                        new SyntaxOperation(")", "s")
+                }};
+                addSyntaxSymbol("output", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation(null , "ls"),
+                        new SyntaxOperation(",", "s"),
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation(null, "le")
+                }};
+                addSyntaxSymbol("variable list", patterns, null);
+                
+                setMainSymbol("main");
+            }
+        };
+        try {
+            PrecedenceTable testTable = PrecedenceTable.fromPack(testSyntax);
+        } catch (PatternSearchException e) {
+            e.printStackTrace();
+        }
+    
+    
     }
 }

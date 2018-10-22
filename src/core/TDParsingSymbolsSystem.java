@@ -12,13 +12,6 @@ public class TDParsingSymbolsSystem extends SymbolsSystem implements Parser {
     public TDParsingSymbolsSystem(SymbolPack symbolPack, SyntaxPack syntaxPack) {
         super(symbolPack);
         syntax = syntaxPack;
-        
-        for (String name : symbols.symbolSet()) {
-            syntaxPack.addSyntaxSymbol(name, null, Integer.toString(symbols.find(name)));
-        }
-    
-        syntaxPack.setIdentifierCode(symbolPack.getIdentifierCode());
-        syntaxPack.setLiteralCode(symbolPack.getLiteralCode());
     }
     
     @Override

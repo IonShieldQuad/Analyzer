@@ -1,10 +1,14 @@
 package syntax;
 
+import lexis.PascalSymbolPack;
+
 public class PascalSyntaxPack extends SyntaxPack {
     
     @Override
     protected void init() {
-    
+        
+        addTerminalsFromPack(new PascalSymbolPack());
+        
         SyntaxOperation[][] patterns;
         
         patterns = new SyntaxOperation[][]{{

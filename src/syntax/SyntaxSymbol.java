@@ -244,7 +244,7 @@ public class SyntaxSymbol {
     
     @NotNull
     @Contract("_, _, _ -> new")
-    private LoopData findLoop(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
+    LoopData findLoop(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
         if (!pattern[index].isLoopStart()) {
             throw new PatternSearchException(this.name, pattern, index, "Loop start not found");
         }
@@ -269,7 +269,7 @@ public class SyntaxSymbol {
     
     @NotNull
     @Contract("_, _, _ -> new")
-    private SelectData findSelect(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
+    SelectData findSelect(int startIndex, @NotNull SyntaxOperation[] pattern, int index) throws PatternSearchException {
         if (!pattern[index].isSelectionStart()) {
             throw new PatternSearchException(this.name, pattern, index, "Selection start not found");
         }

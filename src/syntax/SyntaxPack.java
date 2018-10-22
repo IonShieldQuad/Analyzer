@@ -1,13 +1,12 @@
 package syntax;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import lexis.SymbolPack;
+
+import java.util.*;
 
 
 /**
- * Abstract class
+ * Abstract class containing syntax rules
  */
 public abstract class SyntaxPack {
     
@@ -16,7 +15,7 @@ public abstract class SyntaxPack {
     private int identifierCode;
     private int literalCode;
     
-    SyntaxPack() {
+    protected SyntaxPack() {
         init();
     }
     
@@ -42,7 +41,7 @@ public abstract class SyntaxPack {
     
     public void addSyntaxSymbol(String name, SyntaxSymbol symbol) {
         if (this.syntax.containsKey(name)) {
-            throw new IllegalArgumentException("Symbol name already used");
+            throw new IllegalArgumentException("Symbol name \"" + name + "\" already used");
         }
         this.syntax.put(name, symbol);
     }
@@ -69,5 +68,45 @@ public abstract class SyntaxPack {
     
     protected void setMainSymbol(String mainSymbol) {
         this.mainSymbol = mainSymbol;
+    }
+    
+    protected void addTerminalsFromPack(SymbolPack pack) {
+        for (String s : pack.symbolSet()) {
+            addSyntaxSymbol(s, null, Integer.toString(pack.find(s)));
+        }
+        setIdentifierCode(pack.getIdentifierCode());
+        setLiteralCode(pack.getLiteralCode());
+    }
+    
+    
+    static class OperationPosition {
+        SyntaxSymbol symbol;
+        int patternIndex;
+        int termNum = 0;
+        int operationIndex;
+        final Stack<SyntaxSymbol.LoopData> loops = new Stack<>();
+        final Stack<SyntaxSymbol.SelectData> selects = new Stack<>();
+        
+        OperationPosition() {
+            symbol = null;
+            patternIndex = 0;
+            operationIndex = 0;
+        }
+        
+        OperationPosition(SyntaxSymbol symbol) {
+            this.symbol = symbol;
+            patternIndex = 0;
+            operationIndex = 0;
+        }
+        
+        OperationPosition(SyntaxSymbol symbol, int patternIndex, int operationIndex) {
+            this.symbol = symbol;
+            this.patternIndex = patternIndex;
+            this.operationIndex = operationIndex;
+        }
+        
+        SyntaxOperation find() {
+            return symbol.getPatterns()[patternIndex][operationIndex];
+        }
     }
 }
