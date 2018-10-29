@@ -3,6 +3,8 @@ package core;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import javax.management.openmbean.InvalidKeyException;
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class Logger {
     
     public void addLogger(String name, String path) {
         if (writers.containsKey(name)) {
-            throw new IllegalStateException("Logger \"" + name + "\" already exists");
+            throw new KeyAlreadyExistsException("Logger \"" + name + "\" already exists");
         }
         try {
             writers.put(name, new BufferedWriter(new FileWriter(path)));
@@ -46,7 +48,7 @@ public class Logger {
     
     public void log(@NotNull String msg) {
         if (!isOpen) {
-            throw new IllegalStateException("Logger is closed");
+            throw new IllegalStateException("Logger is already closed");
         }
         try {
             writer.write(msg);
@@ -57,7 +59,7 @@ public class Logger {
     
     public void log(String name, @NotNull String msg) {
         if (!writers.containsKey(name)) {
-            throw new IllegalStateException("Logger name \"" + name + "\" not found");
+            throw new InvalidKeyException("Logger name \"" + name + "\" not found");
         }
         BufferedWriter w = writers.get(name);
         log(msg);
@@ -80,7 +82,7 @@ public class Logger {
     
     public void logln(String name, @NotNull String msg) {
         if (!writers.containsKey(name)) {
-            throw new IllegalStateException("Logger name \"" + name + "\" not found");
+            throw new InvalidKeyException("Logger name \"" + name + "\" not found");
         }
         BufferedWriter w = writers.get(name);
         log(name, msg);

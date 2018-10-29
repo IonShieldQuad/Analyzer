@@ -5,6 +5,8 @@ import core.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
+import java.security.InvalidKeyException;
 import java.util.*;
 
 public abstract class PrecedenceTable {
@@ -28,13 +30,13 @@ public abstract class PrecedenceTable {
         return map.get(x).get(y);
     }
     
-    public void set(String x, String y, Precedence value) {
+    public void set(String x, String y, Precedence value) throws InvalidKeyException {
         if (!contains(x) || !contains(y)) {
             if (!contains(x)) {
-                throw new IllegalStateException("Key \"" + x + "\" not found");
+                throw new InvalidKeyException("Key \"" + x + "\" not found");
             }
             if (!contains(y)) {
-                throw new IllegalStateException("Key \"" + y + "\" not found");
+                throw new InvalidKeyException("Key \"" + y + "\" not found");
             }
         }
         map.get(x).put(y, value);
@@ -42,7 +44,7 @@ public abstract class PrecedenceTable {
     
     protected void add(String key) {
         if (contains(key)) {
-            throw new IllegalStateException("Key \"" + key + "\" already exists");
+            throw new KeyAlreadyExistsException("Key \"" + key + "\" already exists");
         }
         
         map.put(key, new HashMap<>());
@@ -319,7 +321,9 @@ public abstract class PrecedenceTable {
                 this.add(Integer.toString(pack.getLiteralCode()));
                 
                 for (PrecedenceTuple t : tuples) {
-                    this.set(t.x, t.y, t.value);
+                    try {
+                        this.set(t.x, t.y, t.value);
+                    } catch (InvalidKeyException ignored) {}
                 }
                 
             }
