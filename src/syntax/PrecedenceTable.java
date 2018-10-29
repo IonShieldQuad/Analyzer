@@ -85,221 +85,13 @@ public abstract class PrecedenceTable {
     public static PrecedenceTable fromPack(@NotNull SyntaxPack pack) throws PatternSearchException {
         List<PrecedenceTuple> tuples = new ArrayList<>();
         
-        List<List<SymbolListItem>> levels = new ArrayList<>();
+        List<SyntaxSymbol> startedSymbols = new ArrayList<>();
+        List<SyntaxSymbol> finishedSymbols = new ArrayList<>();
+        Map<SyntaxSymbol, SymbolData> dataMap = new HashMap<>();
         
-        Stack<SyntaxPack.OperationPosition> stack = new Stack<>();
-        //TODO: implement table generation
-       
-        stack.push(new SyntaxPack.OperationPosition(pack.getSyntaxSymbol(pack.getMainSymbol())));
-        while(!stack.empty()) {
-            
-            if (stack.size() > 1000) {
-                throw new StackOverflowError();
-            }
-            
-            //If there is a valid symbol at current index
-            if (stack.peek().patternIndex < stack.peek().symbol.getPatterns().length
-            && stack.peek().operationIndex < stack.peek().symbol.getPatterns()[stack.peek().patternIndex].length) {
-                //TODO:
-                
-                System.out.println(stack.peek().symbol.getName() + ": " + stack.peek().find().getData() + " : " + Arrays.stream(stack.peek().find().getParams()).reduce("", (a, b) -> a + " " + b));
-                Logger.getInstance().logln("tableGen", stack.peek().symbol.getName() + ": " + stack.peek().find().getData() + " : " + Arrays.stream(stack.peek().find().getParams()).reduce("", (a, b) -> a + " " + b));
-                
-                //If current operation is symbol match
-                if (stack.peek().find().isSymbol()) {
-                    
-                    //If current operation matches a not terminal symbol
-                    if (stack.peek().find().isIdentifier() || stack.peek().find().isLiteral() || pack.getSyntaxSymbol(stack.peek().find().getData()).getTerm() != null) {
-                        
-                        String symbol;
-                        if (stack.peek().find().isIdentifier()) {
-                            symbol = Integer.toString(pack.getIdentifierCode());;
-                        }
-                        else if (stack.peek().find().isLiteral()) {
-                            symbol = Integer.toString(pack.getLiteralCode());;
-                        }
-                        else {
-                            symbol = pack.getSyntaxSymbol(stack.peek().find().getData()).getTerm();
-                        }
-                        
-                        if (stack.peek().loops.empty()) {
-                            
-                            //Both loops and selects are empty
-                            if (stack.peek().selects.empty()) {
-                                for (int i = 0; i < levels.size(); ++i) {
-                                    int l = i;
-    
-                                    if (i >= stack.size()) {
-                                        levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        levels.get(l).clear();
-                                    }
-                                    else {
-                                        if (stack.peek().termNum == 0) {
-                                            levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        }
-                                    }
-    
-                                }
-    
-                                //Adds this symbol to list
-                                levels.get(stack.size()).add(new SymbolListItem(
-                                        symbol,
-                                        stack.peek().operationIndex,
-                                        stack.peek().loops.isEmpty() ? null : stack.peek().loops.peek(),
-                                        stack.peek().selects.isEmpty() ? null : stack.peek().selects.peek()
-                                ));
-    
-                                stack.peek().operationIndex++;
-                            }
-                            //Loops are empty, selects are not
-                            else {
-                                for (int i = 0; i < levels.size(); ++i) {
-                                    int l = i;
+        pack.getSyntaxSymbol(pack.getMainSymbol()).analyze(startedSymbols, finishedSymbols, dataMap, tuples);
         
-                                    if (i >= stack.size()) {
-                                        levels.get(l).forEach((e) -> {
-                                            if (e.selectData == null || e.selectData.getNext(e.position) > stack.peek().operationIndex) {
-                                                tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size())));}
-                                        });
-                                        levels.get(l).clear();
-                                    }
-                                    else {
-                                        if (stack.peek().termNum == 0) {
-                                            levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        }
-                                    }
-        
-                                }
-    
-                                //Adds this symbol to list
-                                levels.get(stack.size()).add(new SymbolListItem(
-                                        symbol,
-                                        stack.peek().operationIndex,
-                                        stack.peek().loops.isEmpty() ? null : stack.peek().loops.peek(),
-                                        stack.peek().selects.isEmpty() ? null : stack.peek().selects.peek()
-                                ));
-                                stack.peek().operationIndex++;
-                            }
-                            
-                        }
-                        else {
-                            //Loops are not empty, selects are
-                            if (stack.peek().selects.empty()) {
-                                for (int i = 0; i < levels.size(); ++i) {
-                                    int l = i;
-        
-                                    if (i >= stack.size()) {
-                                        levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        levels.get(l).clear();
-                                    }
-                                    else {
-                                        if (stack.peek().termNum == 0) {
-                                            levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        }
-                                    }
-        
-                                }
-    
-                                //Adds this symbol to list
-                                levels.get(stack.size()).add(new SymbolListItem(
-                                        symbol,
-                                        stack.peek().operationIndex,
-                                        stack.peek().loops.isEmpty() ? null : stack.peek().loops.peek(),
-                                        stack.peek().selects.isEmpty() ? null : stack.peek().selects.peek()
-                                ));
-                                stack.peek().operationIndex++;
-                            }
-                            //Both loops and selects are not empty
-                            else {
-                                for (int i = 0; i < levels.size(); ++i) {
-                                    int l = i;
-        
-                                    if (i >= stack.size()) {
-                                        levels.get(l).forEach((e) -> {
-                                            if (e.selectData == null || e.selectData.getNext(e.position) > stack.peek().operationIndex) {
-                                                tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size())));}
-                                        });
-                                        levels.get(l).clear();
-                                    }
-                                    else {
-                                        if (stack.peek().termNum == 0) {
-                                            levels.get(l).forEach((e) -> tuples.add(new PrecedenceTuple(e.name, symbol, calculatePrecedence(l, stack.size()))));
-                                        }
-                                    }
-        
-                                }
-    
-                                //Adds this symbol to list
-                                levels.get(stack.size()).add(new SymbolListItem(
-                                        symbol,
-                                        stack.peek().operationIndex,
-                                        stack.peek().loops.isEmpty() ? null : stack.peek().loops.peek(),
-                                        stack.peek().selects.isEmpty() ? null : stack.peek().selects.peek()
-                                ));
-                                stack.peek().operationIndex++;
-                            }
-                            
-                        }
-                        
-                        stack.peek().termNum++;
-                    }
-                    //Else pushes symbol on stack and updates list capacity if needed
-                    else {
-                        stack.push(new SyntaxPack.OperationPosition(pack.getSyntaxSymbol(stack.peek().find().getData())));
-                        while (levels.size() <= stack.size()) {
-                            levels.add(new ArrayList<>());
-                        }
-                    }
-                    
-                }
-                else {
-                    //If operation is loop start, push the loop on the stack
-                    if (stack.peek().find().isLoopStart()) {
-                        if (stack.peek().loops.empty() || stack.peek().loops.peek().getStart() != stack.peek().operationIndex) {
-                            stack.peek().loops.push(stack.peek().symbol.findLoop(0, stack.peek().symbol.getPatterns()[stack.peek().patternIndex], stack.peek().operationIndex));
-                        }
-                    }
-                    //If operation is select start, push the select on the stack
-                    if (stack.peek().find().isSelectionStart()) {
-                        if (stack.peek().selects.empty() || stack.peek().selects.peek().getStart() != stack.peek().operationIndex) {
-                            stack.peek().selects.push(stack.peek().symbol.findSelect(0, stack.peek().symbol.getPatterns()[stack.peek().patternIndex], stack.peek().operationIndex));
-                        }
-                    }
-                    //Pops loop from stack on end
-                    if (stack.peek().find().isLoopEnd()) {
-                        SyntaxSymbol.LoopData l = stack.peek().loops.pop();
-                        if (l.getStartIndex() == 0) {
-                            l.setStartIndex(1);
-                            stack.peek().loops.push(l);
-                        }
-                        stack.peek().loops.pop();
-                    }
-                    if (stack.peek().find().isSelectionEnd()) {
-                        stack.peek().selects.pop();
-                    }
-                    
-                    stack.peek().operationIndex++;
-                }
-                
-                
-            }
-            
-            //Switches to another sequence if current has no more operations
-            if (stack.peek().operationIndex >= stack.peek().symbol.getPatterns()[stack.peek().patternIndex].length) {
-                stack.peek().patternIndex++;
-                stack.peek().operationIndex = 0;
-                stack.peek().termNum = 0;
-            }
-    
-            //If there are no more sequences, pop symbol from stack
-            if (stack.peek().patternIndex >= stack.peek().symbol.getPatterns().length) {
-                stack.pop();
-                if (!stack.empty()) {
-                    stack.peek().operationIndex++;
-                }
-            }
-            
-        }
+        startedSymbols.forEach(s -> System.out.println(s.getName()));
     
         Logger.getInstance().logln("tableGen", "\nResult:");
         tuples.sort(Comparator.comparing((e) -> e.x));
@@ -330,7 +122,7 @@ public abstract class PrecedenceTable {
         };
     }
     
-    private static class PrecedenceTuple {
+    static class PrecedenceTuple {
         final String x;
         final String y;
         final Precedence value;
@@ -343,27 +135,116 @@ public abstract class PrecedenceTable {
         }
     }
     
-    private static class SymbolListItem {
-        String name;
-        int position;
-        SyntaxSymbol.LoopData loopData;
-        SyntaxSymbol.SelectData selectData;
+    static class OperatorSection {
+        private SyntaxSymbol startTerminal;
+        private SyntaxSymbol endTerminal;
+        private List<SyntaxSymbol> nonTerminalList;
         
-        SymbolListItem(String name, int position) {
-            this.name = name;
-            this.position = position;
+        OperatorSection(SyntaxSymbol startTerminal, SyntaxSymbol endTerminal, List<SyntaxSymbol> nonTerminalList) {
+    
+            this.startTerminal = startTerminal;
+            this.endTerminal = endTerminal;
+            this.nonTerminalList = nonTerminalList;
         }
     
-        SymbolListItem(String name, int position, SyntaxSymbol.LoopData loopData, SyntaxSymbol.SelectData selectData) {
-            this.name = name;
-            this.position = position;
-            this.loopData = loopData;
-            this.selectData = selectData;
+        public List<SyntaxSymbol> getNonTerminalList() {
+            return nonTerminalList;
         }
     
-        @Override
-        public String toString() {
-            return name;
+        public SyntaxSymbol getStartTerminal() {
+            return startTerminal;
+        }
+    
+        public SyntaxSymbol getEndTerminal() {
+            return endTerminal;
+        }
+    }
+    
+    static class SymbolData {
+        private SyntaxSymbol symbol;
+    
+        public List<List<OperatorSection>> getData() {
+            return data;
+        }
+    
+        private List<List<OperatorSection>> data = new ArrayList<>();
+        private List<SyntaxSymbol> extraStartTerms = new ArrayList<>();
+        private List<SyntaxSymbol> extraEndTerms = new ArrayList<>();
+    
+        SymbolData(SyntaxSymbol symbol) {
+            this.symbol = symbol;
+        }
+    
+        public OperatorSection get (int seq, int index) {
+            return data.get(seq).get(index);
+        }
+        
+        public void add(int seq, List<OperatorSection> list) {
+            data.add(seq, list);
+        }
+        
+        List<SyntaxSymbol> getStartTerms(List<SyntaxSymbol> startedSymbols, List<SyntaxSymbol> finishedSymbols, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
+            List<SyntaxSymbol> storage = new ArrayList<>();
+            
+            for (List<OperatorSection> list : data) {
+                OperatorSection el = list.get(0);
+                if (el.startTerminal == null) {
+                    for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
+                        
+                        if (startedSymbols.contains(nonterm)) {
+                            storage.addAll(dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        }
+                        else {
+                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
+                            storage.addAll(dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        }
+                        
+                    }
+                }
+                else {
+                    storage.add(el.startTerminal);
+                }
+            }
+            
+            storage.addAll(extraStartTerms);
+            
+            return storage;
+        }
+        
+        List<SyntaxSymbol> getEndTerms(List<SyntaxSymbol> startedSymbols, List<SyntaxSymbol> finishedSymbols, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
+            List<SyntaxSymbol> storage = new ArrayList<>();
+    
+            for (List<OperatorSection> list : data) {
+                OperatorSection el = list.get(0);
+                if (el.endTerminal == null) {
+                    for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
+                
+                        if (startedSymbols.contains(nonterm)) {
+                            storage.addAll(dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        }
+                        else {
+                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
+                            storage.addAll(dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        }
+                
+                    }
+                }
+                else {
+                    storage.add(el.startTerminal);
+                }
+            }
+    
+            storage.addAll(extraStartTerms);
+    
+            return storage;
+        }
+    
+        public List<SyntaxSymbol> getExtraStartTerms() {
+            return extraStartTerms;
+        }
+    
+        public List<SyntaxSymbol> getExtraEndTerms() {
+            return extraEndTerms;
         }
     }
 }

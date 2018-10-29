@@ -3,6 +3,8 @@
     <words>
       <w>downto</w>
       <w>logln</w>
+      <w>nonterm</w>
+      <w>nonterms</w>
     </words>
   </dictionary>
 </component>

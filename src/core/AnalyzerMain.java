@@ -160,19 +160,22 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation("operation", "s"),
-                        new SyntaxOperation(null, "ls"),
-                        new SyntaxOperation(";", "s"),
-                        new SyntaxOperation("operation", "s"),
-                        new SyntaxOperation(null, "le")
+                        new SyntaxOperation("operation list loop", "s"),
                 }};
                 addSyntaxSymbol("operation list", patterns, null);
     
                 patterns = new SyntaxOperation[][]{{
-                        new SyntaxOperation(null, "ss"),
-                        new SyntaxOperation("input", "s"),
-                        new SyntaxOperation(null, "sb"),
-                        new SyntaxOperation("output", "s"),
-                        new SyntaxOperation(null, "se")
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("operation", "s"),
+                }, {
+                
+                }};
+                addSyntaxSymbol("operation list loop", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("input", "s")
+                }, {
+                        new SyntaxOperation("output", "s")
                 }};
                 addSyntaxSymbol("operation", patterns, null);
     
@@ -194,12 +197,17 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(null, "s id"),
-                        new SyntaxOperation(null , "ls"),
-                        new SyntaxOperation(",", "s"),
-                        new SyntaxOperation(null, "s id"),
-                        new SyntaxOperation(null, "le")
+                        new SyntaxOperation("variable list loop", "s"),
                 }};
                 addSyntaxSymbol("variable list", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(",", "s"),
+                        new SyntaxOperation(null, "s id")
+                }, {
+                
+                }};
+                addSyntaxSymbol("variable list loop", patterns, null);
                 
                 setMainSymbol("main");
             }

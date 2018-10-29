@@ -5,16 +5,14 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class SyntaxSymbol {
     private final SyntaxPack pack;
     private final String name;
     private final SyntaxOperation[][] patterns;
     private final String term;
+    private boolean inlinePrecedence = false;
     
     /**
      * @param pack Syntax pack to which new symbol will be added
@@ -297,6 +295,151 @@ public class SyntaxSymbol {
             }
         }
         throw new PatternSearchException(this.name, pattern, pattern.length - 1, "Unclosed selection");
+    }
+    
+    void analyze(List<SyntaxSymbol> startedSymbols, List<SyntaxSymbol> finishedSymbols, Map<SyntaxSymbol, PrecedenceTable.SymbolData> dataMap, List<PrecedenceTable.PrecedenceTuple> tuples) throws PatternSearchException {
+        if (Arrays.stream(patterns).anyMatch(p -> Arrays.stream(p).anyMatch(op -> op.isSelectionStart() || op.isSelectionEnd() || op.isSelectionBody() || op.isLoopStart() || op.isLoopEnd()))) {
+            throw new PatternSearchException(name, null, 0, "Loop and select operation not supported");
+        }
+        startedSymbols.add(this);
+        PrecedenceTable.SymbolData data = new PrecedenceTable.SymbolData(this);
+        dataMap.put(this, data);
+        
+        for (int i = 0; i < patterns.length; i++) {
+    
+            SyntaxSymbol prev = null;
+            int prevIndex = 0;
+            List<PrecedenceTable.OperatorSection> list = new ArrayList<>();
+            
+            for (int j = 0; j < patterns[i].length; j++) {
+                SyntaxOperation op = patterns[i][j];
+                
+                if (op.isSymbol() && pack.getSyntaxSymbol(op.getData()).term != null || op.isLiteral() || op.isIdentifier()) {
+                    
+                    SyntaxSymbol symbol;
+                    
+                    if (op.isIdentifier()) {
+                        symbol = pack.getSyntaxSymbol("analyzer identifier");
+                    }
+                    else if (op.isLiteral()) {
+                        symbol = pack.getSyntaxSymbol("analyzer literal");
+                    }
+                    else {
+                        symbol = pack.getSyntaxSymbol(op.getData());
+                    }
+                    
+                    
+                    List<SyntaxSymbol> nonterms = new ArrayList<>();
+                    for (int k = prevIndex + 1; k < j; k++) {
+                        if (patterns[i][k].isSymbol()) {
+                            nonterms.add(pack.getSyntaxSymbol(patterns[i][k].getData()));
+                        }
+                    }
+                    
+                    list.add(new PrecedenceTable.OperatorSection(prev, symbol, nonterms));
+                    
+                    prev = symbol;
+                    prevIndex = j;
+                }
+                
+            }
+    
+            if (prevIndex < patterns[i].length - 1) {
+                
+                List<SyntaxSymbol> nonterms = new ArrayList<>();
+                for (int k = prevIndex + 1; k < patterns[i].length; k++) {
+                    if (patterns[i][k].isSymbol()) {
+                        nonterms.add(pack.getSyntaxSymbol(patterns[i][k].getData()));
+                    }
+                }
+    
+                list.add(new PrecedenceTable.OperatorSection(prev, null, nonterms));
+            }
+            
+            data.add(i, list);
+        }
+        
+        
+        for (List<PrecedenceTable.OperatorSection> list : data.getData()) {
+            for (PrecedenceTable.OperatorSection section : list) {
+                
+                if (section.getStartTerminal() != null && section.getEndTerminal() != null) {
+                    tuples.add(new PrecedenceTable.PrecedenceTuple(section.getStartTerminal().term, section.getEndTerminal().term, PrecedenceTable.Precedence.EQUAL));
+                }
+    
+                if (section.getStartTerminal() != null) {
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+                        
+                        if (!startedSymbols.contains(nonterm)) {
+                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
+                        }
+                        
+                        for (SyntaxSymbol startTerm : dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples)) {
+    
+                            if (nonterm.inlinePrecedence) {
+                                tuples.add(new PrecedenceTable.PrecedenceTuple(section.getStartTerminal().term, startTerm.term, PrecedenceTable.Precedence.EQUAL));
+                            } else {
+                                tuples.add(new PrecedenceTable.PrecedenceTuple(section.getStartTerminal().term, startTerm.term, PrecedenceTable.Precedence.LOWER));
+                            }
+                        }
+                        
+                    }
+                }
+    
+                if (section.getEndTerminal() != null) {
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+            
+                        if (!startedSymbols.contains(nonterm)) {
+                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
+                        }
+            
+                        for (SyntaxSymbol endTerm : dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples)) {
+                
+                            if (nonterm.inlinePrecedence) {
+                                tuples.add(new PrecedenceTable.PrecedenceTuple(section.getStartTerminal().term, endTerm.term, PrecedenceTable.Precedence.EQUAL));
+                            } else {
+                                tuples.add(new PrecedenceTable.PrecedenceTuple(section.getStartTerminal().term, endTerm.term, PrecedenceTable.Precedence.LOWER));
+                            }
+                        }
+            
+                    }
+                }
+                
+            }
+        }
+    
+        for (List<PrecedenceTable.OperatorSection> list : data.getData()) {
+            if (!list.isEmpty()) {
+                PrecedenceTable.OperatorSection section = list.get(0);
+                
+                if (section.getStartTerminal() == null) {
+                    
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+                        data.getExtraStartTerms().addAll(dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                    }
+                }
+    
+                section = list.get(list.size() - 1);
+    
+                if (section.getEndTerminal() == null) {
+        
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+                        data.getExtraEndTerms().addAll(dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                    }
+                }
+            }
+        }
+        
+        
+        finishedSymbols.add(this);
+    }
+    
+    public boolean isInlinePrecedence() {
+        return inlinePrecedence;
+    }
+    
+    public void setInlinePrecedence(boolean inlinePrecedence) {
+        this.inlinePrecedence = inlinePrecedence;
     }
     
     static class LoopData {

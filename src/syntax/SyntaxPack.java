@@ -17,6 +17,8 @@ public abstract class SyntaxPack {
     
     protected SyntaxPack() {
         init();
+        addSyntaxSymbol("analyzer identifier", null, null);
+        addSyntaxSymbol("analyzer literal", null, null);
     }
     
     protected abstract void init();
