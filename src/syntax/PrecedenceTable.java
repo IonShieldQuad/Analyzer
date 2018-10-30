@@ -83,18 +83,26 @@ public abstract class PrecedenceTable {
     @NotNull
     @Contract(value = "_ -> new", pure = true)
     public static PrecedenceTable fromPack(@NotNull SyntaxPack pack) throws PatternSearchException {
+        
         List<PrecedenceTuple> tuples = new ArrayList<>();
-        
-        List<SyntaxSymbol> startedSymbols = new ArrayList<>();
-        List<SyntaxSymbol> finishedSymbols = new ArrayList<>();
         Map<SyntaxSymbol, SymbolData> dataMap = new HashMap<>();
+        Set<SyntaxSymbol> set = new HashSet<>();
         
-        pack.getSyntaxSymbol(pack.getMainSymbol()).analyze(startedSymbols, finishedSymbols, dataMap, tuples);
-        
-        startedSymbols.forEach(s -> System.out.println(s.getName()));
+        analyze(pack.getSyntaxSymbol(pack.getMainSymbol()), dataMap, tuples, set);
+    
+        System.out.println("Analyzed symbols:");
+        Logger.getInstance().logln("tableGen", "Analyzed symbols:");
+        dataMap.keySet().forEach(s -> System.out.println(s.getName()));
     
         Logger.getInstance().logln("tableGen", "\nResult:");
-        tuples.sort(Comparator.comparing((e) -> e.x));
+        tuples.sort((a, b) -> {
+            if (a.x.equals(b.x)) {
+                return a.y.compareTo(b.y);
+            }
+            else {
+                return  a.x.compareTo(b.x);
+            }
+        });
         for (PrecedenceTuple t : tuples) {
             System.out.println(t.x + " " + t.value + " " + t.y);
             Logger.getInstance().logln("tableGen", t.x + " " + t.value + " " + t.y);
@@ -109,8 +117,8 @@ public abstract class PrecedenceTable {
                         this.add(s.getTerm());
                     }
                 }
-                this.add(Integer.toString(pack.getIdentifierCode()));
-                this.add(Integer.toString(pack.getLiteralCode()));
+                //this.add(Integer.toString(pack.getIdentifierCode()));
+                //this.add(Integer.toString(pack.getLiteralCode()));
                 
                 for (PrecedenceTuple t : tuples) {
                     try {
@@ -120,6 +128,188 @@ public abstract class PrecedenceTable {
                 
             }
         };
+    }
+    
+    static void analyze(SyntaxSymbol symbol, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+    
+        Logger.getInstance().logln("tableGen", "Analyzing: " + symbol.getName());
+        
+        if (Arrays.stream(symbol.getPatterns()).anyMatch(p -> Arrays.stream(p).anyMatch(op -> op.isSelectionStart() || op.isSelectionEnd() || op.isSelectionBody() || op.isLoopStart() || op.isLoopEnd()))) {
+            throw new PatternSearchException(symbol.getName(), null, 0, "Loop and select operation not supported");
+        }
+        
+        SymbolData data = new SymbolData(symbol);
+        dataMap.put(symbol, data);
+        //set.add(symbol);
+        data.setAnalyzed(true);
+        
+        for (int i = 0; i < symbol.getPatterns().length; i++) {
+            
+            SyntaxSymbol prev = null;
+            int prevIndex = -1;
+            List<SymbolSegment> list = new ArrayList<>();
+            
+            for (int j = 0; j < symbol.getPatterns()[i].length; j++) {
+                SyntaxOperation op = symbol.getPatterns()[i][j];
+                
+                if (op.isSymbol() && (op.isLiteral() || op.isIdentifier() || symbol.getPack().getSyntaxSymbol(op.getData()).getTerm() != null)) {
+                    
+                    SyntaxSymbol s;
+                    
+                    if (op.isIdentifier()) {
+                        s = symbol.getPack().getSyntaxSymbol("analyzer identifier");
+                    }
+                    else if (op.isLiteral()) {
+                        s = symbol.getPack().getSyntaxSymbol("analyzer literal");
+                    }
+                    else {
+                        s = symbol.getPack().getSyntaxSymbol(op.getData());
+                    }
+                    
+                    
+                    List<SyntaxSymbol> nonterms = new ArrayList<>();
+                    for (int k = prevIndex + 1; k < j; k++) {
+                        if (symbol.getPatterns()[i][k].isSymbol()) {
+                            nonterms.add(symbol.getPack().getSyntaxSymbol(symbol.getPatterns()[i][k].getData()));
+                        }
+                    }
+                    
+                    list.add(new SymbolSegment(prev, s, nonterms));
+                    
+                    prev = s;
+                    prevIndex = j;
+                }
+                
+            }
+            
+            if (prevIndex < symbol.getPatterns()[i].length - 1 || symbol.getPatterns()[i].length == 0) {
+                
+                List<SyntaxSymbol> nonterms = new ArrayList<>();
+                for (int k = prevIndex + 1; k < symbol.getPatterns()[i].length; k++) {
+                    if (symbol.getPatterns()[i][k].isSymbol()) {
+                        nonterms.add(symbol.getPack().getSyntaxSymbol(symbol.getPatterns()[i][k].getData()));
+                    }
+                }
+                
+                list.add(new SymbolSegment(prev, null, nonterms));
+            }
+            
+            data.add(i, list);
+            
+            list.forEach(el -> Logger.getInstance().logln("tableGen", (el.getStartTerminal() == null ? "null" : el.getStartTerminal().getName()) + "" + el.getNonTerminalList().stream().collect(StringBuilder::new, (b, s) -> b.append(" | ").append(s.getName()), StringBuilder::append) + " | " + (el.getEndTerminal() == null ? "null" : el.getEndTerminal().getName())));
+            
+        }
+        
+        
+        for (List<SymbolSegment> list : data.getData()) {
+            for (SymbolSegment section : list) {
+                
+                if (section.getStartTerminal() != null && section.getEndTerminal() != null) {
+                    tuples.add(new PrecedenceTuple(section.getStartTerminal().getTerm(), section.getEndTerminal().getTerm(), Precedence.EQUAL));
+                }
+                
+                if (section.getStartTerminal() != null) {
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+    
+                        if (!dataMap.keySet().contains(nonterm)) {
+                            dataMap.put(nonterm, new SymbolData(nonterm));
+                        }
+                        
+                        for (SyntaxSymbol startTerm : dataMap.get(nonterm).getStartTerms(dataMap, tuples, set)) {
+    
+                            String term;
+                            switch (startTerm.getName()) {
+                                case "analyzer identifier":
+                                    term = Integer.toString(startTerm.getPack().getIdentifierCode());
+                                    break;
+                                case "analyzer literal":
+                                    term = Integer.toString(startTerm.getPack().getLiteralCode());
+                                    break;
+                                default:
+                                    term = startTerm.getTerm();
+                                    break;
+                            }
+                            
+                            if (nonterm.isInlinePrecedence()) {
+                                tuples.add(new PrecedenceTuple(section.getStartTerminal().getTerm(), term, Precedence.EQUAL));
+                            } else {
+                                tuples.add(new PrecedenceTuple(section.getStartTerminal().getTerm(), term, Precedence.LOWER));
+                            }
+                        }
+                        
+                    }
+                }
+                
+                if (section.getEndTerminal() != null) {
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+    
+                        if (!dataMap.keySet().contains(nonterm)) {
+                            dataMap.put(nonterm, new SymbolData(nonterm));
+                        }
+                        
+                        for (SyntaxSymbol endTerm : dataMap.get(nonterm).getEndTerms(dataMap, tuples, set)) {
+                            
+                            String term;
+                            switch (endTerm.getName()) {
+                                case "analyzer identifier":
+                                    term = Integer.toString(endTerm.getPack().getIdentifierCode());
+                                    break;
+                                case "analyzer literal":
+                                    term = Integer.toString(endTerm.getPack().getLiteralCode());
+                                    break;
+                                default:
+                                    term = endTerm.getTerm();
+                                    break;
+                            }
+                            
+                            if (nonterm.isInlinePrecedence()) {
+                                tuples.add(new PrecedenceTuple(term, section.getEndTerminal().getTerm(), Precedence.EQUAL));
+                            } else {
+                                tuples.add(new PrecedenceTuple(term, section.getEndTerminal().getTerm(), Precedence.HIGHER));
+                            }
+                        }
+                        
+                    }
+                }
+                
+            }
+        }
+        
+        for (List<SymbolSegment> list : data.getData()) {
+            if (!list.isEmpty()) {
+                SymbolSegment section = list.get(0);
+                
+                if (section.getStartTerminal() == null) {
+                    
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+    
+                        if (!dataMap.keySet().contains(nonterm)) {
+                            dataMap.put(nonterm, new SymbolData(nonterm));
+                        }
+                        
+                        data.getExtraStartTerms().addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
+                    }
+                }
+                
+                section = list.get(list.size() - 1);
+                
+                if (section.getEndTerminal() == null) {
+                    
+                    for (SyntaxSymbol nonterm : section.getNonTerminalList()) {
+    
+                        if (!dataMap.keySet().contains(nonterm)) {
+                            dataMap.put(nonterm, new SymbolData(nonterm));
+                        }
+                        
+                        data.getExtraEndTerms().addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
+                    }
+                }
+            }
+        }
+        
+        data.setFinished(true);
+        //set.remove(symbol);
+        
     }
     
     static class PrecedenceTuple {
@@ -135,12 +325,12 @@ public abstract class PrecedenceTable {
         }
     }
     
-    static class OperatorSection {
+    static class SymbolSegment {
         private SyntaxSymbol startTerminal;
         private SyntaxSymbol endTerminal;
         private List<SyntaxSymbol> nonTerminalList;
         
-        OperatorSection(SyntaxSymbol startTerminal, SyntaxSymbol endTerminal, List<SyntaxSymbol> nonTerminalList) {
+        SymbolSegment(SyntaxSymbol startTerminal, SyntaxSymbol endTerminal, List<SyntaxSymbol> nonTerminalList) {
     
             this.startTerminal = startTerminal;
             this.endTerminal = endTerminal;
@@ -163,40 +353,57 @@ public abstract class PrecedenceTable {
     static class SymbolData {
         private SyntaxSymbol symbol;
     
-        public List<List<OperatorSection>> getData() {
+        public List<List<SymbolSegment>> getData() {
             return data;
         }
     
-        private List<List<OperatorSection>> data = new ArrayList<>();
+        private List<List<SymbolSegment>> data = new ArrayList<>();
         private List<SyntaxSymbol> extraStartTerms = new ArrayList<>();
         private List<SyntaxSymbol> extraEndTerms = new ArrayList<>();
+        
+        private boolean analyzed = false;
+        private boolean finished = false;
     
         SymbolData(SyntaxSymbol symbol) {
             this.symbol = symbol;
         }
     
-        public OperatorSection get (int seq, int index) {
+        public SymbolSegment get (int seq, int index) {
             return data.get(seq).get(index);
         }
         
-        public void add(int seq, List<OperatorSection> list) {
+        public void add(int seq, List<SymbolSegment> list) {
             data.add(seq, list);
         }
         
-        List<SyntaxSymbol> getStartTerms(List<SyntaxSymbol> startedSymbols, List<SyntaxSymbol> finishedSymbols, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
+        List<SyntaxSymbol> getStartTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+            
+            if (!isAnalyzed()) {
+                analyze(symbol, dataMap, tuples, set);
+                return dataMap.get(symbol).getStartTerms(dataMap, tuples, set);
+            }
+            
+            set.add(symbol);
             List<SyntaxSymbol> storage = new ArrayList<>();
             
-            for (List<OperatorSection> list : data) {
-                OperatorSection el = list.get(0);
+            for (List<SymbolSegment> list : data) {
+                SymbolSegment el = list.get(0);
                 if (el.startTerminal == null) {
+    
+                    if (el.endTerminal != null) {
+                        storage.add(el.endTerminal);
+                    }
+                    
                     for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
                         
-                        if (startedSymbols.contains(nonterm)) {
-                            storage.addAll(dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        if (dataMap.keySet().contains(nonterm) && dataMap.get(nonterm).isAnalyzed()) {
+                            if (!set.contains(nonterm)) {
+                                storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
+                            }
                         }
                         else {
-                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
-                            storage.addAll(dataMap.get(nonterm).getStartTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                            analyze(nonterm, dataMap, tuples, set);
+                            storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
                         }
                         
                     }
@@ -206,35 +413,51 @@ public abstract class PrecedenceTable {
                 }
             }
             
+            set.remove(symbol);
             storage.addAll(extraStartTerms);
             
             return storage;
         }
         
-        List<SyntaxSymbol> getEndTerms(List<SyntaxSymbol> startedSymbols, List<SyntaxSymbol> finishedSymbols, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
+        List<SyntaxSymbol> getEndTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+    
+            if (!isAnalyzed()) {
+                analyze(symbol, dataMap, tuples, set);
+                return dataMap.get(symbol).getEndTerms(dataMap, tuples, set);
+            }
+            
+            set.add(symbol);
             List<SyntaxSymbol> storage = new ArrayList<>();
     
-            for (List<OperatorSection> list : data) {
-                OperatorSection el = list.get(0);
+            for (List<SymbolSegment> list : data) {
+                SymbolSegment el = list.get(list.size() - 1);
                 if (el.endTerminal == null) {
+    
+                    if (el.startTerminal != null) {
+                        storage.add(el.startTerminal);
+                    }
+                    
                     for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
                 
-                        if (startedSymbols.contains(nonterm)) {
-                            storage.addAll(dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                        if (dataMap.keySet().contains(nonterm) && dataMap.get(nonterm).isAnalyzed()) {
+                            if (!set.contains(nonterm)) {
+                                storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
+                            }
                         }
                         else {
-                            nonterm.analyze(startedSymbols, finishedSymbols, dataMap, tuples);
-                            storage.addAll(dataMap.get(nonterm).getEndTerms(startedSymbols, finishedSymbols, dataMap, tuples));
+                            analyze(nonterm, dataMap, tuples, set);
+                            storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
                         }
                 
                     }
                 }
                 else {
-                    storage.add(el.startTerminal);
+                    storage.add(el.endTerminal);
                 }
             }
     
-            storage.addAll(extraStartTerms);
+            set.remove(symbol);
+            storage.addAll(extraEndTerms);
     
             return storage;
         }
@@ -245,6 +468,22 @@ public abstract class PrecedenceTable {
     
         public List<SyntaxSymbol> getExtraEndTerms() {
             return extraEndTerms;
+        }
+    
+        public boolean isAnalyzed() {
+            return analyzed;
+        }
+    
+        public void setAnalyzed(boolean analyzed) {
+            this.analyzed = analyzed;
+        }
+    
+        public boolean isFinished() {
+            return finished;
+        }
+    
+        public void setFinished(boolean finished) {
+            this.finished = finished;
         }
     }
 }

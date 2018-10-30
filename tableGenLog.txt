@@ -1,2 +1,54 @@
+Analyzing: main
+null | operation list | null
+Analyzing: operation list
+null | operation | operation list loop | null
+Analyzing: operation
+null | input | null
+null | output | null
+Analyzing: input
+null | read
+read | (
+( | variable list | )
+Analyzing: variable list
+null | analyzer identifier
+analyzer identifier | variable list loop | null
+Analyzing: variable list loop
+null | ,
+, | analyzer identifier
+analyzer identifier | variable list loop | null
+null | null
+Analyzing: output
+null | write
+write | (
+( | variable list | )
+Analyzing: operation list loop
+null | ;
+; | operation | operation list loop | null
+null | null
+Analyzed symbols:
 
 Result:
+0 EQUAL 4
+1 EQUAL 4
+2 LOWER 0
+2 LOWER 0
+2 LOWER 1
+2 LOWER 1
+2 LOWER 2
+3 EQUAL 6
+4 EQUAL 5
+4 EQUAL 5
+4 LOWER 6
+4 LOWER 6
+6 LOWER 3
+6 LOWER 3
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5

@@ -17,8 +17,8 @@ public abstract class SyntaxPack {
     
     protected SyntaxPack() {
         init();
-        addSyntaxSymbol("analyzer identifier", null, null);
-        addSyntaxSymbol("analyzer literal", null, null);
+        addSyntaxSymbol("analyzer identifier", null, Integer.toString(getIdentifierCode()));
+        addSyntaxSymbol("analyzer literal", null, Integer.toString(getLiteralCode()));
     }
     
     protected abstract void init();

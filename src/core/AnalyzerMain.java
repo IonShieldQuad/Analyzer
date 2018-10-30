@@ -160,13 +160,14 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation("operation", "s"),
-                        new SyntaxOperation("operation list loop", "s"),
+                        new SyntaxOperation("operation list loop", "s")
                 }};
                 addSyntaxSymbol("operation list", patterns, null);
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(";", "s"),
                         new SyntaxOperation("operation", "s"),
+                        new SyntaxOperation("operation list loop", "s")
                 }, {
                 
                 }};
@@ -197,13 +198,14 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(null, "s id"),
-                        new SyntaxOperation("variable list loop", "s"),
+                        new SyntaxOperation("variable list loop", "s")
                 }};
                 addSyntaxSymbol("variable list", patterns, null);
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(",", "s"),
-                        new SyntaxOperation(null, "s id")
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation("variable list loop", "s")
                 }, {
                 
                 }};
