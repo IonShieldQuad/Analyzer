@@ -24,6 +24,9 @@ public abstract class SyntaxPack {
     protected abstract void init();
     
     public SyntaxSymbol getSyntaxSymbol(String name) {
+        if (!syntax.containsKey(name)) {
+            throw new IllegalArgumentException("Symbol \"" + name + "\" not found");
+        }
         return this.syntax.get(name);
     }
     

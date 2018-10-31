@@ -15,7 +15,7 @@ public class AnalyzerMain {
     public static void main(String args[]) {
 
         SymbolPack symbolPack = new PascalSymbolPack();
-        SyntaxPack syntaxPack = new PascalSyntaxPack();
+        SyntaxPack syntaxPack = new PascalSimpleSyntaxPack();
         
         String fileNameIn = "input.txt";
         String fileNameOut = "output.txt";
@@ -37,6 +37,7 @@ public class AnalyzerMain {
         Logger.getInstance().addLogger("lexis", "lexisLog.txt");
         Logger.getInstance().addLogger("syntax", "syntaxLog.txt");
         Logger.getInstance().addLogger("tableGen", "tableGenLog.txt");
+        Logger.getInstance().addLogger("tableResult", "tableGenRes.txt");
         
         
         try {
@@ -227,11 +228,11 @@ public class AnalyzerMain {
             e.printStackTrace();
         }
     
-        /*try {
+        try {
             PrecedenceTable testTable = PrecedenceTable.fromPack(syntaxPack);
         } catch (PatternSearchException e) {
             e.printStackTrace();
-        }*/
+        }
         
         Logger.getInstance().close();
     }

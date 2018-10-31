@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.InvalidKeyException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class PrecedenceTable {
     private Map<String, Map<String, Precedence>> map;
@@ -93,6 +94,7 @@ public abstract class PrecedenceTable {
         Logger.getInstance().logln("tableGen", "Analyzed symbols:");
         dataMap.keySet().forEach(s -> System.out.println(s.getName()));
     
+        System.out.println("\nResult:");
         Logger.getInstance().logln("tableGen", "\nResult:");
         tuples.sort((a, b) -> {
             if (a.x.equals(b.x)) {
@@ -102,9 +104,51 @@ public abstract class PrecedenceTable {
                 return  a.x.compareTo(b.x);
             }
         });
+        
+        Map<String, String> nameMap = new HashMap<>();
+    
+        Logger.getInstance().logln("tableResult", "");
+        
         for (PrecedenceTuple t : tuples) {
-            System.out.println(t.x + " " + t.value + " " + t.y);
-            Logger.getInstance().logln("tableGen", t.x + " " + t.value + " " + t.y);
+            if (!nameMap.containsKey(t.x)) {
+                pack.symbolSet().forEach(s -> {
+                    if (s.getTerm() != null && s.getTerm().equals(t.x)) {
+                        switch (s.getName()) {
+                            case "analyzer identifier":
+                                nameMap.put(t.x, "id");
+                                break;
+                            case "analyzer literal":
+                                nameMap.put(t.x, "lit");
+                                break;
+                            default:
+                                nameMap.put(t.x, s.getName());
+                                break;
+                        }
+                        
+                    }
+                });
+            }
+            if (!nameMap.containsKey(t.y)) {
+                pack.symbolSet().forEach(s -> {
+                    if (s.getTerm() != null && s.getTerm().equals(t.y)) {
+                        switch (s.getName()) {
+                            case "analyzer identifier":
+                                nameMap.put(t.y, "id");
+                                break;
+                            case "analyzer literal":
+                                nameMap.put(t.y, "lit");
+                                break;
+                            default:
+                                nameMap.put(t.y, s.getName());
+                                break;
+                        }
+                    }
+                });
+            }
+            
+            System.out.println(nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
+            Logger.getInstance().logln("tableGen", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
+            Logger.getInstance().logln("tableResult", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
         }
         
         return new PrecedenceTable(){
@@ -416,7 +460,7 @@ public abstract class PrecedenceTable {
             counterStart--;
             storage.addAll(extraStartTerms);
             
-            return storage;
+            return storage.stream().distinct().collect(Collectors.toCollection(ArrayList::new));
         }
         
         List<SyntaxSymbol> getEndTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
@@ -460,7 +504,7 @@ public abstract class PrecedenceTable {
             counterEnd--;
             storage.addAll(extraEndTerms);
     
-            return storage;
+            return storage.stream().distinct().collect(Collectors.toCollection(ArrayList::new));
         }
     
         public List<SyntaxSymbol> getExtraStartTerms() {
