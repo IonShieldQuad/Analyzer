@@ -160,18 +160,22 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation("operation", "s"),
-                        new SyntaxOperation("operation list loop", "s")
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("operation list", "s")
+                }, {
+                        new SyntaxOperation("operation", "s")
+                        
                 }};
                 addSyntaxSymbol("operation list", patterns, null);
     
-                patterns = new SyntaxOperation[][]{{
+                /*patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(";", "s"),
                         new SyntaxOperation("operation", "s"),
                         new SyntaxOperation("operation list loop", "s")
                 }, {
                 
                 }};
-                addSyntaxSymbol("operation list loop", patterns, null);
+                addSyntaxSymbol("operation list loop", patterns, null);*/
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation("input", "s")
@@ -198,18 +202,21 @@ public class AnalyzerMain {
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(null, "s id"),
-                        new SyntaxOperation("variable list loop", "s")
+                        new SyntaxOperation(",", "s"),
+                        new SyntaxOperation("variable list", "s")
+                }, {
+                        new SyntaxOperation(null, "s id")
                 }};
                 addSyntaxSymbol("variable list", patterns, null);
     
-                patterns = new SyntaxOperation[][]{{
+                /*patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation(",", "s"),
                         new SyntaxOperation(null, "s id"),
                         new SyntaxOperation("variable list loop", "s")
                 }, {
                 
                 }};
-                addSyntaxSymbol("variable list loop", patterns, null);
+                addSyntaxSymbol("variable list loop", patterns, null);*/
                 
                 setMainSymbol("main");
             }
@@ -219,6 +226,12 @@ public class AnalyzerMain {
         } catch (PatternSearchException e) {
             e.printStackTrace();
         }
+    
+        /*try {
+            PrecedenceTable testTable = PrecedenceTable.fromPack(syntaxPack);
+        } catch (PatternSearchException e) {
+            e.printStackTrace();
+        }*/
         
         Logger.getInstance().close();
     }

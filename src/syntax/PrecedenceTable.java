@@ -86,9 +86,8 @@ public abstract class PrecedenceTable {
         
         List<PrecedenceTuple> tuples = new ArrayList<>();
         Map<SyntaxSymbol, SymbolData> dataMap = new HashMap<>();
-        Set<SyntaxSymbol> set = new HashSet<>();
         
-        analyze(pack.getSyntaxSymbol(pack.getMainSymbol()), dataMap, tuples, set);
+        analyze(pack.getSyntaxSymbol(pack.getMainSymbol()), dataMap, tuples);
     
         System.out.println("Analyzed symbols:");
         Logger.getInstance().logln("tableGen", "Analyzed symbols:");
@@ -130,7 +129,7 @@ public abstract class PrecedenceTable {
         };
     }
     
-    static void analyze(SyntaxSymbol symbol, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+    static void analyze(SyntaxSymbol symbol, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
     
         Logger.getInstance().logln("tableGen", "Analyzing: " + symbol.getName());
         
@@ -140,7 +139,6 @@ public abstract class PrecedenceTable {
         
         SymbolData data = new SymbolData(symbol);
         dataMap.put(symbol, data);
-        //set.add(symbol);
         data.setAnalyzed(true);
         
         for (int i = 0; i < symbol.getPatterns().length; i++) {
@@ -215,7 +213,7 @@ public abstract class PrecedenceTable {
                             dataMap.put(nonterm, new SymbolData(nonterm));
                         }
                         
-                        for (SyntaxSymbol startTerm : dataMap.get(nonterm).getStartTerms(dataMap, tuples, set)) {
+                        for (SyntaxSymbol startTerm : dataMap.get(nonterm).getStartTerms(dataMap, tuples)) {
     
                             String term;
                             switch (startTerm.getName()) {
@@ -247,7 +245,7 @@ public abstract class PrecedenceTable {
                             dataMap.put(nonterm, new SymbolData(nonterm));
                         }
                         
-                        for (SyntaxSymbol endTerm : dataMap.get(nonterm).getEndTerms(dataMap, tuples, set)) {
+                        for (SyntaxSymbol endTerm : dataMap.get(nonterm).getEndTerms(dataMap, tuples)) {
                             
                             String term;
                             switch (endTerm.getName()) {
@@ -287,7 +285,7 @@ public abstract class PrecedenceTable {
                             dataMap.put(nonterm, new SymbolData(nonterm));
                         }
                         
-                        data.getExtraStartTerms().addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
+                        data.getExtraStartTerms().addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples));
                     }
                 }
                 
@@ -301,14 +299,13 @@ public abstract class PrecedenceTable {
                             dataMap.put(nonterm, new SymbolData(nonterm));
                         }
                         
-                        data.getExtraEndTerms().addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
+                        data.getExtraEndTerms().addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples));
                     }
                 }
             }
         }
         
         data.setFinished(true);
-        //set.remove(symbol);
         
     }
     
@@ -363,6 +360,8 @@ public abstract class PrecedenceTable {
         
         private boolean analyzed = false;
         private boolean finished = false;
+        private int counterStart = 0;
+        private int counterEnd = 0;
     
         SymbolData(SyntaxSymbol symbol) {
             this.symbol = symbol;
@@ -376,14 +375,15 @@ public abstract class PrecedenceTable {
             data.add(seq, list);
         }
         
-        List<SyntaxSymbol> getStartTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+        List<SyntaxSymbol> getStartTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
             
             if (!isAnalyzed()) {
-                analyze(symbol, dataMap, tuples, set);
-                return dataMap.get(symbol).getStartTerms(dataMap, tuples, set);
+                analyze(symbol, dataMap, tuples);
+                return dataMap.get(symbol).getStartTerms(dataMap, tuples);
             }
             
-            set.add(symbol);
+            counterStart++;
+            
             List<SyntaxSymbol> storage = new ArrayList<>();
             
             for (List<SymbolSegment> list : data) {
@@ -397,13 +397,13 @@ public abstract class PrecedenceTable {
                     for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
                         
                         if (dataMap.keySet().contains(nonterm) && dataMap.get(nonterm).isAnalyzed()) {
-                            if (!set.contains(nonterm)) {
-                                storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
+                            if (counterStart <= 1) {
+                                storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples));
                             }
                         }
                         else {
-                            analyze(nonterm, dataMap, tuples, set);
-                            storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples, set));
+                            analyze(nonterm, dataMap, tuples);
+                            storage.addAll(dataMap.get(nonterm).getStartTerms(dataMap, tuples));
                         }
                         
                     }
@@ -413,20 +413,21 @@ public abstract class PrecedenceTable {
                 }
             }
             
-            set.remove(symbol);
+            counterStart--;
             storage.addAll(extraStartTerms);
             
             return storage;
         }
         
-        List<SyntaxSymbol> getEndTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples, Set<SyntaxSymbol> set) throws PatternSearchException {
+        List<SyntaxSymbol> getEndTerms(Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
     
             if (!isAnalyzed()) {
-                analyze(symbol, dataMap, tuples, set);
-                return dataMap.get(symbol).getEndTerms(dataMap, tuples, set);
+                analyze(symbol, dataMap, tuples);
+                return dataMap.get(symbol).getEndTerms(dataMap, tuples);
             }
             
-            set.add(symbol);
+            counterEnd++;
+            
             List<SyntaxSymbol> storage = new ArrayList<>();
     
             for (List<SymbolSegment> list : data) {
@@ -440,13 +441,13 @@ public abstract class PrecedenceTable {
                     for (SyntaxSymbol nonterm : el.getNonTerminalList()) {
                 
                         if (dataMap.keySet().contains(nonterm) && dataMap.get(nonterm).isAnalyzed()) {
-                            if (!set.contains(nonterm)) {
-                                storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
+                            if (counterEnd <= 1) {
+                                storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples));
                             }
                         }
                         else {
-                            analyze(nonterm, dataMap, tuples, set);
-                            storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples, set));
+                            analyze(nonterm, dataMap, tuples);
+                            storage.addAll(dataMap.get(nonterm).getEndTerms(dataMap, tuples));
                         }
                 
                     }
@@ -455,8 +456,8 @@ public abstract class PrecedenceTable {
                     storage.add(el.endTerminal);
                 }
             }
-    
-            set.remove(symbol);
+            
+            counterEnd--;
             storage.addAll(extraEndTerms);
     
             return storage;

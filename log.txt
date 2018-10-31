@@ -2101,7 +2101,9 @@ Syntax analysis result:
 Analyzing: main
 null | operation list | null
 Analyzing: operation list
-null | operation | operation list loop | null
+null | operation | ;
+; | operation list | null
+null | operation | null
 Analyzing: operation
 null | input | null
 null | output | null
@@ -2111,20 +2113,13 @@ read | (
 ( | variable list | )
 Analyzing: variable list
 null | analyzer identifier
-analyzer identifier | variable list loop | null
-Analyzing: variable list loop
-null | ,
-, | analyzer identifier
-analyzer identifier | variable list loop | null
-null | null
+analyzer identifier | ,
+, | variable list | null
+null | analyzer identifier
 Analyzing: output
 null | write
 write | (
 ( | variable list | )
-Analyzing: operation list loop
-null | ;
-; | operation | operation list loop | null
-null | null
 Analyzed symbols:
 
 Result:
@@ -2132,16 +2127,38 @@ Result:
 1 EQUAL 4
 2 LOWER 0
 2 LOWER 0
+2 LOWER 0
+2 LOWER 0
+2 LOWER 1
+2 LOWER 1
 2 LOWER 1
 2 LOWER 1
 2 LOWER 2
-3 EQUAL 6
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 HIGHER 5
+3 LOWER 6
+3 LOWER 6
 4 EQUAL 5
 4 EQUAL 5
 4 LOWER 6
 4 LOWER 6
-6 LOWER 3
-6 LOWER 3
+4 LOWER 6
+4 LOWER 6
+5 HIGHER 2
+5 HIGHER 2
+5 HIGHER 2
+5 HIGHER 2
+6 EQUAL 3
 6 HIGHER 5
 6 HIGHER 5
 6 HIGHER 5
@@ -2152,3 +2169,15 @@ Result:
 6 HIGHER 5
 6 HIGHER 5
 6 HIGHER 5
+6 HIGHER 5
+6 HIGHER 5
+Analyzing: main
+null | header | ;
+; | description section | ;
+; | operator section | .
+Analyzing: header
+null | program
+program | program name | null
+Analyzing: program name
+null | analyzer identifier
+Analyzing: description section

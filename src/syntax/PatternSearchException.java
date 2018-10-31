@@ -7,6 +7,7 @@ public class PatternSearchException extends Exception {
     private final String data;
 
     public PatternSearchException(String name, SyntaxOperation[] pattern, int index, String data) {
+        super(data);
         this.name = name;
         this.pattern = pattern;
         this.data = data;
