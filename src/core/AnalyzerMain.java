@@ -231,7 +231,7 @@ public class AnalyzerMain {
         try {
             PrecedenceTable testTable = PrecedenceTable.fromPack(syntaxPack);
         } catch (PatternSearchException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         
         Logger.getInstance().close();

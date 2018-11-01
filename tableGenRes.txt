@@ -1,4 +1,5 @@
 
+Result:
 read EQUAL (
 write EQUAL (
 ; LOWER read
@@ -16,6 +17,7 @@ id EQUAL ,
 id HIGHER )
 id HIGHER )
 
+Result:
 program HIGHER ;
 program LOWER id
 var EQUAL :
@@ -472,3 +474,8 @@ else LOWER begin
 else HIGHER end
 else LOWER if
 else HIGHER else
+
+Conflicts found:
+then | else
+: | ;
+; | ;

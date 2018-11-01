@@ -2,6 +2,7 @@ package syntax;
 
 
 import core.Logger;
+import javafx.util.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,13 +90,11 @@ public abstract class PrecedenceTable {
         Map<SyntaxSymbol, SymbolData> dataMap = new HashMap<>();
         
         analyze(pack.getSyntaxSymbol(pack.getMainSymbol()), dataMap, tuples);
-    
-        System.out.println("Analyzed symbols:");
-        Logger.getInstance().logln("tableGen", "Analyzed symbols:");
+        
         dataMap.keySet().forEach(s -> System.out.println(s.getName()));
     
         System.out.println("\nResult:");
-        Logger.getInstance().logln("tableGen", "\nResult:");
+        Logger.getInstance().logln("tableResult", "\nResult:");
         tuples.sort((a, b) -> {
             if (a.x.equals(b.x)) {
                 return a.y.compareTo(b.y);
@@ -106,16 +105,15 @@ public abstract class PrecedenceTable {
         });
         
         Map<String, String> nameMap = pack.termToNameMap();
-    
-        Logger.getInstance().logln("tableResult", "");
         
         for (PrecedenceTuple t : tuples) {
             System.out.println(nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
-            Logger.getInstance().logln("tableGen", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
             Logger.getInstance().logln("tableResult", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
         }
+    
+        Set<Pair<String, String>> errors = new HashSet<>();
         
-        return new PrecedenceTable(){
+        PrecedenceTable table = new PrecedenceTable(){
             @Override
             protected void init() {
                 
@@ -126,13 +124,26 @@ public abstract class PrecedenceTable {
                 }
                 
                 for (PrecedenceTuple t : tuples) {
+                    if (this.get(t.x, t.y) != Precedence.NONE && this.get(t.x, t.y) != t.value) {
+                        errors.add(new Pair<>(t.x, t.y));
+                    }
                     try {
                         this.set(t.x, t.y, t.value);
                     } catch (InvalidKeyException ignored) {}
                 }
                 
+                
+                
             }
         };
+        
+        if (!errors.isEmpty()) {
+            Logger.getInstance().logln("tableResult", "\nConflicts found:");
+            errors.forEach((p) -> Logger.getInstance().logln("tableResult", nameMap.get(p.getKey()) + " | " + nameMap.get(p.getValue())));
+            throw new PatternSearchException(null, null, 0, "Table creation failed: bad syntax");
+        }
+        
+        return table;
     }
     
     static void analyze(SyntaxSymbol symbol, Map<SyntaxSymbol, SymbolData> dataMap, List<PrecedenceTuple> tuples) throws PatternSearchException {
