@@ -2,13 +2,19 @@ package syntax;
 
 import lexis.SymbolPack;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
  * Abstract class containing syntax rules
  */
 public abstract class SyntaxPack {
+    
+    public static final String ID_NAME = "analyzer identifier";
+    public static final String LIT_NAME = "analyzer literal";
     
     private Map<String, SyntaxSymbol> syntax = new HashMap<>();
     private String mainSymbol;
@@ -17,8 +23,8 @@ public abstract class SyntaxPack {
     
     protected SyntaxPack() {
         init();
-        addSyntaxSymbol("analyzer identifier", null, Integer.toString(getIdentifierCode()));
-        addSyntaxSymbol("analyzer literal", null, Integer.toString(getLiteralCode()));
+        addSyntaxSymbol(ID_NAME, null, Integer.toString(getIdentifierCode()));
+        addSyntaxSymbol(LIT_NAME, null, Integer.toString(getLiteralCode()));
     }
     
     protected abstract void init();
@@ -83,35 +89,25 @@ public abstract class SyntaxPack {
         setLiteralCode(pack.getLiteralCode());
     }
     
-    
-    static class OperationPosition {
-        SyntaxSymbol symbol;
-        int patternIndex;
-        int termNum = 0;
-        int operationIndex;
-        final Stack<SyntaxSymbol.LoopData> loops = new Stack<>();
-        final Stack<SyntaxSymbol.SelectData> selects = new Stack<>();
+    public Map<String, String> termToNameMap() {
+        Map<String, String> map = new HashMap<>();
         
-        OperationPosition() {
-            symbol = null;
-            patternIndex = 0;
-            operationIndex = 0;
-        }
-        
-        OperationPosition(SyntaxSymbol symbol) {
-            this.symbol = symbol;
-            patternIndex = 0;
-            operationIndex = 0;
-        }
-        
-        OperationPosition(SyntaxSymbol symbol, int patternIndex, int operationIndex) {
-            this.symbol = symbol;
-            this.patternIndex = patternIndex;
-            this.operationIndex = operationIndex;
-        }
-        
-        SyntaxOperation find() {
-            return symbol.getPatterns()[patternIndex][operationIndex];
-        }
+        symbolSet().forEach(s -> {
+            if (s.getTerm() != null) {
+                switch (s.getName()) {
+                    case ID_NAME:
+                        map.put(s.getTerm(), "id");
+                        break;
+                    case LIT_NAME:
+                        map.put(s.getTerm(), "lit");
+                        break;
+                    default:
+                        map.put(s.getTerm(), s.getName());
+                        break;
+                }
+            }
+        });
+        return map;
     }
+    
 }

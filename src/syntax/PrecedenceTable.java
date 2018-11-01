@@ -105,47 +105,11 @@ public abstract class PrecedenceTable {
             }
         });
         
-        Map<String, String> nameMap = new HashMap<>();
+        Map<String, String> nameMap = pack.termToNameMap();
     
         Logger.getInstance().logln("tableResult", "");
         
         for (PrecedenceTuple t : tuples) {
-            if (!nameMap.containsKey(t.x)) {
-                pack.symbolSet().forEach(s -> {
-                    if (s.getTerm() != null && s.getTerm().equals(t.x)) {
-                        switch (s.getName()) {
-                            case "analyzer identifier":
-                                nameMap.put(t.x, "id");
-                                break;
-                            case "analyzer literal":
-                                nameMap.put(t.x, "lit");
-                                break;
-                            default:
-                                nameMap.put(t.x, s.getName());
-                                break;
-                        }
-                        
-                    }
-                });
-            }
-            if (!nameMap.containsKey(t.y)) {
-                pack.symbolSet().forEach(s -> {
-                    if (s.getTerm() != null && s.getTerm().equals(t.y)) {
-                        switch (s.getName()) {
-                            case "analyzer identifier":
-                                nameMap.put(t.y, "id");
-                                break;
-                            case "analyzer literal":
-                                nameMap.put(t.y, "lit");
-                                break;
-                            default:
-                                nameMap.put(t.y, s.getName());
-                                break;
-                        }
-                    }
-                });
-            }
-            
             System.out.println(nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
             Logger.getInstance().logln("tableGen", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
             Logger.getInstance().logln("tableResult", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
@@ -160,8 +124,6 @@ public abstract class PrecedenceTable {
                         this.add(s.getTerm());
                     }
                 }
-                //this.add(Integer.toString(pack.getIdentifierCode()));
-                //this.add(Integer.toString(pack.getLiteralCode()));
                 
                 for (PrecedenceTuple t : tuples) {
                     try {
@@ -199,10 +161,10 @@ public abstract class PrecedenceTable {
                     SyntaxSymbol s;
                     
                     if (op.isIdentifier()) {
-                        s = symbol.getPack().getSyntaxSymbol("analyzer identifier");
+                        s = symbol.getPack().getSyntaxSymbol(SyntaxPack.ID_NAME);
                     }
                     else if (op.isLiteral()) {
-                        s = symbol.getPack().getSyntaxSymbol("analyzer literal");
+                        s = symbol.getPack().getSyntaxSymbol(SyntaxPack.LIT_NAME);
                     }
                     else {
                         s = symbol.getPack().getSyntaxSymbol(op.getData());
@@ -261,10 +223,10 @@ public abstract class PrecedenceTable {
     
                             String term;
                             switch (startTerm.getName()) {
-                                case "analyzer identifier":
+                                case SyntaxPack.ID_NAME:
                                     term = Integer.toString(startTerm.getPack().getIdentifierCode());
                                     break;
-                                case "analyzer literal":
+                                case SyntaxPack.LIT_NAME:
                                     term = Integer.toString(startTerm.getPack().getLiteralCode());
                                     break;
                                 default:
@@ -293,10 +255,10 @@ public abstract class PrecedenceTable {
                             
                             String term;
                             switch (endTerm.getName()) {
-                                case "analyzer identifier":
+                                case SyntaxPack.ID_NAME:
                                     term = Integer.toString(endTerm.getPack().getIdentifierCode());
                                     break;
-                                case "analyzer literal":
+                                case SyntaxPack.LIT_NAME:
                                     term = Integer.toString(endTerm.getPack().getLiteralCode());
                                     break;
                                 default:
