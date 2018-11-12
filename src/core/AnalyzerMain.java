@@ -9,11 +9,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class AnalyzerMain {
 
     public static void main(String args[]) {
-
+        Map<String, Integer> m = new HashStorage<>(100, String::hashCode);
+        m.put("a", 1);
+        System.out.println(m.containsKey("a"));
         SymbolPack symbolPack = new PascalSymbolPack();
         SyntaxPack syntaxPack = new PascalSimpleSyntaxPack();
         
@@ -100,7 +103,7 @@ public class AnalyzerMain {
                 OperationResult result = parser.process(data.toArray(new String[0]));
     
                 if (result.isSuccess()) {
-                    outLine = result.toString(" ");
+                    outLine = result.toString();
                 }
                 else {
                     outLine = result.getError().toString();
@@ -114,6 +117,13 @@ public class AnalyzerMain {
                 Logger.getInstance().logln("syntax", "\nSyntax analysis result:");
                 System.out.println(outLine);
                 Logger.getInstance().logln("syntax", outLine);
+                
+                Logger.getInstance().logln("syntax", "Id table");
+    
+                for (Map.Entry<String, IdData> entry : lexer.getIdData().entrySet()) {
+                    Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : (entry.getValue().getType())));
+                }
+                //lexer.getIdData().forEach((i, d) -> Logger.getInstance().logln("syntax", i + ": " + d.getType()));
             }
             catch (PatternSearchException e) {
                 System.out.println("======================================================================================");
@@ -150,7 +160,7 @@ public class AnalyzerMain {
         SyntaxPack testSyntax = new SyntaxPack() {
             @Override
             protected void init() {
-                addTerminalsFromPack(testSymbols);
+                setSymbolPack(testSymbols);
                 
                 SyntaxOperation[][] patterns;
                 
@@ -224,6 +234,276 @@ public class AnalyzerMain {
         };
         try {
             PrecedenceTable testTable = PrecedenceTable.fromPack(testSyntax);
+        } catch (PatternSearchException e) {
+            e.printStackTrace();
+        }
+    
+    
+        SymbolPack testSymbols0 = new SymbolPack() {
+            @Override
+            protected void initSymbols() {
+                add("program");
+                add("var");
+                add("integer");
+                add("real");
+                add("begin");
+                add("end");
+                add("for");
+                add("to");
+                add("downto");
+                add("do");
+                add("read");
+                add("write");
+                add("writeln");
+                addSpaced(":=");
+                addSpaced("+");
+                addSpaced("-");
+                addSpaced("*");
+                addSpaced("/");
+                addSpaced(".");
+                addSpaced(";");
+                addSpaced(",");
+                addSpaced(":");
+                addSpaced("(");
+                addSpaced(")");
+                setIdentifierCode(getSymbolCount());
+                setLiteralCode(getSymbolCount() + 1);
+            }
+        };
+    
+        SyntaxPack testSyntax0 = new SyntaxPack() {
+            @Override
+            protected void init() {
+                setSymbolPack(testSymbols0);
+            
+                SyntaxOperation[][] patterns;
+            
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("header", "s"),
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("description section", "s"),
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("operation section", "s"),
+                        new SyntaxOperation(".", "s")
+                }};
+                addSyntaxSymbol("main", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("program", "s"),
+                        new SyntaxOperation(null, "s id")
+                }};
+                addSyntaxSymbol("header", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("var", "s"),
+                        new SyntaxOperation("declaration", "s"),
+                        new SyntaxOperation("description section loop", "s")
+                }};
+                addSyntaxSymbol("description section", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("declaration", "s"),
+                        new SyntaxOperation("description section loop", "s")
+                }, {
+                
+                }};
+                addSyntaxSymbol("description section loop", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("variable list", "s"),
+                        new SyntaxOperation(":", "s"),
+                        new SyntaxOperation("variable type", "s"),
+                        new SyntaxOperation(";", "s")
+                }};
+                addSyntaxSymbol("declaration", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("integer", "s")
+                }, {
+                        new SyntaxOperation("real", "s")
+                }};
+                addSyntaxSymbol("variable type", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("begin", "s"),
+                        new SyntaxOperation("operation list", "s"),
+                        new SyntaxOperation("end", "s")
+                }};
+                addSyntaxSymbol("operation section", patterns, null);
+                
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("operation", "s"),
+                        new SyntaxOperation("operation list loop", "s")
+                }};
+                addSyntaxSymbol("operation list", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(";", "s"),
+                        new SyntaxOperation("operation", "s"),
+                        new SyntaxOperation("operation list loop", "s")
+                }, {
+                
+                }};
+                addSyntaxSymbol("operation list loop", patterns, null).setInlinePrecedence(true);
+            
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("input", "s")
+                }, {
+                        new SyntaxOperation("output", "s")
+                }, {
+                        new SyntaxOperation("assignment", "s")
+                }, {
+                        new SyntaxOperation("loop", "s")
+                }};
+                addSyntaxSymbol("operation", patterns, null);
+            
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("read", "s"),
+                        new SyntaxOperation("(", "s"),
+                        new SyntaxOperation("variable list", "s"),
+                        new SyntaxOperation(")", "s")
+                }};
+                addSyntaxSymbol("input", patterns, null);
+            
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("write", "s"),
+                        new SyntaxOperation("(", "s"),
+                        new SyntaxOperation("variable list", "s"),
+                        new SyntaxOperation(")", "s")
+                }};
+                addSyntaxSymbol("output", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation(":=", "s"),
+                        new SyntaxOperation("expression", "s")
+                }};
+                addSyntaxSymbol("assignment", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop plus", "s")
+                }, {
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop minus", "s")
+                }};
+                addSyntaxSymbol("expression", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("+", "s"),
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop plus", "s")
+                }, {
+                        new SyntaxOperation("+", "s"),
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop minus", "s")
+                }};
+                addSyntaxSymbol("expression loop plus", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("-", "s"),
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop plus", "s")
+                }, {
+                        new SyntaxOperation("-", "s"),
+                        new SyntaxOperation("addition", "s"),
+                        new SyntaxOperation("expression loop minus", "s")
+                }};
+                addSyntaxSymbol("expression loop minus", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop multi", "s")
+                }, {
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop div", "s")
+                }};
+                addSyntaxSymbol("addition", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("*", "s"),
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop multi", "s")
+                }, {
+                        new SyntaxOperation("*", "s"),
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop div", "s")
+                }};
+                addSyntaxSymbol("addition loop multi", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("/", "s"),
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop multi", "s")
+                }, {
+                        new SyntaxOperation("/", "s"),
+                        new SyntaxOperation("multiplication", "s"),
+                        new SyntaxOperation("addition loop div", "s")
+                }};
+                addSyntaxSymbol("addition loop div", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(null, "s id")
+                }, {
+                        new SyntaxOperation(null, "s lit")
+                }, {
+                        new SyntaxOperation("(", "s"),
+                        new SyntaxOperation("expression", "s"),
+                        new SyntaxOperation(")", "s")
+                }};
+                addSyntaxSymbol("multiplication", patterns, null);
+                
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation("variable list loop", "s")
+                }};
+                addSyntaxSymbol("variable list", patterns, null);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation(",", "s"),
+                        new SyntaxOperation(null, "s id"),
+                        new SyntaxOperation("variable list loop", "s")
+                }, {
+                
+                }};
+                addSyntaxSymbol("variable list loop", patterns, null).setInlinePrecedence(true);
+    
+                patterns = new SyntaxOperation[][]{{
+                        new SyntaxOperation("for", "s id"),
+                        new SyntaxOperation("assignment", "s"),
+                        new SyntaxOperation("to", "s"),
+                        new SyntaxOperation("expression", "s"),
+                        new SyntaxOperation("do", "s"),
+                        new SyntaxOperation("operation section", "s")
+                }, {
+                        new SyntaxOperation("for", "s id"),
+                        new SyntaxOperation("assignment", "s"),
+                        new SyntaxOperation("downto", "s"),
+                        new SyntaxOperation("expression", "s"),
+                        new SyntaxOperation("do", "s"),
+                        new SyntaxOperation("operation section", "s")
+                }, {
+                        new SyntaxOperation("for", "s id"),
+                        new SyntaxOperation("assignment", "s"),
+                        new SyntaxOperation("to", "s"),
+                        new SyntaxOperation("expression", "s"),
+                        new SyntaxOperation("do", "s"),
+                        new SyntaxOperation("operation", "s")
+                }, {
+                        new SyntaxOperation("for", "s id"),
+                        new SyntaxOperation("assignment", "s"),
+                        new SyntaxOperation("downto", "s"),
+                        new SyntaxOperation("expression", "s"),
+                        new SyntaxOperation("do", "s"),
+                        new SyntaxOperation("operation", "s")
+                }};
+                addSyntaxSymbol("loop", patterns, null);
+            
+                setMainSymbol("main");
+            }
+        };
+        try {
+            PrecedenceTable testTable = PrecedenceTable.fromPack(testSyntax0);
         } catch (PatternSearchException e) {
             e.printStackTrace();
         }

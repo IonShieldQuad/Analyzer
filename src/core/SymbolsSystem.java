@@ -12,7 +12,15 @@ public class SymbolsSystem implements Lexer {
 
     private StringLexer lexer = new StringLexer(this);
     protected SymbolPack symbols;
-    protected Map<String, Integer> idMap = new HashMap<>();
+    protected Map<String, Integer> idMap = new HashStorage<>(100, s -> {
+        int[] res = {0};
+        final int prime = 1049;
+        
+        s.chars().forEach(c -> res[0] += c * Math.pow(prime, c));
+        
+        return res[0];
+    });
+    protected Map<Integer, IdData> idData = new HashStorage<>(100, i -> i);
 
     public SymbolsSystem(SymbolPack symbolPack) {
         this.symbols = symbolPack;
@@ -37,8 +45,9 @@ public class SymbolsSystem implements Lexer {
 
     /**Adds an identifier to map if it doesn't exist*/
     public boolean addIdentifier(String key) {
-        if (!this.idMap.containsKey(key)) {
-            this.idMap.put(key, idMap.size());
+        if (!idMap.containsKey(key)) {
+            idMap.put(key, idMap.size());
+            idData.put(idMap.get(key), new IdData());
             return true;
         }
         return false;
@@ -64,5 +73,30 @@ public class SymbolsSystem implements Lexer {
     @Override
     public String[] process(String input) throws UnmatchedSubstringException {
         return lexer.processString(input);
+    }
+    
+    @Override
+    public Map<String, IdData> getIdData() {
+        Map<String, IdData> m = new HashMap<>();
+        for (String id : idMap.keySet()) {
+            if (id != null) {
+                m.put(id, idData.get(idMap.get(id)));
+            }
+        }
+        return m;
+    }
+    
+    public void setTypeOfId(int id, String type) {
+        if (id < 0 || id > idData.size() - 1) {
+            throw new IllegalArgumentException("Id with index " + id + " does not exist");
+        }
+        idData.get(id).setType(type);
+    }
+    
+    public String getTypeOfId(int id) {
+        if (id < 0 || id > idData.size() - 1) {
+            throw new IllegalArgumentException("Id with index " + id + " does not exist");
+        }
+        return idData.get(id).getType();
     }
 }

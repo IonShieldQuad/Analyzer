@@ -7,16 +7,17 @@ public class PascalSyntaxPack extends SyntaxPack {
     @Override
     protected void init() {
         
-        addTerminalsFromPack(new PascalSymbolPack());
+        setSymbolPack(new PascalSymbolPack());
+        //addTerminalsFromPack(new PascalSymbolPack());
         
         SyntaxOperation[][] patterns;
         
         patterns = new SyntaxOperation[][]{{
-                new SyntaxOperation("header", "s"),
+                new SyntaxOperation("header", "s $header"),
                 new SyntaxOperation(";", "s"),
-                new SyntaxOperation("description section", "s"),
+                new SyntaxOperation("description section", "s $desc"),
                 new SyntaxOperation(";", "s"),
-                new SyntaxOperation("operator section", "s"),
+                new SyntaxOperation("operator section", "s $operators"),
                 new SyntaxOperation(".", "s")
         }};
         addSyntaxSymbol("main", patterns, null);

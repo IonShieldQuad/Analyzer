@@ -62,6 +62,20 @@ public abstract class SymbolPack {
         return this.symbolsMap.get(symbol);
     }
     
+    public int extractIdentifier(String input) {
+        if (!input.startsWith(getIdentifierCode() + ".")) {
+            throw new IllegalArgumentException(input + "is not an identifier containing string");
+        }
+        return Integer.parseInt(input.substring(Integer.toString(getIdentifierCode()).length() + 1));
+    }
+    
+    public int extractLiteral(String input) {
+        if (!input.startsWith(getLiteralCode() + ".")) {
+            throw new IllegalArgumentException(input + "is not an literal containing string");
+        }
+        return Integer.parseInt(input.substring(Integer.toString(getLiteralCode()).length() + 1));
+    }
+    
     @Nullable
     public final String find(int symbol) {
         if (symbol == identifierCode) {

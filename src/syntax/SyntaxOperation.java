@@ -61,6 +61,14 @@ public class SyntaxOperation {
         return contains("sb");
     }
     
+    boolean isIdType() {
+        return Arrays.stream(params).anyMatch(s -> s.startsWith("type->$"));
+    }
+    
+    public List<String> idsTypeList() {
+        return Arrays.stream(params).filter(s -> s.startsWith("type->$")).map(s -> s.substring(6)).collect(ArrayList::new, List::add, List::addAll);
+    }
+    
     @Contract(pure = true)
     private boolean contains(String param) {
         return Arrays.asList(params).contains(param);
@@ -68,7 +76,14 @@ public class SyntaxOperation {
     
     @Contract(pure = true)
     public List<String> getVariables() {
-        return Arrays.stream(params).filter((s) -> s.startsWith("$")).collect(ArrayList<String>::new, List::add, List::addAll);
+        /*List<String> list = new ArrayList<>();
+        for (int i = 0; i < params.length; i++) {
+            if (params[i].length() > 0 && params[i].startsWith("$")) {
+                list.add(params[i]);
+            }
+        }*/
+        return Arrays.stream(params).filter(s -> !s.equals("") && s.startsWith("$")).collect(ArrayList::new, List::add, List::addAll);
+        /*return list;*/
     }
     
     @Contract(pure = true)
@@ -78,6 +93,6 @@ public class SyntaxOperation {
     
     @Contract(pure = true)
     public boolean containsVariables() {
-        return getVariables().isEmpty();
+        return !getVariables().isEmpty();
     }
 }

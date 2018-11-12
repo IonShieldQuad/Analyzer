@@ -5,10 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class SyntaxSymbol {
     private final SyntaxPack pack;
@@ -59,7 +56,8 @@ public class SyntaxSymbol {
      * */
     @NotNull
     public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
-        List<OperationResult.DataEntry> out = new ArrayList<>();
+        List<String> out = new ArrayList<>();
+        Map<String, String> vars = new HashMap<>();
         OperationResult.SyntaxError error = null;
         
         for (SyntaxOperation[] pattern : patterns) {
@@ -69,7 +67,8 @@ public class SyntaxSymbol {
 
             out.clear();
             Stack<LoopData> loops = new Stack<>();
-            Stack<SelectData>selects = new Stack<>();
+            Stack<SelectData> selects = new Stack<>();
+            vars.clear();
 
             for (int i = 0; i < pattern.length;) {
                 SyntaxOperation op = pattern[i];
@@ -91,6 +90,19 @@ public class SyntaxSymbol {
                 
                 Logger.getInstance().logln("syntax", "(" + data[position] + ") " + res.getOldPosition() + " -> " + (res.isSuccess() ? res.getNewPosition() : "\"" + res.getError() + "\"") + (loops.isEmpty() ? "" : " l") + (selects.isEmpty() ? "" : " s") + " : " + name + ": " + i + " exit");
     
+                //Stores variables
+                if (op.containsVariables()) {
+                    op.getVariables().forEach(v -> vars.put(v, res.toString()));
+                    Arrays.stream(op.getParams()).forEach(System.out::println);
+                    System.out.println("!" + op.getVariables().size());
+                    System.out.println(vars.size());
+                }
+                
+                //Sets identifier type
+                if (res.isSuccess() && op.isIdType()) {
+                    op.idsTypeList().forEach(s -> pack.setTypeOfId(pack.extractIdentifier(vars.get(s)), out.toString()));
+                }
+                
                 //Saves error with highest index
                 if (res.getError() != null && (err == null || res.getError().getIndex() > err.getIndex())) {
                     err = res.getError();
@@ -108,7 +120,7 @@ public class SyntaxSymbol {
                 if (res.isSuccess()) {
                     //Updates position and data if operation succeeded
                     position = res.getNewPosition();
-                    out.addAll(res.getData());
+                    out.add(res.getData());
                     
                     if (!selects.isEmpty()) {
                         if (selects.peek().hasPoint(i + 1) && selects.peek().getStart() != i) {
@@ -178,10 +190,30 @@ public class SyntaxSymbol {
                 ++i;
             }
             if (success) {
-                return new OperationResult(index, position, true, out, error);
+                return new OperationResult(index, position, true, buildOutString(getName(), vars), error);
             }
         }
-        return new OperationResult(index, index, false, out, error);
+        return new OperationResult(index, index, false, buildOutString(getName(), vars), error);
+    }
+    
+    private String buildOutString(String name, Map<String, String> vars) {
+        StringBuilder out = new StringBuilder();
+        out.append("(");
+    
+        int i = 0;
+        for (String var : vars.keySet()) {
+            
+            out.append(vars.get(var)).append("@").append(var);
+            
+            if (i < vars.size() - 1) {
+                out.append("|");
+            }
+            
+            i++;
+        }
+        
+        out.append("#").append(name).append(")");
+        return out.toString();
     }
 
     /**
@@ -236,7 +268,7 @@ public class SyntaxSymbol {
             }
             else {
                 OperationResult res = this.pack.getSyntaxSymbol(op.getData()).searchPatterns(data, index);
-                return new OperationResult(index, res.getNewPosition(), res.isSuccess(), res.toString(" "), res.getVariables(), res.getError());
+                return new OperationResult(index, res.getNewPosition(), res.isSuccess(), res.toString(), res.getError());
             }
         }
         return new OperationResult(index, index, true, "", null);

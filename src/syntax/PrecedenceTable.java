@@ -91,9 +91,6 @@ public abstract class PrecedenceTable {
         
         analyze(pack.getSyntaxSymbol(pack.getMainSymbol()), dataMap, tuples);
         
-        dataMap.keySet().forEach(s -> System.out.println(s.getName()));
-    
-        System.out.println("\nResult:");
         Logger.getInstance().logln("tableResult", "\nResult:");
         tuples.sort((a, b) -> {
             if (a.x.equals(b.x)) {
@@ -107,7 +104,6 @@ public abstract class PrecedenceTable {
         Map<String, String> nameMap = pack.termToNameMap();
         
         for (PrecedenceTuple t : tuples) {
-            System.out.println(nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
             Logger.getInstance().logln("tableResult", nameMap.get(t.x) + " " + t.value + " " + nameMap.get(t.y));
         }
     

@@ -12,35 +12,8 @@ public class OperationResult {
     private final int oldPosition;
     private final int newPosition;
     private final boolean success;
-    private final List<DataEntry> data;
+    private final String data;
     private final SyntaxError error;
-    private final Map<String, List<String>> variables;
-    
-    OperationResult(int oldPosition, int newPosition, boolean success, List<DataEntry> data, @Nullable SyntaxError error) {
-        
-        this.oldPosition = oldPosition;
-        this.newPosition = newPosition;
-        this.success = success;
-        if (data != null) {
-            this.data = new ArrayList<>(data);
-        }
-        else {
-            this.data = new ArrayList<>();
-        }
-        this.variables = new HashMap<>();
-        this.data.stream()
-                .filter(DataEntry::hasVariables)
-                .map(DataEntry::getVariables)
-                .forEach((m) -> m.keySet().forEach((k) -> {
-                    if (this.variables.containsKey(k)) {
-                        this.variables.get(k).addAll(m.get(k));
-                    }
-                    else {
-                        this.variables.put(k, new ArrayList<>(m.get(k)));
-                    }
-                }));
-        this.error = error;
-    }
     
     OperationResult(int oldPosition, int newPosition, boolean success, String data, @Nullable SyntaxError error) {
         
@@ -48,56 +21,30 @@ public class OperationResult {
         this.newPosition = newPosition;
         this.success = success;
         if (data != null) {
-            this.data = new ArrayList<>();
-            this.data.add(new DataEntry(data));
+            this.data = data;
         }
         else {
-            this.data = new ArrayList<>();
+            this.data = "";
         }
-        variables = new HashMap<>();
+ 
         this.error = error;
     }
     
-    OperationResult(int oldPosition, int newPosition, boolean success, String data, Map<String, List<String>> variables, @Nullable SyntaxError error) {
-        
-        this.oldPosition = oldPosition;
-        this.newPosition = newPosition;
-        this.success = success;
-        if (data != null) {
-            this.data = new ArrayList<>();
-            this.data.add(new DataEntry(data, variables));
-        }
-        else {
-            this.data = new ArrayList<>();
-        }
-        this.variables = new HashMap<>();
-        this.data.stream()
-                .filter(DataEntry::hasVariables)
-                .map(DataEntry::getVariables)
-                .forEach((m) -> m.keySet().forEach((k) -> {
-                    if (this.variables.containsKey(k)) {
-                        this.variables.get(k).addAll(m.get(k));
-                    }
-                    else {
-                        this.variables.put(k, new ArrayList<>(m.get(k)));
-                    }
-                }));
-        this.error = error;
-    }
     
     @Override
     public String toString() {
-        StringBuilder out = new StringBuilder();
+        return data;
+        /*StringBuilder out = new StringBuilder();
         for (DataEntry s : getData()) {
             if (s == null || s.toString().length() == 0) {
                 continue;
             }
             out.append(s);
         }
-        return out.toString();
+        return out.toString();*/
     }
     
-    public String toString(String separator) {
+    /*public String toString(String separator) {
         StringBuilder out = new StringBuilder();
         String prev = separator;
         for (DataEntry s : data) {
@@ -113,7 +60,7 @@ public class OperationResult {
         prev = s.toString();
         }
     return out.toString();
-    }
+    }*/
     
     public SyntaxError getError() {
         return error;
@@ -131,16 +78,9 @@ public class OperationResult {
         return oldPosition;
     }
     
-    List<String> getVariableValues(String var) {
-        return variables.get(var);
-    }
     
-    Map<String, List<String>> getVariables() {
-        return variables;
-    }
-    
-    public List<DataEntry> getData() {
-        return new ArrayList<>(data);
+    public String getData() {
+        return data;
     }
     
     public static class SyntaxError {

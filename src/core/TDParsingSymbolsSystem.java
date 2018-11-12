@@ -12,6 +12,7 @@ public class TDParsingSymbolsSystem extends SymbolsSystem implements Parser {
     public TDParsingSymbolsSystem(SymbolPack symbolPack, SyntaxPack syntaxPack) {
         super(symbolPack);
         syntax = syntaxPack;
+        syntaxPack.setSystem(this);
     }
     
     @Override
