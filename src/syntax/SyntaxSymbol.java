@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SyntaxSymbol {
     private final SyntaxPack pack;
@@ -93,14 +95,30 @@ public class SyntaxSymbol {
                 //Stores variables
                 if (op.containsVariables()) {
                     op.getVariables().forEach(v -> vars.put(v, res.toString()));
-                    Arrays.stream(op.getParams()).forEach(System.out::println);
-                    System.out.println("!" + op.getVariables().size());
-                    System.out.println(vars.size());
+                    //Arrays.stream(op.getParams()).forEach(System.out::println);
+                    //System.out.println("!" + op.getVariables().size());
+                    //System.out.println(vars.size());
                 }
                 
                 //Sets identifier type
                 if (res.isSuccess() && op.isIdType()) {
-                    op.idsTypeList().forEach(s -> pack.setTypeOfId(pack.extractIdentifier(vars.get(s)), out.toString()));
+                    //op.idsTypeList().forEach(s -> pack.setTypeOfId(pack.extractIdentifier(vars.get(s)), out.toString()));
+                    Pattern p = Pattern.compile(pack.getIdentifierCode() + ".[0-9]*");
+                    Pattern tp = Pattern.compile("[0-9]*@\\$val");
+                    for (String name : op.idsTypeList()) {
+                        Matcher m = p.matcher(vars.get(name));
+                        Matcher tm = tp.matcher(res.toString());
+                        
+                        String type = res.toString();
+                        if (tm.find()) {
+                            type = tm.group().split("@")[0];
+                        }
+                        
+                        while (m.find()) {
+                            int code = pack.extractIdentifier(m.group());
+                            pack.setTypeOfId(code, type);
+                        }
+                    }
                 }
                 
                 //Saves error with highest index

@@ -13,12 +13,14 @@ public class SymbolsSystem implements Lexer {
     private StringLexer lexer = new StringLexer(this);
     protected SymbolPack symbols;
     protected Map<String, Integer> idMap = new HashStorage<>(100, s -> {
-        int[] res = {0};
+        int res = 1;
         final int prime = 1049;
         
-        s.chars().forEach(c -> res[0] += c * Math.pow(prime, c));
+        for (char c : s.toCharArray()) {
+            res = res * prime + c;
+        }
         
-        return res[0];
+        return res;
     });
     protected Map<Integer, IdData> idData = new HashStorage<>(100, i -> i);
 

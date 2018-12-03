@@ -121,7 +121,7 @@ public class AnalyzerMain {
                 Logger.getInstance().logln("syntax", "Id table");
     
                 for (Map.Entry<String, IdData> entry : lexer.getIdData().entrySet()) {
-                    Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : (entry.getValue().getType())));
+                    Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getType())));
                 }
                 //lexer.getIdData().forEach((i, d) -> Logger.getInstance().logln("syntax", i + ": " + d.getType()));
             }

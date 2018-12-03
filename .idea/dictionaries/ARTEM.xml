@@ -2,6 +2,7 @@
   <dictionary name="ARTEM">
     <words>
       <w>downto</w>
+      <w>hasher</w>
       <w>logln</w>
       <w>nonterm</w>
       <w>nonterms</w>

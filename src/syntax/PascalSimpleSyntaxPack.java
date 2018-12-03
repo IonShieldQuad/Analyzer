@@ -32,7 +32,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
                 new SyntaxOperation("var", "s"),
                 new SyntaxOperation("variable list", "s $list"),
                 new SyntaxOperation(":", "s"),
-                new SyntaxOperation("variable type", "s $type"),
+                new SyntaxOperation("variable type", "s $type type->$list"),
                 new SyntaxOperation("description section loop", "s $extra")
         }};
         addSyntaxSymbol("description section", patterns, null);
@@ -41,7 +41,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
                 new SyntaxOperation(";", "s"),
                 new SyntaxOperation("variable list", "s $list"),
                 new SyntaxOperation(":", "s"),
-                new SyntaxOperation("variable type", "s $type"),
+                new SyntaxOperation("variable type", "s $type type->$list"),
                 new SyntaxOperation("description section loop", "s $extra")
         }, {
         

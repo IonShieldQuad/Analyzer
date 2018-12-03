@@ -170,7 +170,6 @@ public class HashStorage<K, V> implements Map<K, V> {
                 el = table.get(el.getChain());
             }
             pointer++;
-            hashTable.set(hash, pointer);
             table.add(pointer, new Tuple<>(k, v));
             el.setChain(pointer);
         }

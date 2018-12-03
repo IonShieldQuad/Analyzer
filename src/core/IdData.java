@@ -1,7 +1,7 @@
 package core;
 
 class IdData {
-    private String type = "";
+    private String type = "NO_VALUE";
 
     public String getType() {
         return type;
