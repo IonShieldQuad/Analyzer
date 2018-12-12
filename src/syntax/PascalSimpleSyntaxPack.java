@@ -23,7 +23,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
         addSyntaxSymbol("main", patterns, null);
         
         patterns = new SyntaxOperation[][]{{
-                new SyntaxOperation("program", "s"),
+                new SyntaxOperation("program", "s type->$name"),
                 new SyntaxOperation(null, "s id $name")
         }};
         addSyntaxSymbol("header", patterns, null);
@@ -49,13 +49,13 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
         addSyntaxSymbol("description section loop", patterns, null);
         
         patterns = new SyntaxOperation[][]{{
-                new SyntaxOperation("integer", "s $val")
+                new SyntaxOperation("integer", "s $type")
         }, {
-                new SyntaxOperation("real", "s $val")
+                new SyntaxOperation("real", "s $type")
         }, {
-                new SyntaxOperation("char", "s $val")
+                new SyntaxOperation("char", "s $type")
         }, {
-                new SyntaxOperation("string", "s $val")
+                new SyntaxOperation("string", "s $type")
         }};
         addSyntaxSymbol("variable type", patterns, null);
         

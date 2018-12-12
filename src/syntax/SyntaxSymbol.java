@@ -60,6 +60,7 @@ public class SyntaxSymbol {
     public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
         List<String> out = new ArrayList<>();
         Map<String, String> vars = new HashMap<>();
+        Map<String, String> types = new HashMap<>();
         OperationResult.SyntaxError error = null;
         
         for (SyntaxOperation[] pattern : patterns) {
@@ -71,6 +72,7 @@ public class SyntaxSymbol {
             Stack<LoopData> loops = new Stack<>();
             Stack<SelectData> selects = new Stack<>();
             vars.clear();
+            types.clear();
 
             for (int i = 0; i < pattern.length;) {
                 SyntaxOperation op = pattern[i];
@@ -95,29 +97,12 @@ public class SyntaxSymbol {
                 //Stores variables
                 if (op.containsVariables()) {
                     op.getVariables().forEach(v -> vars.put(v, res.toString()));
-                    //Arrays.stream(op.getParams()).forEach(System.out::println);
-                    //System.out.println("!" + op.getVariables().size());
-                    //System.out.println(vars.size());
                 }
                 
-                //Sets identifier type
+                //Stores identifier type
                 if (res.isSuccess() && op.isIdType()) {
-                    //op.idsTypeList().forEach(s -> pack.setTypeOfId(pack.extractIdentifier(vars.get(s)), out.toString()));
-                    Pattern p = Pattern.compile(pack.getIdentifierCode() + ".[0-9]*");
-                    Pattern tp = Pattern.compile("[0-9]*@\\$val");
                     for (String name : op.idsTypeList()) {
-                        Matcher m = p.matcher(vars.get(name));
-                        Matcher tm = tp.matcher(res.toString());
-                        
-                        String type = res.toString();
-                        if (tm.find()) {
-                            type = tm.group().split("@")[0];
-                        }
-                        
-                        while (m.find()) {
-                            int code = pack.extractIdentifier(m.group());
-                            pack.setTypeOfId(code, type);
-                        }
+                        types.put(name, res.toString());
                     }
                 }
                 
@@ -208,6 +193,28 @@ public class SyntaxSymbol {
                 ++i;
             }
             if (success) {
+                
+                //Assign types
+                Pattern p = Pattern.compile(pack.getIdentifierCode() + ".[0-9]*");
+                Pattern tp = Pattern.compile("[0-9]*@\\$type");
+                for (String name : types.keySet()) {
+                    if (vars.get(name) == null) {
+                        throw new PatternSearchException(name, pattern, index, "Variable " + name + " not found");
+                    }
+                    Matcher m = p.matcher(vars.get(name));
+                    Matcher tm = tp.matcher(types.get(name));
+        
+                    String type = types.get(name);
+                    if (tm.find()) {
+                        type = tm.group().split("@")[0];
+                    }
+        
+                    while (m.find()) {
+                        int code = pack.extractIdentifier(m.group());
+                        pack.setTypeOfId(code, type);
+                    }
+                }
+                
                 return new OperationResult(index, position, true, buildOutString(getName(), vars), error);
             }
         }
