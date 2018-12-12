@@ -10,6 +10,7 @@ import java.util.List;
 
 import static java.lang.Character.isDigit;
 
+/**Lexical analyzer*/
 public class StringLexer {
     public StringLexer(SymbolsSystem dictionary) {
         this.dic = dictionary;

@@ -2,6 +2,7 @@ package syntax;
 
 import lexis.PascalSymbolPack;
 
+/**Pascal syntax rules - simplified*/
 public class PascalSimpleSyntaxPack extends SyntaxPack {
     
     @Override

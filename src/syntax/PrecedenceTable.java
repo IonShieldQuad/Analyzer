@@ -11,6 +11,7 @@ import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**Class for storing precedence values between elements*/
 public abstract class PrecedenceTable {
     private Map<String, Map<String, Precedence>> map;
     private List<String> keys;

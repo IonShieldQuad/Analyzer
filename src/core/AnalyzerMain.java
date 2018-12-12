@@ -3,7 +3,10 @@ package core;
 import lexis.PascalSymbolPack;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
-import syntax.*;
+import syntax.OperationResult;
+import syntax.PascalSimpleSyntaxPack;
+import syntax.PatternSearchException;
+import syntax.SyntaxPack;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,9 +17,6 @@ import java.util.Map;
 public class AnalyzerMain {
 
     public static void main(String args[]) {
-        Map<String, Integer> m = new HashStorage<>(100, String::hashCode);
-        m.put("a", 1);
-        System.out.println(m.containsKey("a"));
         SymbolPack symbolPack = new PascalSymbolPack();
         SyntaxPack syntaxPack = new PascalSimpleSyntaxPack();
         
@@ -37,6 +37,8 @@ public class AnalyzerMain {
         Lexer lexer = td;
         Parser parser = td;
         
+        
+        //Add files for logging
         Logger.getInstance().addLogger("lexis", "lexisLog.txt");
         Logger.getInstance().addLogger("syntax", "syntaxLog.txt");
         Logger.getInstance().addLogger("tableGen", "tableGenLog.txt");
@@ -143,7 +145,7 @@ public class AnalyzerMain {
         
         
         
-        SymbolPack testSymbols = new SymbolPack() {
+        /*SymbolPack testSymbols = new SymbolPack() {
             @Override
             protected void initSymbols() {
                 add("read");
@@ -179,14 +181,6 @@ public class AnalyzerMain {
                 }};
                 addSyntaxSymbol("operation list", patterns, null);
     
-                /*patterns = new SyntaxOperation[][]{{
-                        new SyntaxOperation(";", "s"),
-                        new SyntaxOperation("operation", "s"),
-                        new SyntaxOperation("operation list loop", "s")
-                }, {
-                
-                }};
-                addSyntaxSymbol("operation list loop", patterns, null);*/
     
                 patterns = new SyntaxOperation[][]{{
                         new SyntaxOperation("input", "s")
@@ -220,14 +214,6 @@ public class AnalyzerMain {
                 }};
                 addSyntaxSymbol("variable list", patterns, null);
     
-                /*patterns = new SyntaxOperation[][]{{
-                        new SyntaxOperation(",", "s"),
-                        new SyntaxOperation(null, "s id"),
-                        new SyntaxOperation("variable list loop", "s")
-                }, {
-                
-                }};
-                addSyntaxSymbol("variable list loop", patterns, null);*/
                 
                 setMainSymbol("main");
             }
@@ -240,7 +226,6 @@ public class AnalyzerMain {
     
     
         SymbolPack testSymbols0 = new SymbolPack() {
-            @Override
             protected void initSymbols() {
                 add("program");
                 add("var");
@@ -512,7 +497,7 @@ public class AnalyzerMain {
             PrecedenceTable testTable = PrecedenceTable.fromPack(syntaxPack);
         } catch (PatternSearchException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
         
         Logger.getInstance().close();
     }

@@ -72,11 +72,13 @@ public class SymbolsSystem implements Lexer {
         return this.symbols.getLiteralCode();
     }
     
+    /**Process the string using lexer*/
     @Override
     public String[] process(String input) throws UnmatchedSubstringException {
         return lexer.processString(input);
     }
     
+    /**Get data about all ids*/
     @Override
     public Map<String, IdData> getIdData() {
         Map<String, IdData> m = new HashMap<>();

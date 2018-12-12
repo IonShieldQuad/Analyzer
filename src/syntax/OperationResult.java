@@ -15,7 +15,7 @@ public class OperationResult {
     private final String data;
     private final SyntaxError error;
     
-    OperationResult(int oldPosition, int newPosition, boolean success, String data, @Nullable SyntaxError error) {
+    public OperationResult(int oldPosition, int newPosition, boolean success, String data, @Nullable SyntaxError error) {
         
         this.oldPosition = oldPosition;
         this.newPosition = newPosition;

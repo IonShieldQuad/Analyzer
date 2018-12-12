@@ -1,5 +1,6 @@
 package lexis;
 
+/**Lexemes of Pascal language*/
 public class PascalSymbolPack extends SymbolPack {
     
     @Override

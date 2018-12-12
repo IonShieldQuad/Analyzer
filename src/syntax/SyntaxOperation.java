@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**Class containing data about single syntax operation*/
 public class SyntaxOperation {
     private final String data;
     private final String[] params;

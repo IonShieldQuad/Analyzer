@@ -6,6 +6,7 @@ import syntax.PatternSearchException;
 import syntax.SyntaxPack;
 import syntax.SyntaxSymbol;
 
+/**Recursive parser*/
 public class TDParsingSymbolsSystem extends SymbolsSystem implements Parser {
     protected SyntaxPack syntax;
     

@@ -62,6 +62,7 @@ public abstract class SymbolPack {
         return this.symbolsMap.get(symbol);
     }
     
+    /**Extracts integer value of string containing identifier*/
     public int extractIdentifier(String input) {
         if (!input.startsWith(getIdentifierCode() + ".")) {
             throw new IllegalArgumentException(input + "is not an identifier containing string");
@@ -69,6 +70,7 @@ public abstract class SymbolPack {
         return Integer.parseInt(input.substring(Integer.toString(getIdentifierCode()).length() + 1));
     }
     
+    /**Extracts integer value of string containing literal*/
     public int extractLiteral(String input) {
         if (!input.startsWith(getLiteralCode() + ".")) {
             throw new IllegalArgumentException(input + "is not an literal containing string");
@@ -76,6 +78,7 @@ public abstract class SymbolPack {
         return Integer.parseInt(input.substring(Integer.toString(getLiteralCode()).length() + 1));
     }
     
+    /**Finds original lexeme by it's code*/
     @Nullable
     public final String find(int symbol) {
         if (symbol == identifierCode) {

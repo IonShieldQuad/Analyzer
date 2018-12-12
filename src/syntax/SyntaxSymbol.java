@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**Class containing data about a symbol*/
 public class SyntaxSymbol {
     private final SyntaxPack pack;
     private final String name;
@@ -59,7 +60,9 @@ public class SyntaxSymbol {
     @NotNull
     public OperationResult searchPatterns(@NotNull String[] data, int index) throws PatternSearchException {
         List<String> out = new ArrayList<>();
+        //Map containing variables
         Map<String, String> vars = new HashMap<>();
+        //Map containing data about identifier type assignment
         Map<String, String> types = new HashMap<>();
         OperationResult.SyntaxError error = null;
         
@@ -194,7 +197,7 @@ public class SyntaxSymbol {
             }
             if (success) {
                 
-                //Assign types
+                //Assign identifier types
                 Pattern p = Pattern.compile(pack.getIdentifierCode() + ".[0-9]*");
                 Pattern tp = Pattern.compile("[0-9]*@\\$type");
                 for (String name : types.keySet()) {
