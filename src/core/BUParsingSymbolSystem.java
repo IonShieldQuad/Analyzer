@@ -45,7 +45,7 @@ public class BUParsingSymbolSystem extends SymbolsSystem implements Parser {
                 j1--;
                 n1 = data.get(j1);
                 n2 = data.get(j1 + 1);
-            } while (table.get(n1, n2) != PrecedenceTable.Precedence.EQUAL && j1 > 0);
+            } while (table.get(n1, n2) != PrecedenceTable.Precedence.LOWER && j1 > 0);
     
             for (int x = j1 + 1; x <= j2; x++) {
                 res.add(data.get(x));
