@@ -1,5 +1,6 @@
 package core;
 
+import generator.SymbolData;
 import lexis.PascalSymbolPack;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
@@ -126,6 +127,10 @@ public class AnalyzerMain {
                     Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getType())));
                 }
                 //lexer.getIdData().forEach((i, d) -> Logger.getInstance().logln("syntax", i + ": " + d.getType()));
+    
+                //Convert output to data tree
+                SymbolData sd = SymbolData.readString(outLine);
+                System.out.println(sd);
             }
             catch (PatternSearchException e) {
                 System.out.println("======================================================================================");
