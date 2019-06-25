@@ -80,7 +80,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
                 new SyntaxOperation("operator list", "s $list"),
                 new SyntaxOperation("end", "s")
         }, {
-                new SyntaxOperation("operator", "s")
+                new SyntaxOperation("operator", "s $op")
         }};
         addSyntaxSymbol("operator section", patterns, null);
         
@@ -103,9 +103,9 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
                 new SyntaxOperation("assignment", "s $op")
         }, {
                 new SyntaxOperation("conditional", "s $op")
-        }, {
+        }, /*{
                 new SyntaxOperation("loop", "s $op")
-        }, {
+        },*/ {
                 new SyntaxOperation("input", "s $op")
         }, {
                 new SyntaxOperation("output", "s $op")
@@ -129,7 +129,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
         addSyntaxSymbol("output", patterns, null);
         
         patterns = new SyntaxOperation[][]{{
-                new SyntaxOperation(null, "s id"),
+                new SyntaxOperation(null, "s id $var"),
                 new SyntaxOperation(":=", "s"),
                 new SyntaxOperation("expression", "s $expr")
         }};
@@ -303,7 +303,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
         }};
         addSyntaxSymbol("multiplication", patterns, null);
         
-        patterns = new SyntaxOperation[][]{{
+        /*patterns = new SyntaxOperation[][]{{
                 new SyntaxOperation("for", "s"),
                 new SyntaxOperation("loop cond", "s $cond"),
                 new SyntaxOperation("do", "s"),
@@ -320,7 +320,7 @@ public class PascalSimpleSyntaxPack extends SyntaxPack {
                 new SyntaxOperation("downto", "s $op"),
                 new SyntaxOperation("expression", "s $expr")
         }};
-        addSyntaxSymbol("loop cond", patterns, null);
+        addSyntaxSymbol("loop cond", patterns, null);*/
         
         patterns = new SyntaxOperation[][]{{
                 new SyntaxOperation("if", "s"),

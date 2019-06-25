@@ -1,5 +1,7 @@
 package core;
 
+import generator.CodeGenerator;
+import generator.PascalToPL1;
 import generator.SymbolData;
 import lexis.PascalSymbolPack;
 import lexis.SymbolPack;
@@ -44,6 +46,7 @@ public class AnalyzerMain {
         Logger.getInstance().addLogger("syntax", "syntaxLog.txt");
         Logger.getInstance().addLogger("tableGen", "tableGenLog.txt");
         Logger.getInstance().addLogger("tableResult", "tableGenRes.txt");
+        Logger.getInstance().addLogger("generated", "generated.txt");
         
         
         try {
@@ -124,13 +127,23 @@ public class AnalyzerMain {
                 Logger.getInstance().logln("syntax", "Id table");
     
                 for (Map.Entry<String, IdData> entry : lexer.getIdData().entrySet()) {
-                    Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getType())));
+                    Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getKey() + ":" + entry.getValue().getName() + ":" + entry.getValue().getType())));
                 }
                 //lexer.getIdData().forEach((i, d) -> Logger.getInstance().logln("syntax", i + ": " + d.getType()));
     
                 //Convert output to data tree
                 SymbolData sd = SymbolData.readString(outLine);
                 System.out.println(sd);
+                
+                //Generate code
+                String generated;
+                CodeGenerator generator = new PascalToPL1(symbolPack, syntaxPack, lexer);
+                generated = generator.generate(sd);
+                System.out.println("Generated: ");
+                System.out.println(generated);
+                Logger.getInstance().logln("generated", generated);
+                
+                
             }
             catch (PatternSearchException e) {
                 System.out.println("======================================================================================");

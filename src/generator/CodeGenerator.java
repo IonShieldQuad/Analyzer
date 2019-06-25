@@ -34,6 +34,10 @@ public abstract class CodeGenerator {
         return func.apply(symbol);
     }
     
+    protected Function<SymbolData, String> add(String key, Function<SymbolData, String> function) {
+        return functions.put(key, function);
+    }
+    
     protected abstract void init();
     
     public abstract String generate(SymbolData data);

@@ -4,9 +4,7 @@ import lexis.StringLexer;
 import lexis.SymbolPack;
 import lexis.UnmatchedSubstringException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SymbolsSystem implements Lexer {
 
@@ -48,8 +46,12 @@ public class SymbolsSystem implements Lexer {
     /**Adds an identifier to map if it doesn't exist*/
     public boolean addIdentifier(String key) {
         if (!idMap.containsKey(key)) {
+            IdData data = new IdData();
+            data.setKey(idMap.size());
+            data.setName(key);
+            
             idMap.put(key, idMap.size());
-            idData.put(idMap.get(key), new IdData());
+            idData.put(idMap.get(key), data);
             return true;
         }
         return false;
@@ -88,6 +90,17 @@ public class SymbolsSystem implements Lexer {
             }
         }
         return m;
+    }
+    
+    @Override
+    public List<IdData> getIdList() {
+        List<IdData> list = new ArrayList<>();
+        
+        for (int i = 0; i < idData.size(); i++) {
+            list.add(idData.get(i));
+        }
+        
+        return list;
     }
     
     public void setTypeOfId(int id, String type) {

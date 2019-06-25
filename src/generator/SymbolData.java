@@ -38,6 +38,10 @@ public class SymbolData {
         this.function = function;
     }
     
+    public SymbolData get(String key) {
+        return symbols.get(key);
+    }
+    
     public static SymbolData readString(String dataString) {
         return getSymbol(dataString, 0).symbolData;
     }
