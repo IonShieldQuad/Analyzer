@@ -87,7 +87,7 @@ public abstract class SymbolPack {
         if (symbol == literalCode) {
             return "literal";
         }
-        for (var pair : symbolsMap.entrySet()) {
+        for (Map.Entry<String, Integer> pair : symbolsMap.entrySet()) {
             if (pair.getValue() == symbol) {
                 return pair.getKey();
             }
