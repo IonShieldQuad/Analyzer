@@ -47,13 +47,14 @@ public class AnalyzerMain {
         Logger.getInstance().addLogger("tableGen", "tableGenLog.txt");
         Logger.getInstance().addLogger("tableResult", "tableGenRes.txt");
         Logger.getInstance().addLogger("generated", "generated.txt");
-        
-        
+        Logger.getInstance().addLogger("syntaxResult", "syntax.txt");
+    
+        UnmatchedSubstringException fail = null;
         try {
             //Create reader and writer
             reader = new BufferedReader(new FileReader(fileNameIn));
             writer = new BufferedWriter(new FileWriter(fileNameOut));
-    
+            
             System.out.println("\nLexical analysis:");
             Logger.getInstance().logln("lexis", "\nLexical analysis:");
             do {
@@ -78,6 +79,7 @@ public class AnalyzerMain {
                     catch (UnmatchedSubstringException e) {
                         System.out.println("Error: Failed to match substring: " + e.getUnmatchedSubstring());
                         Logger.getInstance().logln("lexis", "Error: Failed to match substring: " + e.getUnmatchedSubstring());
+                        fail = e;
                     }
                     writer.newLine();
                 }
@@ -101,6 +103,10 @@ public class AnalyzerMain {
             writer.close();
     
             try {
+                if (fail != null) {
+                    throw fail;
+                }
+                
                 System.out.println("\nSyntax analysis:");
                 Logger.getInstance().logln("syntax", "\nSyntax analysis:");
                 System.out.println("Data size: " + data.size());
@@ -123,11 +129,13 @@ public class AnalyzerMain {
                 Logger.getInstance().logln("syntax", "\nSyntax analysis result:");
                 System.out.println(outLine);
                 Logger.getInstance().logln("syntax", outLine);
+                Logger.getInstance().logln("syntaxResult", outLine);
                 
                 Logger.getInstance().logln("syntax", "Id table");
     
                 for (Map.Entry<String, IdData> entry : lexer.getIdData().entrySet()) {
                     Logger.getInstance().logln("syntax", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getKey() + ":" + entry.getValue().getName() + ":" + entry.getValue().getType())));
+                    Logger.getInstance().logln("syntaxResult", (entry == null ? "E == null" : entry.getKey()) + ": " + (entry == null ? "E == null" : entry.getValue() == null ? "V == null" : "OK: " + (entry.getValue().getKey() + ":" + entry.getValue().getName() + ":" + entry.getValue().getType())));
                 }
                 //lexer.getIdData().forEach((i, d) -> Logger.getInstance().logln("syntax", i + ": " + d.getType()));
     
@@ -154,8 +162,14 @@ public class AnalyzerMain {
                 Logger.getInstance().logln("syntax", "Error in syntax pattern search in symbol '" + e.getName() + "', position: " + e.getIndex());
                 Logger.getInstance().logln("syntax", e.getData());
                 Logger.getInstance().logln("syntax", "======================================================================================");
+                Logger.getInstance().logln("syntaxResult", "Error in syntax pattern search in symbol '" + e.getName() + "', position: " + e.getIndex());
+                Logger.getInstance().logln("syntaxResult", e.getData());
+            } catch (UnmatchedSubstringException e) {
+                System.out.println("Error: Failed to match substring: " + e.getUnmatchedSubstring());
+                Logger.getInstance().logln("syntax", "Error: Failed to match substring: " + e.getUnmatchedSubstring());
+                Logger.getInstance().logln("syntaxResult", "Error: Failed to match substring: " + e.getUnmatchedSubstring());
             }
-            
+    
         }
         catch (IOException e) {
             e.printStackTrace();

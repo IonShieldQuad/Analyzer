@@ -132,10 +132,14 @@ public class StringLexer {
         if (string.equals("true") || string.equals("false")) {
             matched = true;
         }
+        boolean fail = false;
         for (int i = 0; i < string.length(); ++i) {
             if (!(isDigit(string.charAt(i)) || string.charAt(i) == '.')) {
+                fail = true;
                 break;
             }
+        }
+        if (!fail) {
             matched = true;
         }
         if (string.charAt(0) == '\"' && string.charAt(string.length() - 1) == '\"') {

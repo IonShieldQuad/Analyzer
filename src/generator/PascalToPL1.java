@@ -213,7 +213,7 @@ public class PascalToPL1 extends CodeGenerator {
             if (sd.get("extra") == null) {
                 return "";
             }
-            String op = symbols.find(Integer.parseInt(sd.get("op").getName()));;
+            String op = symbols.find(Integer.parseInt(sd.get("op").getName()));
             return "MOD(" + apply(sd.get("expr")) + (apply(sd.get("extra")).length() == 0 ? "" : ", " + apply(sd.get("extra"))) + ")";
         });
         
@@ -226,6 +226,11 @@ public class PascalToPL1 extends CodeGenerator {
                    return Integer.toString(symbols.extractLiteral(sd.get("val").getName()));
                }
                catch (IllegalArgumentException e1) {
+                   try {
+                       if (sd.get("val").getName().contains(".")) {
+                           return (sd.get("val").getName().substring(sd.get("val").getName().indexOf(".") + 1));
+                       }
+                   } catch (IndexOutOfBoundsException e2) {}
                    return "(" + apply(sd.get("val")) + ")";
                }
            }

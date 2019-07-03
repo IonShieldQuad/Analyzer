@@ -16,10 +16,10 @@ public class PascalSymbolPack extends SymbolPack {
         this.add("if");
         this.add("else");
         this.add("then");
-        this.add("while");
-        this.add("for");
-        this.add("to");
-        this.add("downto");
+        //this.add("while");
+        //this.add("for");
+        //this.add("to");
+        //this.add("downto");
         this.add("do");
         this.add("read");
         this.add("write");
